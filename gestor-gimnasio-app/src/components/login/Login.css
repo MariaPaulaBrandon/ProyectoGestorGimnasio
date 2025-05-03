@@ -4,18 +4,16 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: #212121; /* Gris oscuro */
-  color: #ffffff; /* Texto blanco por defecto */
+  background-color: #212121;
+  color: #ffffff;
 }
 
-/* Styles for the Card component */
 .login-card {
   border: 1px solid white;
-  background-color: transparent !important; /* Use !important to override potential MUI default */
-  margin-top: 64px; /* Corresponds to mt: 8 */
+  background-color: transparent !important;
+  margin-top: 64px;
 }
 
-/* Styles for the Box inside CardContent */
 .login-box-inner {
   display: flex;
   flex-direction: column;
@@ -23,51 +21,50 @@
   padding: 4%;
 }
 
-/* Styles for the Typography title */
 .login-title {
   color: white;
 }
 
-/* Styles for the form Box */
 .login-form-box {
-  margin-top: 8px; /* Corresponds to mt: 1 */
-  width: 100%; /* Ensure form takes full width */
+  margin-top: 8px;
+  width: 100%;
 }
 
-/* Styles for the Stack containing buttons */
 .login-stack {
-  margin-top: 24px; /* Corresponds to mt: 3 */
-  margin-bottom: 16px; /* Corresponds to mb: 2 */
+  margin-top: 24px;
+  margin-bottom: 16px;
 }
 
-/* Estilos para los TextField en tema oscuro */
 .login-container .MuiTextField-root .MuiInputLabel-root {
-  color: rgba(255, 255, 255, 0.7); /* Color de la etiqueta */
+  color: rgba(255, 255, 255, 0.7);
 }
+
 .login-container .MuiTextField-root .MuiInputLabel-root.Mui-focused {
-  color: #ffffff; /* Color de la etiqueta cuando está enfocado */
+  color: #ffffff;
 }
 
 .login-container .MuiTextField-root .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
-  border-color: rgba(255, 255, 255, 0.23); /* Color del borde */
+  border-color: rgba(255, 255, 255, 0.23);
 }
+
 .login-container .MuiTextField-root .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-  border-color: rgba(255, 255, 255, 0.5); /* Color del borde al pasar el mouse */
+  border-color: rgba(255, 255, 255, 0.5);
 }
+
 .login-container .MuiTextField-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-  border-color: #ffffff; /* Color del borde cuando está enfocado */
+  border-color: #ffffff;
 }
 
 .login-container .MuiTextField-root .MuiInputBase-input {
-  color: #ffffff; /* Color del texto dentro del input */
+  color: #ffffff;
 }
 
-/* Estilos para el botón Outlined */
 .login-container .MuiButton-outlined {
   color: #ffffff;
   border-color: rgba(255, 255, 255, 0.5);
 }
+
 .login-container .MuiButton-outlined:hover {
   border-color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.08); /* Ligero fondo al pasar el mouse */
+  background-color: rgba(255, 255, 255, 0.08);
 }
