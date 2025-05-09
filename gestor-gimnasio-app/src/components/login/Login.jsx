@@ -67,7 +67,7 @@ function Login() {
                     fullWidth
                     variant="contained"
                   >
-                    Iniciar Sesión
+                    Iniciar Sesión kljrtjert
                   </Button>
                   <Button
                     type="button"
