@@ -11,6 +11,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useNavigate } from 'react-router-dom';
 import './Register.css';
 
 function Register() {
@@ -19,6 +20,7 @@ function Register() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
 
     const handleNombresChange = (event) => {
         setNombres(event.target.value);
@@ -52,6 +54,10 @@ function Register() {
         console.log('Password:', password);
     };
 
+    const handleNavigateToLogin = () => {
+        navigate('/login');
+    }
+
     return (
         <Box className="register-container">
             <Container component="main" maxWidth="sm">
@@ -59,7 +65,7 @@ function Register() {
                     <CardContent>
                         <Box className="register-box-inner">
                             <Typography component="h1" variant="h5" className="register-title">
-                                Registro de Usuario
+                                Registro
                             </Typography>
                             <Box component="form" onSubmit={handleSubmit} noValidate className="register-form-box">
                                 <TextField
@@ -130,9 +136,16 @@ function Register() {
                                         type="submit"
                                         fullWidth
                                         variant="contained"
-                                        sx={{ py: 1.5 }}
                                     >
                                         Registrarse
+                                    </Button>
+                                    <Button
+                                        type="button"
+                                        fullWidth
+                                        variant="outlined"
+                                        onClick={handleNavigateToLogin}
+                                    >
+                                        Iniciar Sesión
                                     </Button>
                                 </Stack>
                             </Box>
