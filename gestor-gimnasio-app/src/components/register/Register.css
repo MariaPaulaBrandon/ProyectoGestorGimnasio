@@ -35,6 +35,22 @@
   margin-top: 24px;
 }
 
+.register-stack .MuiButton-contained,
+.register-stack .MuiButton-outlined {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.register-container .MuiButton-outlined {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.register-container .MuiButton-outlined:hover {
+  border-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
 .register-container .MuiTextField-root .MuiInputLabel-root {
   color: rgba(255, 255, 255, 0.7);
 }

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
@@ -12,6 +13,7 @@ import './Login.css';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -27,6 +29,10 @@ function Login() {
     console.log('Password:', password);
   };
 
+  const handleNavigateToRegister = () => {
+    navigate('/register');
+  };
+
   return (
     <Box className="login-container">
       <Container component="main" maxWidth="sm">
@@ -34,7 +40,7 @@ function Login() {
           <CardContent>
             <Box className="login-box-inner">
               <Typography component="h1" variant="h5" className="login-title">
-                Iniciar Sesión
+                Inicio de Sesión
               </Typography>
               <Box component="form" onSubmit={handleSubmit} noValidate className="login-form-box">
                 <TextField
@@ -73,6 +79,7 @@ function Login() {
                     type="button"
                     fullWidth
                     variant="outlined"
+                    onClick={handleNavigateToRegister}
                   >
                     Registrarse
                   </Button>

@@ -32,7 +32,12 @@
 
 .login-stack {
   margin-top: 24px;
-  margin-bottom: 16px;
+}
+
+.login-stack .MuiButton-contained,
+.login-stack .MuiButton-outlined {
+  padding-top: 12px;
+  padding-bottom: 12px;
 }
 
 .login-container .MuiTextField-root .MuiInputLabel-root {
