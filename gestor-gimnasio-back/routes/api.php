@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TipoUsuarioController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Http\Request;
@@ -23,5 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('usuarios', [UsuarioController::class, 'index']);
 Route::get('usuario/{id}', [UsuarioController::class, 'show']);
 Route::post('usuario', [UsuarioController::class, 'store']);
+
+Route::post('auth/login', [AuthController::class, 'login']);
 
 Route::get('tipos-usuario', [TipoUsuarioController::class, 'index']);
