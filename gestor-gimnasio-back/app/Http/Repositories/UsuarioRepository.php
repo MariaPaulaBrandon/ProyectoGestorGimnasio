@@ -32,6 +32,19 @@ class UsuarioRepository
     }
 
     /**
+     * Obtener un usuario por su email.
+     *
+     * @param string $email El email del usuario.
+     * @return \App\Models\Usuario|null El usuario encontrado o null si no se encuentra.
+     */
+    public function getByEmail(string $email)
+    {
+        return Usuario::with('tipoUsuario')
+            ->where('email', $email)
+            ->first();
+    }
+
+    /**
      * Crear un nuevo usuario.
      *
      * @param array $data Los datos del nuevo usuario.
