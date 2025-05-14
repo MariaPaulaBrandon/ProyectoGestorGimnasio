@@ -36,7 +36,6 @@ class Usuario extends Model
         'nombres',
         'email',
         'password',
-        'fecha_alta',
         'id_tipo_usuario',
     ];
     /**

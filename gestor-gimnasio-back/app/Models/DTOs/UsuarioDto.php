@@ -3,6 +3,7 @@
 namespace App\Models\DTOs;
 
 use App\Models\Usuario;
+use Carbon\Carbon;
 
 class UsuarioDto
 {
@@ -11,8 +12,8 @@ class UsuarioDto
         public string $apellidos,
         public string $nombres,
         public string $email,
-        public string $fechaAlta,
-        public ?string $fechaBaja,
+        public Carbon $fechaAlta,
+        public ?Carbon $fechaBaja,
         public int $idTipoUsuario,
         public string $descTipoUsuario,
     ) {}
