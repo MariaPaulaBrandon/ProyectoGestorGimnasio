@@ -3,8 +3,9 @@
 namespace App\Http\Services;
 
 use App\Http\Repositories\UsuarioRepository;
-use App\Models\DTOs\UsuarioDto; // Asegúrate de importar UsuarioDto
-use App\Models\Usuario; // Importa el modelo Usuario
+use App\Models\DTOs\UsuarioDto;
+use App\Models\Usuario;
+use Illuminate\Support\Facades\Hash; // Importar Hash
 
 class UsuarioService
 {
@@ -21,5 +22,22 @@ class UsuarioService
         return $usuarios->map(function (Usuario $usuario) {
             return UsuarioDto::fromUser($usuario);
         });
+    }
+
+    public function getById(int $id)
+    {
+        $usuario = $this->usuarioRepository->getById($id);
+
+        if ($usuario) {
+            return UsuarioDto::fromUser($usuario);
+        }
+
+        return null;
+    }
+
+    public function create(array $data)
+    {
+        $data['password'] = Hash::make($data['password']);
+        return $this->usuarioRepository->create($data);
     }
 }
