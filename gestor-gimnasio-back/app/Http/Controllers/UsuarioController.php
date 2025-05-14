@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\UsuarioService;
+use App\Http\Interfaces\UsuarioServiceInterface;
 use Illuminate\Http\Request;
 
 class UsuarioController extends Controller
 {
-    protected $usuarioSrv;
-
-    public function __construct(UsuarioService $usuarioSrv)
-    {
+    public function __construct(
+        protected UsuarioServiceInterface $usuarioSrv
+    ) {
         $this->usuarioSrv = $usuarioSrv;
     }
 

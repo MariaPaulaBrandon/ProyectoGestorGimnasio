@@ -2,31 +2,30 @@
 
 namespace App\Http\Services;
 
-use App\Http\Repositories\UsuarioRepository;
+use App\Http\Interfaces\UsuarioRepositoryInterface;
+use App\Http\Interfaces\UsuarioServiceInterface;
 use App\Models\DTOs\UsuarioDto;
 use App\Models\Usuario;
-use Illuminate\Support\Facades\Hash; // Importar Hash
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Collection;
 
-class UsuarioService
+class UsuarioService implements UsuarioServiceInterface
 {
-    protected $usuarioRepository;
+    public function __construct(
+        protected UsuarioRepositoryInterface $usuarioRepoInterface
+    ) {}
 
-    public function __construct(UsuarioRepository $usuarioRepository)
+    public function getAll(): Collection
     {
-        $this->usuarioRepository = $usuarioRepository;
-    }
-
-    public function getAll()
-    {
-        $usuarios = $this->usuarioRepository->getAll();
+        $usuarios = $this->usuarioRepoInterface->getAll();
         return $usuarios->map(function (Usuario $usuario) {
             return UsuarioDto::fromUser($usuario);
         });
     }
 
-    public function getById(int $id)
+    public function getById(int $id): ?UsuarioDto
     {
-        $usuario = $this->usuarioRepository->getById($id);
+        $usuario = $this->usuarioRepoInterface->getById($id);
 
         if ($usuario) {
             return UsuarioDto::fromUser($usuario);
@@ -35,9 +34,9 @@ class UsuarioService
         return null;
     }
 
-    public function create(array $data)
+    public function create(array $data): Usuario
     {
         $data['password'] = Hash::make($data['password']);
-        return $this->usuarioRepository->create($data);
+        return $this->usuarioRepoInterface->create($data);
     }
 }

@@ -2,18 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\AuthService;
+use App\Http\Interfaces\AuthServiceInterface;
 use App\Models\DTOs\UsuarioDto;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    protected $authService;
-
-    public function __construct(AuthService $authService)
-    {
-        $this->authService = $authService;
-    }
+    public function __construct(
+        protected AuthServiceInterface $authService
+    ) {}
 
     public function login(Request $request)
     {
