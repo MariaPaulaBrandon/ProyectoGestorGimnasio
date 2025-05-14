@@ -57,6 +57,14 @@
         "test": [
             "@php artisan config:clear --ansi",
             "@php artisan test"
+        ],
+        "clean": [
+            "@php artisan cache:clear --ansi",
+            "@php artisan config:clear --ansi",
+            "@php artisan route:clear --ansi"
+        ],
+        "serve8080": [
+            "@php artisan serve --port=8080"
         ]
     },
     "extra": {
