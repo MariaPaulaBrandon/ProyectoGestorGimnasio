@@ -1,24 +1,18 @@
 <?php
 
-namespace App\Http\Repositories;
+namespace App\Http\Interfaces;
 
-use App\Models\Usuario;
-use App\Http\Interfaces\UsuarioRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
+use App\Models\Usuario;
 
-class UsuarioRepository implements UsuarioRepositoryInterface
+interface UsuarioRepositoryInterface
 {
     /**
      * Obtener todos los usuarios.
      *
      * @return \Illuminate\Database\Eloquent\Collection Una colección de todos los usuarios.
      */
-    public function getAll(): Collection
-    {
-        return Usuario::with('tipoUsuario')
-            ->orderBy('id')
-            ->get();
-    }
+    public function getAll(): Collection;
 
     /**
      * Obtener un usuario por su ID.
@@ -26,12 +20,7 @@ class UsuarioRepository implements UsuarioRepositoryInterface
      * @param int $id El ID del usuario.
      * @return \App\Models\Usuario|null El usuario encontrado o null si no se encuentra.
      */
-    public function getById(int $id): ?Usuario
-    {
-        return Usuario::with('tipoUsuario')
-            ->where('id', $id)
-            ->first();
-    }
+    public function getById(int $id): ?Usuario;
 
     /**
      * Obtener un usuario por su email.
@@ -39,12 +28,7 @@ class UsuarioRepository implements UsuarioRepositoryInterface
      * @param string $email El email del usuario.
      * @return \App\Models\Usuario|null El usuario encontrado o null si no se encuentra.
      */
-    public function getByEmail(string $email): ?Usuario
-    {
-        return Usuario::with('tipoUsuario')
-            ->where('email', $email)
-            ->first();
-    }
+    public function getByEmail(string $email): ?Usuario;
 
     /**
      * Crear un nuevo usuario.
@@ -52,10 +36,7 @@ class UsuarioRepository implements UsuarioRepositoryInterface
      * @param array $data Los datos del nuevo usuario.
      * @return \App\Models\Usuario El usuario creado.
      */
-    public function create(array $data): Usuario
-    {
-        return Usuario::create($data);
-    }
+    public function create(array $data): Usuario;
 
     /**
      * Actualizar un usuario existente.
@@ -64,17 +45,7 @@ class UsuarioRepository implements UsuarioRepositoryInterface
      * @param array $data Los nuevos datos del usuario.
      * @return \App\Models\Usuario|null El usuario actualizado o null si no se encuentra.
      */
-    public function update(int $id, array $data): ?Usuario
-    {
-        $usuario = $this->getById($id);
-
-        if ($usuario) {
-            $usuario->update($data);
-            return $usuario;
-        }
-
-        return null;
-    }
+    public function update(int $id, array $data): ?Usuario;
 
     /**
      * Eliminar un usuario por su ID.
@@ -82,14 +53,5 @@ class UsuarioRepository implements UsuarioRepositoryInterface
      * @param int $id El ID del usuario a eliminar.
      * @return bool Verdadero si se eliminó correctamente, falso de lo contrario.
      */
-    public function delete(int $id): bool
-    {
-        $usuario = $this->getById($id);
-
-        if ($usuario) {
-            return $usuario->delete();
-        }
-
-        return false;
-    }
+    public function delete(int $id): bool;
 }

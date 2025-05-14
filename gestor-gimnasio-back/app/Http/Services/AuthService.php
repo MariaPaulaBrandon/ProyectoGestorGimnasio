@@ -2,17 +2,16 @@
 
 namespace App\Http\Services;
 
-use App\Http\Repositories\UsuarioRepository;
+use App\Http\Interfaces\UsuarioRepositoryInterface;
+use App\Http\Interfaces\AuthServiceInterface;
+use App\Models\Usuario;
 use Illuminate\Support\Facades\Hash;
 
-class AuthService
+class AuthService implements AuthServiceInterface
 {
-    protected $usuarioRepository;
-
-    public function __construct(UsuarioRepository $usuarioRepository)
-    {
-        $this->usuarioRepository = $usuarioRepository;
-    }
+    public function __construct(
+        protected UsuarioRepositoryInterface $usuarioRepository
+    ) {}
 
     /**
      * Intenta autenticar un usuario basado en email y contraseña.
@@ -20,7 +19,7 @@ class AuthService
      * @param array $credentials Las credenciales (email y password).
      * @return \App\Models\Usuario|null El usuario autenticado o null si falla la autenticación.
      */
-    public function attemptLogin(array $credentials)
+    public function attemptLogin(array $credentials): ?Usuario
     {
         $usuario = $this->usuarioRepository->getByEmail($credentials['email']);
 
