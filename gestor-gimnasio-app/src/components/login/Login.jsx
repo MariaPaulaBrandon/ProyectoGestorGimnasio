@@ -10,9 +10,9 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-import UsuarioDto from '../../models/dtos/usuario-dto.model.dto';
 import './Login.css';
-import environment from '../../environments/environment';
+import environment from '../../environments/Environment';
+import UsuarioAcceesToken from '../../models/auth/UsuarioAccessToken';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -26,14 +26,6 @@ function Login() {
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
-  };
-
-  const processLoginError = (errorData, type = 'api') => {
-    if (type === 'api') {
-      setLoginError(`Error al tratar de iniciar sesión: ${errorData.message ?? 'Respuesta inesperada del servidor.'}`);
-    } else if (type === 'network') {
-      setLoginError(`Error de red: ${errorData.message ?? 'No se pudo conectar al servidor.'}. Por favor, inténtelo más tarde.`);
-    }
   };
 
   const handleSubmit = async (event) => {
@@ -56,13 +48,15 @@ function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        const usuario = new UsuarioDto(data);
-        //! TODO: Guardar el token en el almacenamiento local o en un contexto global y navegar a la página de inicio
+        const usuAccesToken = new UsuarioAcceesToken(data.usuario, data.accessToken, data.tokenType);
+        localStorage.setItem('usuario', JSON.stringify(usuAccesToken.usuario));
+        localStorage.setItem('usuarioAccesToken', usuAccesToken.accessToken);
+        localStorage.setItem('usuarioTokenType', usuAccesToken.tokenType);
       } else {
-        processLoginError(data);
+        setLoginError(`Error al iniciar sesión: ${data.message}`);
       }
     } catch (error) {
-      processLoginError(error, 'network');
+      setLoginError(`Error ${error}`);
     }
   };
 

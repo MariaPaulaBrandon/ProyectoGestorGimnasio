@@ -10,8 +10,8 @@ export default defineConfig(({ command }) => {
     resolve: {
       alias: {
         '@environment': isProduction
-          ? path.resolve(__dirname, 'src/environments/environment.prod.js')
-          : path.resolve(__dirname, 'src/environments/environment.js'),
+          ? path.resolve(__dirname, 'src/environments/Environment.prod.js')
+          : path.resolve(__dirname, 'src/environments/Environment.js'),
       },
     },
   };
