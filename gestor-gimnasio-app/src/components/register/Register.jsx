@@ -221,7 +221,6 @@ function Register() {
                   label="Nombres"
                   name="nombres"
                   autoComplete="given-name"
-                  autoFocus
                   value={nombres}
                   onChange={handleNombresChange}
                   onBlur={validateNombres}
