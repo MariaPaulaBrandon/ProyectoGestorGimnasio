@@ -23,7 +23,13 @@ class AuthController extends Controller
         $usuario = $this->authService->attemptLogin($credentials);
 
         if ($usuario) {
-            return response()->json(UsuarioDto::fromUser($usuario), Response::HTTP_OK);
+            $token = $usuario->createToken('auth_token')->plainTextToken;
+
+            return response()->json([
+                'usuario' => UsuarioDto::fromUser($usuario),
+                'accessToken' => $token,
+                'tokenType' => 'Bearer',
+            ], Response::HTTP_OK);
         } else {
             return response()->json(['message' => 'email o contraseña incorrectos'], Response::HTTP_UNAUTHORIZED);
         }

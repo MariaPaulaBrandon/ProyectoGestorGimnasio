@@ -3,11 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 
-class Usuario extends Model
+class Usuario extends Authenticatable // Cambiar aquí
 {
-    use HasFactory;
+    // Agregar HasApiTokens y Notifiable
+    use HasFactory, HasApiTokens, Notifiable;
+
     /**
      * La tabla asociada con el modelo.
      *

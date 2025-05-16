@@ -17,14 +17,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::get('usuarios', [UsuarioController::class, 'index']);
-Route::get('usuario/{id}', [UsuarioController::class, 'show']);
-Route::post('usuario', [UsuarioController::class, 'store']);
-
 Route::post('auth/login', [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('usuarios', [UsuarioController::class, 'index']);
+    Route::get('usuario/{id}', [UsuarioController::class, 'show']);
+    Route::post('usuario', [UsuarioController::class, 'store']);
+});
 
 Route::get('tipos-usuario', [TipoUsuarioController::class, 'index']);

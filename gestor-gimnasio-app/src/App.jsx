@@ -4,12 +4,22 @@ import Login from './components/login/Login';
 import Register from './components/register/Register';
 
 function App() {
+  const usuarioEstaLogueado = localStorage.getItem('usuarioAccesToken');
+
   return (
     <Router>
       <Routes>
-        <Route path='*' element={<Navigate to='/login' replace />} />
+        {/* Rutas públicas */}
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+
+        {/* Rutas protegidas */}
+
+        <Route path='*' element={
+          usuarioEstaLogueado
+            ? <Navigate to='/register' replace /> //! TODO: Cambiar la ruta al home/dashboard cuando esté disponible
+            : <Navigate to='/login' replace />
+        } />
       </Routes>
     </Router>
   )
