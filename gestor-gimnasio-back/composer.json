@@ -64,6 +64,7 @@
             "@php artisan route:clear --ansi"
         ],
         "serve8080": [
+            "Composer\\Config::disableProcessTimeout",
             "@php artisan serve --port=8080"
         ]
     },

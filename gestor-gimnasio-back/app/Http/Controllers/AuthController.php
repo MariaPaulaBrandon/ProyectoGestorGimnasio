@@ -24,7 +24,7 @@ class AuthController extends Controller
         if ($usuario) {
             return response()->json(UsuarioDto::fromUser($usuario));
         } else {
-            return response()->json(['message' => 'Email o contraseña incorrectos.'], 401);
+            return response()->json(['message' => 'email o contraseña incorrectos'], 401);
         }
     }
 }
