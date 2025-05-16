@@ -10,6 +10,10 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import './Login.css';
 import environment from '../../environments/Environment';
 import UsuarioAcceesToken from '../../models/auth/UsuarioAccessToken';
@@ -18,19 +22,68 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState(null);
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+
+  const validateEmail = () => {
+    if (!email.trim()) {
+      setEmailError('El email es requerido.');
+      return false;
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      setEmailError('El formato del email no es válido.');
+      return false;
+    }
+    setEmailError('');
+    return true;
+  };
+
+  const validatePassword = () => {
+    if (!password) {
+      setPasswordError('La contraseña es requerida.');
+      return false;
+    }
+    setPasswordError('');
+    return true;
+  };
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
+    if (emailError) {
+      validateEmail();
+    }
   };
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
+    if (passwordError) {
+      validatePassword();
+    }
+  };
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const isFormInvalid = () => {
+    return !email || !password || !!emailError || !!passwordError;
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoginError(null);
+
+    const isEmailValid = validateEmail();
+    const isPasswordValid = validatePassword();
+
+    if (!isEmailValid || !isPasswordValid) {
+      return;
+    }
 
     try {
       const response = await fetch(`${environment.apiUrl}/auth/login`, {
@@ -78,6 +131,7 @@ function Login() {
                   margin="normal"
                   required
                   fullWidth
+                  type='email'
                   id="email"
                   label="Email"
                   name="email"
@@ -85,6 +139,9 @@ function Login() {
                   autoFocus
                   value={email}
                   onChange={handleEmailChange}
+                  onBlur={validateEmail}
+                  error={!!emailError}
+                  helperText={emailError}
                 />
                 <TextField
                   margin="normal"
@@ -92,11 +149,31 @@ function Login() {
                   fullWidth
                   name="password"
                   label="Contraseña"
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   id="password"
                   autoComplete="current-password"
                   value={password}
                   onChange={handlePasswordChange}
+                  onBlur={validatePassword}
+                  error={!!passwordError}
+                  helperText={passwordError}
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="alternar visibilidad de contraseña"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                            className="register-visibility-icon"
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      )
+                    }
+                  }}
                 />
                 {loginError && (
                   <Alert severity="error" sx={{ mt: 2, mb: 0 }}>
@@ -109,6 +186,7 @@ function Login() {
                     type="submit"
                     fullWidth
                     variant="contained"
+                    disabled={isFormInvalid()}
                   >
                     Iniciar Sesión
                   </Button>

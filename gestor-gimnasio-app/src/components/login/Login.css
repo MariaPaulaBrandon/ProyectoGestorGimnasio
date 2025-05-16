@@ -1,75 +1,79 @@
 .login-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background-color: #212121;
-  color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #212121;
+    color: #ffffff;
 }
 
 .login-card {
-  border: 1px solid white;
-  background-color: transparent !important;
-  margin-top: 64px;
+    border: 1px solid white;
+    background-color: transparent !important;
+    margin-top: 64px;
 }
 
 .login-box-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 4%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4%;
 }
 
 .login-title {
-  color: white;
+    color: white;
 }
 
 .login-form-box {
-  margin-top: 8px;
-  width: 100%;
+    margin-top: 8px;
+    width: 100%;
 }
 
 .login-stack {
-  margin-top: 24px;
+    margin-top: 24px;
 }
 
 .login-stack .MuiButton-contained,
 .login-stack .MuiButton-outlined {
-  padding-top: 12px;
-  padding-bottom: 12px;
+    padding-top: 12px;
+    padding-bottom: 12px;
 }
 
 .login-container .MuiTextField-root .MuiInputLabel-root {
-  color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .login-container .MuiTextField-root .MuiInputLabel-root.Mui-focused {
-  color: #ffffff;
+    color: #ffffff;
 }
 
 .login-container .MuiTextField-root .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
-  border-color: rgba(255, 255, 255, 0.23);
+    border-color: rgba(255, 255, 255, 0.23);
 }
 
 .login-container .MuiTextField-root .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-  border-color: rgba(255, 255, 255, 0.5);
+    border-color: rgba(255, 255, 255, 0.5);
 }
 
 .login-container .MuiTextField-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-  border-color: #ffffff;
+    border-color: #ffffff;
 }
 
 .login-container .MuiTextField-root .MuiInputBase-input {
-  color: #ffffff;
+    color: #ffffff;
 }
 
 .login-container .MuiButton-outlined {
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.5);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.5);
 }
 
 .login-container .MuiButton-outlined:hover {
-  border-color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.08);
+    border-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.register-visibility-icon {
+    color: rgba(255, 255, 255, 0.7) !important;
 }
