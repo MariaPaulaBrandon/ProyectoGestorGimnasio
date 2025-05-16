@@ -1,7 +1,18 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
 
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [react()],
-})
+export default defineConfig(({ command }) => {
+  const isProduction = command === 'build';
+
+  return {
+    plugins: [react()],
+    resolve: {
+      alias: {
+        '@environment': isProduction
+          ? path.resolve(__dirname, 'src/environments/environment.prod.js')
+          : path.resolve(__dirname, 'src/environments/environment.js'),
+      },
+    },
+  };
+});
