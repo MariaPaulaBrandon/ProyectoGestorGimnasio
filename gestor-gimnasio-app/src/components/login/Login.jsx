@@ -136,7 +136,6 @@ function Login() {
                   label="Email"
                   name="email"
                   autoComplete="email"
-                  autoFocus
                   value={email}
                   onChange={handleEmailChange}
                   onBlur={validateEmail}
