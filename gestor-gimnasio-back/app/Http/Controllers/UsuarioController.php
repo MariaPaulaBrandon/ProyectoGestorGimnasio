@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Interfaces\UsuarioServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class UsuarioController extends Controller
 {
@@ -36,11 +37,10 @@ class UsuarioController extends Controller
             'apellidos' => 'required|string|max:255',
             'nombres' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:usuario,email',
-            'password' => 'required|string|min:8',
-            'id_tipo_usuario' => 'required|integer|exists:tipo_usuario,id',
+            'password' => 'required|string',
         ]);
 
         $usuario = $this->usuarioSrv->create($data);
-        return response()->json($usuario, 201);
+        return response()->json($usuario, Response::HTTP_CREATED);
     }
 }
