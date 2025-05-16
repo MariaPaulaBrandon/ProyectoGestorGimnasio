@@ -12,6 +12,7 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import UsuarioDto from '../../models/dtos/usuario-dto.model.dto';
 import './Login.css';
+import environment from '../../environments/environment';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -29,7 +30,7 @@ function Login() {
 
   const processLoginError = (errorData, type = 'api') => {
     if (type === 'api') {
-      setLoginError(`Error: ${errorData.message ?? 'Respuesta inesperada del servidor.'}`);
+      setLoginError(`Error al tratar de iniciar sesión: ${errorData.message ?? 'Respuesta inesperada del servidor.'}`);
     } else if (type === 'network') {
       setLoginError(`Error de red: ${errorData.message ?? 'No se pudo conectar al servidor.'}. Por favor, inténtelo más tarde.`);
     }
@@ -40,7 +41,7 @@ function Login() {
     setLoginError(null);
 
     try {
-      const response = await fetch('http://127.0.0.1:8080/api/auth/login', {
+      const response = await fetch(`${environment.apiUrl}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
