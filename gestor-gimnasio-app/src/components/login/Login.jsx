@@ -105,6 +105,7 @@ function Login() {
         localStorage.setItem('usuario', JSON.stringify(usuAccesToken.usuario));
         localStorage.setItem('usuarioAccesToken', usuAccesToken.accessToken);
         localStorage.setItem('usuarioTokenType', usuAccesToken.tokenType);
+        navigate('/header');
       } else {
         setLoginError(`Error al iniciar sesión: ${data.message}`);
       }
