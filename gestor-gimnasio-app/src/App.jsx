@@ -1,8 +1,9 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css'
-import Login from './components/login/Login';
-import Register from './components/register/Register';
+import Login from './components/auth/login/Login';
+import Register from './components/auth/register/Register';
 import Header from './components/layouts/header/Header';
+import RutaProtegida from './components/auth/RutaProtegida/RutaProtegida';
 
 function App() {
   const usuarioEstaLogueado = localStorage.getItem('usuarioAccesToken');
@@ -15,7 +16,9 @@ function App() {
         <Route path='/register' element={<Register />} />
 
         {/* Rutas protegidas */}
-        <Route path='/header' element={<Header />} />
+        <Route element={<RutaProtegida />}>
+          <Route path='/header' element={<Header />} />
+        </Route>
 
         <Route path='*' element={
           usuarioEstaLogueado
