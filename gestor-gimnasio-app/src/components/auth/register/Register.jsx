@@ -133,7 +133,7 @@ function Register() {
     }
 
     try {
-      const response = await fetch(`${environment.apiUrl}/usuario`, {
+      const response = await fetch(`${environment.apiUrl}/usuarios`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
