@@ -9,10 +9,8 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import Button from '@mui/material/Button';
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
-import EventNoteIcon from '@mui/icons-material/EventNote';
-import BuildIcon from '@mui/icons-material/Build';
 import UsuarioDto from '../../../models/dtos/UsuarioDto.model.dto';
+import NavigationButton from '../../navigation-button/NavigationButton';
 import './Header.css';
 
 function Header() {
@@ -69,32 +67,12 @@ function Header() {
               <Typography variant="h6" component="div">
                 Fit Manager
               </Typography>
-              <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <Button
-                  color="inherit"
-                  startIcon={<FitnessCenterIcon />}
-                  onClick={handleClasesClick}
-                  sx={{ textTransform: 'none', mx: 1 }}
-                >
-                  Clases
-                </Button>
-                <Button
-                  color="inherit"
-                  startIcon={<EventNoteIcon />}
-                  onClick={handleActividadesClick}
-                  sx={{ textTransform: 'none', mx: 1 }}
-                >
-                  Actividades
-                </Button>
-                <Button
-                  color="inherit"
-                  startIcon={<BuildIcon />}
-                  onClick={handleAbmClick}
-                  sx={{ textTransform: 'none', mx: 1 }}
-                >
-                  ABM
-                </Button>
-              </Box>
+              <NavigationButton
+                usuario={usuario}
+                onClasesClick={handleClasesClick}
+                onActividadesClick={handleActividadesClick}
+                onAbmClick={handleAbmClick}
+              />
               <div>
                 <IconButton
                   size="large"
