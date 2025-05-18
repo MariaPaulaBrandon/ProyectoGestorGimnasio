@@ -18,11 +18,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('auth/login', [AuthController::class, 'login']);
-Route::post('usuario', [UsuarioController::class, 'store']);
+Route::post('usuarios', [UsuarioController::class, 'store']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('usuarios', [UsuarioController::class, 'index']);
-    Route::get('usuario/{id}', [UsuarioController::class, 'show']);
+    Route::get('usuarios/{id}', [UsuarioController::class, 'show']);
 });
 
 Route::get('tipos-usuario', [TipoUsuarioController::class, 'index']);

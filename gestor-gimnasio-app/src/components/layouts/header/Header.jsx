@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -9,6 +9,9 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import Button from '@mui/material/Button';
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
+import EventNoteIcon from '@mui/icons-material/EventNote';
+import BuildIcon from '@mui/icons-material/Build';
 import UsuarioDto from '../../../models/dtos/UsuarioDto.model.dto';
 import './Header.css';
 
@@ -42,69 +45,115 @@ function Header() {
     navigate('/login');
   };
 
+  const handleClasesClick = () => {
+    // TODO: Crear componente de Clases
+    console.log('Botón Clases clickeado');
+  };
+
+  const handleActividadesClick = () => {
+    // TODO: Crear componente de Actividades
+    console.log('Botón Actividades clickeado');
+  };
+
+  const handleAbmClick = () => {
+    // TODO: Crear componente de ABM o menú desplegable para ABMs
+    console.log('Botón ABM clickeado');
+  };
+
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Fit Manager
-          </Typography>
-          {usuario && (
-            <div>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorMenuUsu}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorMenuUsu)}
-                onClose={handleClose}
-              >
-                <MenuItem disabled>
-                  <Typography variant="subtitle1">{`${usuario.nombres} ${usuario.apellidos}`}</Typography>
-                </MenuItem>
-                <MenuItem disabled>
-                  <Typography variant="subtitle1">{`Rol: ${usuario.descTipoUsuario}`}</Typography>
-                </MenuItem>
-                <MenuItem
-                  sx={{
-                    justifyContent: 'center',
-                    paddingY: '6px',
-                    '&:hover, &.Mui-focusVisible': {
-                      backgroundColor: 'transparent',
-                    },
-                  }}
+    <>
+      {usuario && (
+        <Box sx={{ flexGrow: 1 }}>
+          <AppBar position="static">
+            <Toolbar>
+              <Typography variant="h6" component="div">
+                Fit Manager
+              </Typography>
+              <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Button
+                  color="inherit"
+                  startIcon={<FitnessCenterIcon />}
+                  onClick={handleClasesClick}
+                  sx={{ textTransform: 'none', mx: 1 }}
                 >
-                  <Button
-                    variant="contained"
-                    className="logout-button-custom-red"
-                    onClick={handleLogout}
+                  Clases
+                </Button>
+                <Button
+                  color="inherit"
+                  startIcon={<EventNoteIcon />}
+                  onClick={handleActividadesClick}
+                  sx={{ textTransform: 'none', mx: 1 }}
+                >
+                  Actividades
+                </Button>
+                <Button
+                  color="inherit"
+                  startIcon={<BuildIcon />}
+                  onClick={handleAbmClick}
+                  sx={{ textTransform: 'none', mx: 1 }}
+                >
+                  ABM
+                </Button>
+              </Box>
+              <div>
+                <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleMenu}
+                  color="inherit"
+                >
+                  <AccountCircle />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorMenuUsu}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={Boolean(anchorMenuUsu)}
+                  onClose={handleClose}
+                >
+                  <MenuItem disabled>
+                    <Typography variant="subtitle1">{`Nombre: ${usuario.nombres} ${usuario.apellidos}`}</Typography>
+                  </MenuItem>
+                  <MenuItem disabled>
+                    <Typography variant="subtitle1">{`Email: ${usuario.email}`}</Typography>
+                  </MenuItem>
+                  <MenuItem disabled>
+                    <Typography variant="subtitle1">{`Rol: ${usuario.descTipoUsuario}`}</Typography>
+                  </MenuItem>
+                  <MenuItem
+                    sx={{
+                      justifyContent: 'center',
+                      paddingY: '6px',
+                      '&:hover, &.Mui-focusVisible': {
+                        backgroundColor: 'transparent',
+                      },
+                    }}
                   >
-                    Cerrar Sesión
-                  </Button>
-                </MenuItem>
-              </Menu>
-            </div>
-          )}
-        </Toolbar>
-      </AppBar>
-    </Box>
+                    <Button
+                      variant="contained"
+                      className="logout-button-custom-red"
+                      onClick={handleLogout}
+                    >
+                      Cerrar Sesión
+                    </Button>
+                  </MenuItem>
+                </Menu>
+              </div>
+            </Toolbar>
+          </AppBar>
+        </Box>
+      )}
+    </>
   );
 }
 
