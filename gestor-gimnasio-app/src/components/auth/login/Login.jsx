@@ -104,7 +104,7 @@ function Login() {
         localStorage.setItem('usuario', JSON.stringify(usuAccesToken.usuario));
         localStorage.setItem('usuarioAccesToken', usuAccesToken.accessToken);
         localStorage.setItem('usuarioTokenType', usuAccesToken.tokenType);
-        navigate('/home');
+        navigate('/dashboard');
       } else {
         setLoginError(`Error al iniciar sesión: ${data.message}`);
       }
@@ -123,16 +123,16 @@ function Login() {
               {environment.nombreApp}
             </Typography>
             <Typography variant="h6" component="p" sx={{ mb: 2 }}>
-              Este es tu canal de gestión de cuenta.
+              Gestioná tu cuenta de forma fácil y rápida
             </Typography>
             <Typography variant="body1" component="div" sx={{ textAlign: 'left' }}>
-              Acá vas a poder:
+              Con Fit Manager podés:
               <ul>
-                <li>Actualizar datos personales</li>
-                <li>Inscribir a las clases</li>
-                <li>Consultar historial de pagos</li>
-                <li>Consultar historial de clases</li>
-                <li>Cambiar plan</li>
+                <li>Actualizar tus datos personales de forma rápida y segura</li>
+                <li>Inscribirte a clases y administrar tus turnos</li>
+                <li>Consultar tu historial de pagos y comprobantes</li>
+                <li>Revisar el historial de clases realizadas</li>
+                <li>Modificar tu plan según tus necesidades</li>
               </ul>
             </Typography>
           </Box>
