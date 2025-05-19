@@ -5,17 +5,16 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Stack from '@mui/material/Stack';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import environment from '../../../environments/Environment';
+import environment from '../../../environments/environment';
 import UsuarioAcceesToken from '../../../models/auth/UsuarioAccessToken';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
 import './Login.css';
 
 function Login() {
@@ -105,7 +104,7 @@ function Login() {
         localStorage.setItem('usuario', JSON.stringify(usuAccesToken.usuario));
         localStorage.setItem('usuarioAccesToken', usuAccesToken.accessToken);
         localStorage.setItem('usuarioTokenType', usuAccesToken.tokenType);
-        navigate('/header');
+        navigate('/home');
       } else {
         setLoginError(`Error al iniciar sesión: ${data.message}`);
       }
@@ -114,97 +113,133 @@ function Login() {
     }
   };
 
-  const handleNavigateToRegister = () => {
-    navigate('/register');
-  };
-
   return (
-    <Box className="login-container">
-      <Container component="main" maxWidth="sm">
-        <Card className="login-card">
-          <CardContent>
-            <Box className="login-box-inner">
-              <Typography component="h1" variant="h5" className="login-title">
-                Inicio de Sesión
+    <Container component="main" maxWidth="lg" className="login-container-white">
+      <Grid container spacing={2} sx={{ minHeight: 'calc(100vh - 128px)', alignItems: 'center' }}>
+        <Grid item xs={12} md={6} className="login-info-column">
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', mb: { xs: 4, md: 0 } }}>
+            <img src="/logo_app.png" alt={`${environment.nombreApp} Logo`} className="login-logo-white" />
+            <Typography variant="h4" component="h2" gutterBottom sx={{ fontWeight: 'bold', mt: 2 }}>
+              {environment.nombreApp}
+            </Typography>
+            <Typography variant="h6" component="p" sx={{ mb: 2 }}>
+              Este es tu canal de gestión de cuenta.
+            </Typography>
+            <Typography variant="body1" component="div" sx={{ textAlign: 'left' }}>
+              Acá vas a poder:
+              <ul>
+                <li>Actualizar datos personales</li>
+                <li>Inscribir a las clases</li>
+                <li>Consultar historial de pagos</li>
+                <li>Consultar historial de clases</li>
+                <li>Cambiar plan</li>
+              </ul>
+            </Typography>
+          </Box>
+        </Grid>
+
+        <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Box className="login-box-white">
+            <Typography component="h1" variant="h5" className="login-title-white">
+              Bienvenido al espacio del cliente
+            </Typography>
+            {loginError && (
+              <Alert severity="error" sx={{ width: '100%', mt: 2 }}>
+                <AlertTitle>Error</AlertTitle>
+                {loginError}
+              </Alert>
+            )}
+            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, display: 'flex', flexDirection: 'column' }} className="login-form-white">
+              <Typography variant="subtitle1" gutterBottom sx={{ textAlign: 'left', width: '100%' }}>
+                Email:
               </Typography>
-              <Box component="form" onSubmit={handleSubmit} noValidate className="login-form-box">
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  type='email'
-                  id="email"
-                  label="Email"
-                  name="email"
-                  autoComplete="email"
-                  value={email}
-                  onChange={handleEmailChange}
-                  onBlur={validateEmail}
-                  error={!!emailError}
-                  helperText={emailError}
-                />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Contraseña"
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  autoComplete="current-password"
-                  value={password}
-                  onChange={handlePasswordChange}
-                  onBlur={validatePassword}
-                  error={!!passwordError}
-                  helperText={passwordError}
-                  slotProps={{
-                    input: {
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="alternar visibilidad de contraseña"
-                            onClick={handleClickShowPassword}
-                            onMouseDown={handleMouseDownPassword}
-                            edge="end"
-                            className="register-visibility-icon"
-                          >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
-                        </InputAdornment>
-                      )
-                    }
-                  }}
-                />
-                {loginError && (
-                  <Alert severity="error" sx={{ mt: 2, mb: 0 }}>
-                    <AlertTitle>Error</AlertTitle>
-                    {loginError}
-                  </Alert>
-                )}
-                <Stack spacing={2} className="login-stack">
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    disabled={isFormInvalid()}
-                  >
-                    Iniciar Sesión
-                  </Button>
-                  <Button
-                    type="button"
-                    fullWidth
-                    variant="outlined"
-                    onClick={handleNavigateToRegister}
-                  >
-                    Registrarse
-                  </Button>
-                </Stack>
-              </Box>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                name="email"
+                autoComplete="email"
+                value={email}
+                onChange={handleEmailChange}
+                onBlur={validateEmail}
+                error={!!emailError}
+                helperText={emailError}
+                variant="outlined"
+                className="login-textfield-white"
+              />
+              <Typography variant="subtitle1" gutterBottom sx={{ textAlign: 'left', width: '100%', mt: 2 }}>
+                Contraseña:
+              </Typography>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                id="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={handlePasswordChange}
+                onBlur={validatePassword}
+                error={!!passwordError}
+                helperText={passwordError}
+                variant="outlined"
+                className="login-textfield-white"
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                          className="register-visibility-icon-white"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }
+                }}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                className="login-submit-button-white"
+                disabled={isFormInvalid()}
+                sx={{ mb: '4px !important' }}
+              >
+                Ingresar
+              </Button>
+              <Button
+                fullWidth
+                variant="contained"
+                className="login-submit-button-white"
+                onClick={() => navigate('/register')}
+                sx={{ mt: '4px !important' }}
+              >
+                Registrarse
+              </Button>
+              <Link
+                href="#"
+                variant="body2"
+                className="forgot-password-link-white"
+              >
+                ¿Olvidaste tu contraseña?
+              </Link>
             </Box>
-          </CardContent>
-        </Card>
-      </Container>
-    </Box>
+          </Box>
+        </Grid>
+      </Grid>
+      <footer className="login-footer-white">
+        <Typography variant="body2" color="text.secondary" align="center">
+          © {new Date().getFullYear()} by {environment.nombreApp}
+        </Typography>
+      </footer>
+    </Container>
   );
 }
 
