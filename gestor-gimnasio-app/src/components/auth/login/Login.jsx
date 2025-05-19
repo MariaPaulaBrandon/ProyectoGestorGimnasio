@@ -143,12 +143,6 @@ function Login() {
             <Typography component="h1" variant="h5" className="login-title-white">
               Bienvenido al espacio del cliente
             </Typography>
-            {loginError && (
-              <Alert severity="error" sx={{ width: '100%', mt: 2 }}>
-                <AlertTitle>Error</AlertTitle>
-                {loginError}
-              </Alert>
-            )}
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, display: 'flex', flexDirection: 'column' }} className="login-form-white">
               <Typography variant="subtitle1" gutterBottom sx={{ textAlign: 'left', width: '100%' }}>
                 Email:
@@ -204,6 +198,12 @@ function Login() {
                   }
                 }}
               />
+              {loginError && (
+                <Alert severity="error" sx={{ width: '100%', mt: 2 }}>
+                  <AlertTitle>Error</AlertTitle>
+                  {loginError}
+                </Alert>
+              )}
               <Button
                 type="submit"
                 fullWidth
