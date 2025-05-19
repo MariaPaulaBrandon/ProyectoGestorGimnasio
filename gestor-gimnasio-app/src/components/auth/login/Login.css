@@ -1,79 +1,109 @@
-.login-container {
+.login-container-white {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     min-height: 100vh;
-    background-color: #212121;
-    color: #ffffff;
+    background-color: #ffffff;
+    color: #000000;
+    padding-top: 32px;
+    padding-bottom: 32px;
+    box-sizing: border-box;
 }
 
-.login-card {
-    border: 1px solid white;
-    background-color: transparent !important;
-    margin-top: 64px;
+.login-info-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-right: 32px;
 }
 
-.login-box-inner {
+.login-logo-white {
+    max-width: 150px;
+    height: auto;
+    margin-bottom: 16px;
+}
+
+.login-box-white {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 4%;
+    padding: 24px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    margin-top: auto;
 }
 
-.login-title {
-    color: white;
+.login-title-white {
+    color: #000000;
+    margin-bottom: 24px;
+    font-weight: bold;
 }
 
-.login-form-box {
-    margin-top: 8px;
+.login-form-white {
     width: 100%;
 }
 
-.login-stack {
-    margin-top: 24px;
+.login-textfield-white .MuiInputLabel-root {
+    color: rgba(0, 0, 0, 0.6);
 }
 
-.login-stack .MuiButton-contained,
-.login-stack .MuiButton-outlined {
-    padding-top: 12px;
-    padding-bottom: 12px;
+.login-textfield-white .MuiInputLabel-root.Mui-focused {
+    color: #000000;
 }
 
-.login-container .MuiTextField-root .MuiInputLabel-root {
-    color: rgba(255, 255, 255, 0.7);
+.login-textfield-white .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+    border-color: rgba(0, 0, 0, 0.23);
 }
 
-.login-container .MuiTextField-root .MuiInputLabel-root.Mui-focused {
-    color: #ffffff;
+.login-textfield-white .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+    border-color: rgba(0, 0, 0, 0.5);
 }
 
-.login-container .MuiTextField-root .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
-    border-color: rgba(255, 255, 255, 0.23);
+.login-textfield-white .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: #000000;
 }
 
-.login-container .MuiTextField-root .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-    border-color: rgba(255, 255, 255, 0.5);
+.login-textfield-white .MuiInputBase-input {
+    color: #000000;
 }
 
-.login-container .MuiTextField-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-    border-color: #ffffff;
+.login-submit-button-white {
+    margin-top: 24px !important;
+    margin-bottom: 16px !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+    background-color: #000000 !important;
+    color: #ffffff !important;
 }
 
-.login-container .MuiTextField-root .MuiInputBase-input {
-    color: #ffffff;
+.login-submit-button-white:hover {
+    background-color: #333333 !important;
 }
 
-.login-container .MuiButton-outlined {
-    color: #ffffff;
-    border-color: rgba(255, 255, 255, 0.5);
+.forgot-password-link-white {
+    color: #000000;
+    text-decoration: none;
+    margin-top: 8px;
+    align-self: center;
 }
 
-.login-container .MuiButton-outlined:hover {
-    border-color: #ffffff;
-    background-color: rgba(255, 255, 255, 0.08);
+.forgot-password-link-white:hover {
+    text-decoration: underline;
 }
 
-.register-visibility-icon {
-    color: rgba(255, 255, 255, 0.7) !important;
+.register-visibility-icon-white {
+    color: rgba(0, 0, 0, 0.54) !important;
+}
+
+.login-footer-white {
+    width: 100%;
+    padding: 16px;
+    text-align: center;
+    margin-top: auto;
 }
