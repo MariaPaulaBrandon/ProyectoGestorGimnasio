@@ -100,10 +100,3 @@
 .register-visibility-icon-white {
     color: rgba(0, 0, 0, 0.54) !important;
 }
-
-.login-footer-white {
-    width: 100%;
-    padding: 16px;
-    text-align: center;
-    margin-top: auto;
-}
