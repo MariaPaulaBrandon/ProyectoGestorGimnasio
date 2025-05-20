@@ -43,4 +43,15 @@ class UsuarioController extends Controller
         $usuario = $this->usuarioSrv->create($data);
         return response()->json($usuario, Response::HTTP_CREATED);
     }
+
+    public function checkEmailExists(string $email)
+    {
+        if (empty($email)) {
+            return response()->json(['message' => 'El email no puede estar vacío'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $exists = $this->usuarioSrv->checkEmailExists($email);
+
+        return response()->json(['exists' => $exists], Response::HTTP_OK);
+    }
 }

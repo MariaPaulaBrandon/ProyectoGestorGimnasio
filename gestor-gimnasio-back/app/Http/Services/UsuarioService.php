@@ -34,6 +34,11 @@ class UsuarioService implements UsuarioServiceInterface
         return null;
     }
 
+    public function checkEmailExists(string $email): bool
+    {
+        return $this->usuarioRepoInterface->checkEmailExists($email);
+    }
+
     public function create(array $data): Usuario
     {
         $data['password'] = Hash::make($data['password']);
