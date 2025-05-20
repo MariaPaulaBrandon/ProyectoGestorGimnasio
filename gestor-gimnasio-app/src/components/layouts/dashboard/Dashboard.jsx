@@ -3,19 +3,39 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-import Footer from "../footer/Footer";
+import Footer from '../footer/Footer';
 
 function Dashboard() {
   return (
-    <>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        overflowX: 'hidden',
+      }}
+    >
       <Header />
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <Container
+        maxWidth="lg"
+        component="main"
+        sx={{
+          mt: 4,
+          mb: 4,
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
         <Paper
           sx={{
             p: 3,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            width: '100%',
+            maxWidth: 'lg',
           }}
         >
           <Typography variant="h4" component="h1" gutterBottom>
@@ -43,7 +63,7 @@ function Dashboard() {
         </Paper>
       </Container>
       <Footer />
-    </>
+    </Box>
   );
 }
 

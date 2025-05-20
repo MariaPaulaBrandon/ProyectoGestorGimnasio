@@ -216,7 +216,7 @@ function Login() {
                 variant="contained"
                 className="login-submit-button-white"
                 onClick={() => navigate('/register')}
-                sx={{ mt: '6px !important', mb: '25px !important' }}
+                sx={{ mt: 1.5, mb: 6.25 }}
               >
                 Registrarse
               </Button>

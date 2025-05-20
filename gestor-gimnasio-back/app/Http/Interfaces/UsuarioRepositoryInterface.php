@@ -31,6 +31,14 @@ interface UsuarioRepositoryInterface
     public function getByEmail(string $email): ?Usuario;
 
     /**
+     * Verifica si un correo electrónico ya existe en la base de datos.
+     *
+     * @param string $email El correo electrónico a verificar.
+     * @return bool True si el correo electrónico existe, false en caso contrario.
+     */
+    public function checkEmailExists(string $email): bool;
+
+    /**
      * Crear un nuevo usuario.
      *
      * @param array $data Los datos del nuevo usuario.
