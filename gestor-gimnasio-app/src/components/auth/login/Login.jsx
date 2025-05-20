@@ -15,6 +15,7 @@ import environment from '../../../environments/environment';
 import UsuarioAcceesToken from '../../../models/auth/UsuarioAccessToken';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
+import Footer from '../../layouts/footer/Footer';
 import './Login.css';
 
 function Login() {
@@ -139,19 +140,17 @@ function Login() {
         </Grid>
 
         <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Box className="login-box-white">
+          <Box className="login-box-white" sx={{ paddingTop: '48px', paddingBottom: '40px' }}>
             <Typography component="h1" variant="h5" className="login-title-white">
               Bienvenido al espacio del cliente
             </Typography>
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, display: 'flex', flexDirection: 'column' }} className="login-form-white">
-              <Typography variant="subtitle1" gutterBottom sx={{ textAlign: 'left', width: '100%' }}>
-                Email:
-              </Typography>
               <TextField
                 margin="normal"
                 required
                 fullWidth
                 id="email"
+                label="Email"
                 name="email"
                 autoComplete="email"
                 value={email}
@@ -162,9 +161,6 @@ function Login() {
                 variant="outlined"
                 className="login-textfield-white"
               />
-              <Typography variant="subtitle1" gutterBottom sx={{ textAlign: 'left', width: '100%', mt: 2 }}>
-                Contraseña:
-              </Typography>
               <TextField
                 margin="normal"
                 required
@@ -172,6 +168,7 @@ function Login() {
                 name="password"
                 type={showPassword ? 'text' : 'password'}
                 id="password"
+                label="Contraseña"
                 autoComplete="current-password"
                 value={password}
                 onChange={handlePasswordChange}
@@ -219,7 +216,7 @@ function Login() {
                 variant="contained"
                 className="login-submit-button-white"
                 onClick={() => navigate('/register')}
-                sx={{ mt: '4px !important' }}
+                sx={{ mt: '6px !important', mb: '25px !important' }}
               >
                 Registrarse
               </Button>
@@ -234,11 +231,7 @@ function Login() {
           </Box>
         </Grid>
       </Grid>
-      <footer className="login-footer-white">
-        <Typography variant="body2" color="text.secondary" align="center">
-          © {new Date().getFullYear()} by {environment.nombreApp}
-        </Typography>
-      </footer>
+      <Footer />
     </Container>
   );
 }

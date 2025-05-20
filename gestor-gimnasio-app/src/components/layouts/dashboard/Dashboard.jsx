@@ -3,6 +3,7 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
+import Footer from "../footer/Footer";
 
 function Dashboard() {
   return (
@@ -41,6 +42,7 @@ function Dashboard() {
           </Box>
         </Paper>
       </Container>
+      <Footer />
     </>
   );
 }
