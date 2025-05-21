@@ -51,7 +51,7 @@ function ForgottenPassword() {
       const data = await response.json();
 
       if (!response.ok) {
-        setSubmitError(data.message ?? 'OOcurrió un error al intentar enviar el correo de recuperación');
+        setSubmitError(data.message ?? 'Ocurrió un error al intentar enviar el correo de recuperación');
         return;
       }
 
