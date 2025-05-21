@@ -50,8 +50,8 @@ class UsuarioController extends Controller
             return response()->json(['message' => 'El email no puede estar vacío'], Response::HTTP_BAD_REQUEST);
         }
 
-        $exists = $this->usuarioSrv->checkEmailExists($email);
+        $existe = $this->usuarioSrv->checkEmailExists($email);
 
-        return response()->json(['exists' => $exists], Response::HTTP_OK);
+        return response()->json(['existe' => $existe], Response::HTTP_OK);
     }
 }

@@ -4,6 +4,7 @@ import Login from './components/auth/login/Login';
 import Register from './components/auth/register/Register';
 import RutaProtegida from './components/auth/RutaProtegida/RutaProtegida';
 import Dashboard from './components/layouts/dashboard/Dashboard';
+import ForgottenPassword from './components/forgotten-password/ForgottenPassword';
 
 function App() {
   const usuarioEstaLogueado = localStorage.getItem('usuarioAccesToken');
@@ -14,6 +15,7 @@ function App() {
         {/* Rutas públicas */}
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+        <Route path='contraseña-olvidada' element={<ForgottenPassword />} />
 
         {/* Rutas protegidas */}
         <Route element={<RutaProtegida />}>
