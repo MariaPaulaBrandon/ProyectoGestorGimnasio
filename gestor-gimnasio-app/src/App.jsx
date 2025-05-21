@@ -15,7 +15,7 @@ function App() {
         {/* Rutas públicas */}
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
-        <Route path='contraseña-olvidada' element={<ForgottenPassword />} />
+        <Route path='/forgot-password' element={<ForgottenPassword />} />
 
         {/* Rutas protegidas */}
         <Route element={<RutaProtegida />}>

@@ -223,7 +223,7 @@ function Login() {
               <Link
                 variant="body2"
                 className="forgot-password-link-white"
-                onClick={() => navigate('/contraseña-olvidada')}
+                onClick={() => navigate('/forgot-password')}
               >
                 ¿Olvidaste tu contraseña?
               </Link>
