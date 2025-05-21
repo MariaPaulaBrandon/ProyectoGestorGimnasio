@@ -221,9 +221,9 @@ function Login() {
                 Registrarse
               </Button>
               <Link
-                href="#"
                 variant="body2"
                 className="forgot-password-link-white"
+                onClick={() => navigate('/contraseña-olvidada')}
               >
                 ¿Olvidaste tu contraseña?
               </Link>

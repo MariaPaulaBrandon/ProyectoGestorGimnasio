@@ -88,13 +88,10 @@
 
 .forgot-password-link-white {
     color: #000000;
-    text-decoration: none;
+    text-decoration: underline;
     margin-top: 8px;
     align-self: center;
-}
-
-.forgot-password-link-white:hover {
-    text-decoration: underline;
+    cursor: 'pointer' !important;
 }
 
 .register-visibility-icon-white {
