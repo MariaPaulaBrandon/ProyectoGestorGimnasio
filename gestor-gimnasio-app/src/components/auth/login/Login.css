@@ -91,7 +91,7 @@
     text-decoration: underline;
     margin-top: 8px;
     align-self: center;
-    cursor: 'pointer' !important;
+    cursor: pointer;
 }
 
 .register-visibility-icon-white {

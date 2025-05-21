@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Route;
 Route::post('auth/login', [AuthController::class, 'login']);
 Route::prefix('usuarios')->group(function () {
     Route::post('/', [UsuarioController::class, 'store'])->name('usuarios.store');
-    Route::get('/check-email/{email}', [UsuarioController::class, 'checkEmailExists'])->name('usuarios.checkEmail');
+    Route::get('/check-email/{email}', [UsuarioController::class, 'checkEmailExists'])
+        ->middleware('throttle:5,1')
+        ->name('usuarios.checkEmail');
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [UsuarioController::class, 'index'])->name('usuarios.index');
