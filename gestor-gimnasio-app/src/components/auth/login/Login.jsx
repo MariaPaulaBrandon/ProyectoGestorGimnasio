@@ -17,6 +17,7 @@ import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Footer from '../../layouts/footer/Footer';
 import './Login.css';
+import { CircularProgress } from '@mui/material';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -25,6 +26,7 @@ function Login() {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const validateEmail = () => {
@@ -77,11 +79,14 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoginError(null);
+    setIsLoading(true);
 
     const isEmailValid = validateEmail();
     const isPasswordValid = validatePassword();
 
     if (!isEmailValid || !isPasswordValid) {
+      setIsLoading(false);
+      setLoginError('Por favor, completá todos los campos correctamente');
       return;
     }
 
@@ -108,16 +113,18 @@ function Login() {
         navigate('/dashboard');
       } else {
         setLoginError(`Error al iniciar sesión: ${data.message}`);
+        setIsLoading(false);
       }
     } catch (error) {
       setLoginError(`Error ${error}`);
+      setIsLoading(false);
     }
   };
 
   return (
     <Container component="main" maxWidth="lg" className="login-container-white">
       <Grid container spacing={2} sx={{ minHeight: 'calc(100vh - 128px)', alignItems: 'center' }}>
-        <Grid item xs={12} md={6} className="login-info-column">
+        <Grid size={{ xs: 12, md: 6 }} className="login-info-column">
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', mb: { xs: 4, md: 0 } }}>
             <img src="/logo_app.png" alt={`${environment.nombreApp} Logo`} className="login-logo-white" />
             <Typography variant="h4" component="h2" gutterBottom sx={{ fontWeight: 'bold', mt: 2 }}>
@@ -139,7 +146,7 @@ function Login() {
           </Box>
         </Grid>
 
-        <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Grid size={{ xs: 12, md: 6 }} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Box className="login-box-white" sx={{ paddingTop: '48px', paddingBottom: '40px' }}>
             <Typography component="h1" variant="h5" className="login-title-white">
               Bienvenido al espacio del cliente
@@ -209,7 +216,7 @@ function Login() {
                 disabled={isFormInvalid()}
                 sx={{ mb: '4px !important' }}
               >
-                Ingresar
+                {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Ingresar'}
               </Button>
               <Button
                 fullWidth
