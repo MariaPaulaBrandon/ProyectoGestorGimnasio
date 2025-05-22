@@ -8,7 +8,11 @@ use App\Http\Repositories\UsuarioRepository;
 use App\Http\Interfaces\UsuarioServiceInterface;
 use App\Http\Services\UsuarioService;
 use App\Http\Interfaces\AuthServiceInterface;
+use App\Http\Interfaces\TurnoClaseRepositoryInterface;
+use App\Http\Interfaces\TurnoClaseServiceInterface;
+use App\Http\Repositories\TurnoClaseRepository;
 use App\Http\Services\AuthService;
+use App\Http\Services\TurnoClaseService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,6 +34,16 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             AuthServiceInterface::class,
             AuthService::class
+        );
+
+        $this->app->bind(
+            TurnoClaseRepositoryInterface::class,
+            TurnoClaseRepository::class
+        );
+
+        $this->app->bind(
+            TurnoClaseServiceInterface::class,
+            TurnoClaseService::class
         );
     }
 
