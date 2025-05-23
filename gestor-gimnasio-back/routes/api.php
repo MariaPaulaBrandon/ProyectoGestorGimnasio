@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Inscripcion;
+use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\TurnoClase;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
@@ -33,7 +33,9 @@ Route::prefix('turnos-clase')->group(function () {
 
 Route::prefix('inscripciones')->group(function () {
     Route::middleware(AUTH_SANCTION)->group(function () {
-        Route::post('/', [Inscripcion::class, 'inscribirUsuario'])
+        Route::post('/', [InscripcionController::class, 'inscribirUsuario'])
             ->name('inscripciones.inscribir-usuario');
+        Route::delete('/{id}', [InscripcionController::class, 'cancelarInscripcion'])
+            ->name('inscripciones.cancelar-inscripcion');
     });
 });

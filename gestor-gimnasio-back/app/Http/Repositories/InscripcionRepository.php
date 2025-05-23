@@ -15,4 +15,9 @@ class InscripcionRepository implements InscripcionRepositoryInterface
             'fecha' => now(),
         ]);
     }
+
+    public function cancelarInscripcion($id)
+    {
+        return Inscripcion::destroy($id);
+    }
 }
