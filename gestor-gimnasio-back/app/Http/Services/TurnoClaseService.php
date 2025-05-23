@@ -5,7 +5,6 @@ namespace App\Http\Services;
 use App\Http\Interfaces\TurnoClaseRepositoryInterface;
 use App\Http\Interfaces\TurnoClaseServiceInterface;
 use App\Models\DTOs\TurnoClaseIncriptionStatusDto;
-use App\Models\TurnoClase;
 
 class TurnoClaseService implements TurnoClaseServiceInterface
 {
@@ -21,6 +20,7 @@ class TurnoClaseService implements TurnoClaseServiceInterface
             return new TurnoClaseIncriptionStatusDto(
                 idTurnoClase: $turno->idTurnoClase,
                 idActividad: $turno->idActividad,
+                tipoActividad: $turno->tipoActividad,
                 fecha: $turno->fecha,
                 horarioDesde: $turno->horarioDesde,
                 horarioHasta: $turno->horarioHasta,

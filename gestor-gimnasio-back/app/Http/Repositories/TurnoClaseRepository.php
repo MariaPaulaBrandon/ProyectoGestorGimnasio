@@ -15,12 +15,14 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
             ->select([
                 'turno_clase.id AS idTurnoClase',
                 'turno_clase.id_actividad AS idActividad',
+                'tipo_actividad.tipo AS tipoActividad',
                 'turno_clase.fecha',
                 'turno_clase.horario_desde AS horarioDesde',
                 'turno_clase.horario_hasta AS horarioHasta',
                 'turno_clase.cupo_maximo AS cupoMaximo',
                 DB::raw('CASE WHEN inscripcion.id IS NOT NULL THEN TRUE ELSE FALSE END AS inscripto')
             ])
+            ->leftJoin('tipo_actividad', 'turno_clase.id_actividad', '=', 'tipo_actividad.id')
             ->leftJoin('inscripcion', function ($join) use ($userId) {
                 $join->on('turno_clase.id', '=', 'inscripcion.id_turno_clase')
                     ->where('inscripcion.id_usuario', '=', $userId);

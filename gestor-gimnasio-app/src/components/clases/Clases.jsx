@@ -13,6 +13,10 @@ import TurnoClaseIncripcionEstadoDto from '../../models/dtos/TurnoClaseIncripcio
 import environment from '../../environments/environment';
 import './Clases.css';
 import UsuarioAcceesToken from '../../models/auth/UsuarioAccessToken';
+import PropTypes from 'prop-types';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { green, red } from '@mui/material/colors';
 
 function Clases() {
   const [clasesParaTabla, setClasesParaTabla] = useState([]);
@@ -52,60 +56,83 @@ function Clases() {
 
   return (
     <TableContainer component={Paper} className="clases-table">
+      {isLoading ? <ClasesCarga /> : <ClasesTabla clases={clasesParaTabla} />}
+    </TableContainer>
+  );
+}
+
+function ClasesCarga() {
+  return (
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: 3 }}>
+      <CircularProgress sx={{ mr: 2 }} />
+      <Typography>Cargando clases...</Typography>
+    </Box>
+  );
+}
+
+function ClasesTabla({ clases }) {
+  if (!clases || clases.length === 0) {
+    return (
       <Table sx={{ minWidth: 900 }} aria-label="tabla de clases">
         <TableHead>
           <TableRow>
             <TableCell>Actividad</TableCell>
             <TableCell>Fecha</TableCell>
-            <TableCell>Comienzo</TableCell>
-            <TableCell>Fin</TableCell>
+            <TableCell>Horario Inicio</TableCell>
+            <TableCell>Horario Fin</TableCell>
             <TableCell>Inscripto</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {(() => {
-            if (isLoading) {
-              return (
-                <TableRow>
-                  <TableCell colSpan={5} align="center">
-                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: 3 }}>
-                      <CircularProgress sx={{ mr: 2 }} />
-                      <Typography>Cargando clases...</Typography>
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              );
-            }
-            if (clasesParaTabla && clasesParaTabla.length > 0) {
-              return (
-                <>
-                  {clasesParaTabla.map((clase) => (
-                    <TableRow
-                      key={clase.idTurnoClase}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <TableCell>{clase.idActividad}</TableCell>
-                      <TableCell>{clase.fecha}</TableCell>
-                      <TableCell>{clase.horarioDesde}</TableCell>
-                      <TableCell>{clase.horarioHasta}</TableCell>
-                      <TableCell>{clase.inscripto ? 'Sí' : 'No'}</TableCell>
-                    </TableRow>
-                  ))}
-                </>
-              );
-            }
-            return (
-              <TableRow>
-                <TableCell colSpan={5} align="center">
-                  No hay clases para mostrar.
-                </TableCell>
-              </TableRow>
-            );
-          })()}
+          <TableRow>
+            <TableCell colSpan={5} align="center">
+              No hay clases para mostrar
+            </TableCell>
+          </TableRow>
         </TableBody>
       </Table>
-    </TableContainer>
+    );
+  }
+
+  return (
+    <Table sx={{ minWidth: 600 }} aria-label="tabla de clases">
+      <TableHead>
+        <TableRow>
+          <TableCell>Actividad</TableCell>
+          <TableCell>Fecha</TableCell>
+          <TableCell>Horario Inicio</TableCell>
+          <TableCell>Horario Fin</TableCell>
+          <TableCell>Inscripto</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {clases.map((clase) => {
+          const soloFechas = clase.fecha.split(' ')[0].split('-');
+          const fechaFormateada = `${soloFechas[2]}/${soloFechas[1]}/${soloFechas[0]}`;
+          return (
+            <TableRow
+              key={clase.idTurnoClase}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell>{clase.tipoActividad}</TableCell>
+              <TableCell>{fechaFormateada}</TableCell>
+              <TableCell>{clase.horarioDesde}</TableCell>
+              <TableCell>{clase.horarioHasta}</TableCell>
+              <TableCell>
+                {clase.inscripto ?
+                  <CheckCircleOutlineIcon sx={{ color: green[500] }} /> :
+                  <HighlightOffIcon sx={{ color: red[500] }} />}
+              </TableCell>
+            </TableRow>
+          );
+        })}
+      </TableBody>
+    </Table>
   );
 }
+
+ClasesTabla.propTypes = {
+  clases: PropTypes.arrayOf(PropTypes.instanceOf(TurnoClaseIncripcionEstadoDto)).isRequired,
+};
 
 export default Clases;
