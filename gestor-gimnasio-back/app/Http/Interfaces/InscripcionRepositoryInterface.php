@@ -12,4 +12,12 @@ interface InscripcionRepositoryInterface
      * @return App\Models\Inscripcion La entidad de inscripción creada.
      */
     public function inscribirUsuario($id_usuario, $id_turno_clase);
+
+    /**
+     * Cancela una inscripción específica.
+     *
+     * @param int $id El ID de la inscripción que se va a cancelar.
+     * @return int El número de registros eliminados.
+     */
+    public function cancelarInscripcion($id);
 }

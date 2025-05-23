@@ -15,7 +15,10 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
             ->select([
                 'turno_clase.id AS idTurnoClase',
                 'turno_clase.id_actividad AS idActividad',
-                'tipo_actividad.tipo AS tipoActividad',
+                DB::raw('CONCAT(
+                    LEFT(tipo_actividad.tipo, 1),
+                    SUBSTRING(LOWER(tipo_actividad.tipo), 2)
+                ) AS tipoActividad'),
                 'turno_clase.fecha',
                 'turno_clase.horario_desde AS horarioDesde',
                 'turno_clase.horario_hasta AS horarioHasta',

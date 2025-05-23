@@ -4,6 +4,8 @@ namespace App\Http\Services;
 
 use App\Http\Interfaces\InscripcionRepositoryInterface;
 use App\Http\Interfaces\InscripcionServiceInterface;
+use App\Models\Inscripcion;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class InscripcionService implements InscripcionServiceInterface
 {
@@ -21,5 +23,26 @@ class InscripcionService implements InscripcionServiceInterface
     public function inscribirUsuario($id_usuario, $id_turno_clase)
     {
         return $this->inscripcionRepository->inscribirUsuario($id_usuario, $id_turno_clase);
+    }
+
+    /**
+     * Cancela una inscripción específica.
+     *
+     * @param int $id El ID de la inscripción que se va a cancelar.
+     * @return bool Verdadero si la inscripción fue cancelada con éxito, falso en caso contrario.
+     */
+    public function cancelarInscripcion($id)
+    {
+        $filasAfectadas = $this->inscripcionRepository->cancelarInscripcion($id);
+
+        if ($filasAfectadas === 0) {
+            throw (new ModelNotFoundException)->setModel(Inscripcion::class, [$id]);
+        }
+
+        if ($filasAfectadas > 1) {
+            throw new \LogicException("Se esperaba eliminar una inscripción, pero se eliminaron {$filasAfectadas}. ID: {$id}");
+        }
+
+        return true;
     }
 }
