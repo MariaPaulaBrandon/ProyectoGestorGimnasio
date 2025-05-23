@@ -109,7 +109,6 @@ function Login() {
         const usuAccesToken = new UsuarioAcceesToken(data.usuario, data.accessToken, data.tokenType);
         localStorage.setItem('usuario', JSON.stringify(usuAccesToken.usuario));
         localStorage.setItem('usuarioAccesToken', usuAccesToken.accessToken);
-        localStorage.setItem('usuarioTokenType', usuAccesToken.tokenType);
         navigate('/dashboard');
       } else {
         setLoginError(`Error al iniciar sesión: ${data.message}`);
