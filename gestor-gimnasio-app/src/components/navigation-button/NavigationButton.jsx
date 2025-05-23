@@ -5,12 +5,14 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 import BuildIcon from '@mui/icons-material/Build';
 import TiposUsuarioEnum from '../../models/enums/TiposUsuarioEnum.models.enum.js';
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 
-function NavigationButton({ usuario, onClasesClick, onActividadesClick, onAbmClick }) {
+function NavigationButton({ usuario }) {
   if (!usuario) {
     return null;
   }
 
+  const navigate = useNavigate();
   const idTipoUsuario = parseInt(usuario.idTipoUsuario, 10);
 
   const puedeVerClases =
@@ -30,8 +32,8 @@ function NavigationButton({ usuario, onClasesClick, onActividadesClick, onAbmCli
         <Button
           color="inherit"
           startIcon={<FitnessCenterIcon />}
-          onClick={onClasesClick}
           sx={{ textTransform: 'none', mx: 1 }}
+          onClick={() => navigate('/dashboard/clases')}
         >
           Clases
         </Button>
@@ -40,7 +42,6 @@ function NavigationButton({ usuario, onClasesClick, onActividadesClick, onAbmCli
         <Button
           color="inherit"
           startIcon={<EventNoteIcon />}
-          onClick={onActividadesClick}
           sx={{ textTransform: 'none', mx: 1 }}
         >
           Actividades
@@ -50,7 +51,6 @@ function NavigationButton({ usuario, onClasesClick, onActividadesClick, onAbmCli
         <Button
           color="inherit"
           startIcon={<BuildIcon />}
-          onClick={onAbmClick}
           sx={{ textTransform: 'none', mx: 1 }}
         >
           ABM
@@ -68,9 +68,6 @@ NavigationButton.propTypes = {
       TiposUsuarioEnum.ADMINISTRADOR,
     ]).isRequired,
   }),
-  onClasesClick: PropTypes.func.isRequired,
-  onActividadesClick: PropTypes.func.isRequired,
-  onAbmClick: PropTypes.func.isRequired,
 };
 
 export default NavigationButton;

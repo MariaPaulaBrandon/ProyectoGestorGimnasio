@@ -43,21 +43,6 @@ function Header() {
     navigate('/login');
   };
 
-  const handleClasesClick = () => {
-    // TODO: Crear componente de Clases
-    console.log('Botón Clases clickeado');
-  };
-
-  const handleActividadesClick = () => {
-    // TODO: Crear componente de Actividades
-    console.log('Botón Actividades clickeado');
-  };
-
-  const handleAbmClick = () => {
-    // TODO: Crear componente de ABM o menú desplegable para ABMs
-    console.log('Botón ABM clickeado');
-  };
-
   return (
     <>
       {usuario && (
@@ -69,9 +54,6 @@ function Header() {
               </Typography>
               <NavigationButton
                 usuario={usuario}
-                onClasesClick={handleClasesClick}
-                onActividadesClick={handleActividadesClick}
-                onAbmClick={handleAbmClick}
               />
               <div>
                 <IconButton
