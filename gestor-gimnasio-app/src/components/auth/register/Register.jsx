@@ -3,19 +3,17 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Stack from '@mui/material/Stack';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import environment from '../../../environments/environment';
 import './Register.css';
+import Footer from '../../layouts/footer/Footer';
 
 function Register() {
   const [nombres, setNombres] = useState('');
@@ -45,7 +43,6 @@ function Register() {
       setNombresError('Nombres es requerido.');
       return false;
     }
-
     setNombresError('');
     return true;
   };
@@ -55,7 +52,6 @@ function Register() {
       setApellidosError('Apellidos es requerido.');
       return false;
     }
-
     setApellidosError('');
     return true;
   };
@@ -68,7 +64,6 @@ function Register() {
       setEmailError('Formato de email inválido.');
       return false;
     }
-
     setEmailError('');
     return true;
   };
@@ -78,7 +73,6 @@ function Register() {
       setPasswordError('Contraseña es requerida.');
       return false;
     }
-
     setPasswordError('');
     return true;
   };
@@ -121,7 +115,6 @@ function Register() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     const isNombresValid = validateNombres();
     const isApellidosValid = validateApellidos();
     const isEmailValid = validateEmail();
@@ -137,7 +130,6 @@ function Register() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
         },
         body: JSON.stringify({
           nombres: nombres.toLocaleUpperCase('es-AR'),
@@ -184,133 +176,134 @@ function Register() {
     setOpenSnackbar(false);
   };
 
-  const validarMensajesErrorRegistro = (errores) => {
-    const erroresEmail = errores.email;
-    const erroresPassword = errores.password;
-
-    let mensajesErrorEmail = '';
-    let mennsajesErrorPassword = '';
-
-    if (erroresEmail && erroresEmail.length > 0) {
-      mensajesErrorEmail = erroresEmail.join(', ');
-    }
-
-    if (erroresPassword && erroresPassword.length > 0) {
-      mennsajesErrorPassword = erroresPassword.join(', ');
-    }
-
-    const mensajesError = `${mensajesErrorEmail} ${mennsajesErrorPassword}`;
-    return mensajesError;
-  }
-
   return (
-    <Box className="register-container">
-      <Container component="main" maxWidth="sm">
-        <Card className="register-card">
-          <CardContent>
-            <Box className="register-box-inner">
-              <Typography component="h1" variant="h5" className="register-title">
-                Registro
-              </Typography>
-              <Box component="form" onSubmit={handleSubmit} noValidate className="register-form-box">
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="nombres"
-                  label="Nombres"
-                  name="nombres"
-                  autoComplete="given-name"
-                  value={nombres}
-                  onChange={handleNombresChange}
-                  onBlur={validateNombres}
-                  error={!!nombresError}
-                  helperText={nombresError}
-                />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="apellidos"
-                  label="Apellidos"
-                  name="apellidos"
-                  autoComplete="family-name"
-                  value={apellidos}
-                  onChange={handleApellidosChange}
-                  onBlur={validateApellidos}
-                  error={!!apellidosError}
-                  helperText={apellidosError}
-                />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email"
-                  name="email"
-                  autoComplete="email"
-                  type='email'
-                  value={email}
-                  onChange={handleEmailChange}
-                  onBlur={validateEmail}
-                  error={!!emailError}
-                  helperText={emailError}
-                />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Contraseña"
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  autoComplete="new-password"
-                  value={password}
-                  onChange={handlePasswordChange}
-                  onBlur={validatePassword}
-                  error={!!passwordError}
-                  helperText={passwordError}
-                  slotProps={{
-                    input: {
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="alternar visibilidad de contraseña"
-                            onClick={handleClickShowPassword}
-                            onMouseDown={handleMouseDownPassword}
-                            edge="end"
-                            className="register-visibility-icon"
-                          >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }
-                  }}
-                />
-                <Stack spacing={2} className="register-stack">
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    disabled={isFormInvalid()}
-                  >
-                    Registrarse
-                  </Button>
-                  <Button
-                    type="button"
-                    fullWidth
-                    variant="outlined"
-                    onClick={handleNavigateToLogin}
-                  >
-                    Iniciar Sesión
-                  </Button>
-                </Stack>
-              </Box>
+    <Box className="register-page-container">
+      <Grid container sx={{ flexGrow: 1, alignItems: 'stretch' }}>
+        <Grid item xs={12} md={6} className="register-info-column">
+          <img src="/logo_app.png" alt="Fit Manager Logo" className="register-logo-white" />
+          <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold', mt: 2, color: '#000000' }}>
+            Fit Manager
+          </Typography>
+          <Typography variant="h6" component="p" sx={{ mt: 1, mb: 3, color: '#333333', maxWidth: '80%' }}>
+            Gestioná tu cuenta de forma fácil y rápida
+          </Typography>
+          <Box sx={{ textAlign: 'left', width: '100%', maxWidth: '400px', color: '#000000' }}>
+            <Typography variant="body1" component="div" sx={{ mb: 1, fontWeight: '500' }}>
+              Con Fit Manager podés:
+            </Typography>
+            <ul style={{ paddingLeft: '20px', margin: 0, listStyleType: 'disc' }}>
+              <li>Actualizar tus datos personales de forma rápida y segura</li>
+              <li>Inscribirte a clases y administrar tus turnos</li>
+              <li>Consultar tu historial de pagos y comprobantes</li>
+              <li>Revisar el historial de clases realizadas</li>
+              <li>Modificar tu plan según tus necesidades</li>
+            </ul>
+          </Box>
+        </Grid>
+
+        <Grid item xs={12} md={6} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: { xs: '16px', md: '32px' } }}>
+          <Box className="register-box-white">
+            <Typography component="h1" variant="h5" className="register-title-white">
+              Crear Cuenta
+            </Typography>
+            <Box component="form" onSubmit={handleSubmit} noValidate className="register-form-white">
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="nombres"
+                label="Nombres"
+                name="nombres"
+                autoComplete="given-name"
+                value={nombres}
+                onChange={handleNombresChange}
+                onBlur={validateNombres}
+                error={!!nombresError}
+                helperText={nombresError}
+                className="register-textfield-white"
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="apellidos"
+                label="Apellidos"
+                name="apellidos"
+                autoComplete="family-name"
+                value={apellidos}
+                onChange={handleApellidosChange}
+                onBlur={validateApellidos}
+                error={!!apellidosError}
+                helperText={apellidosError}
+                className="register-textfield-white"
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email"
+                name="email"
+                autoComplete="email"
+                value={email}
+                onChange={handleEmailChange}
+                onBlur={validateEmail}
+                error={!!emailError}
+                helperText={emailError}
+                className="register-textfield-white"
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Contraseña"
+                type={showPassword ? 'text' : 'password'}
+                id="password"
+                autoComplete="new-password"
+                value={password}
+                onChange={handlePasswordChange}
+                onBlur={validatePassword}
+                error={!!passwordError}
+                helperText={passwordError}
+                className="register-textfield-white"
+                slotProps={{
+                  input: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                        className="register-visibility-icon-white"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                className="register-submit-button-white"
+                disabled={isFormInvalid()}
+              >
+                Registrarse
+              </Button>
+              <Grid container justifyContent="center" sx={{ mt: 2 }}>
+                <Grid item>
+                  <RouterLink to="/login" variant="body2" className="login-link-white">
+                    ¿Ya tenés una cuenta? Iniciá Sesión
+                  </RouterLink>
+                </Grid>
+              </Grid>
             </Box>
-          </CardContent>
-        </Card>
-      </Container>
+          </Box>
+        </Grid>
+      </Grid>
+      <Footer />
       <Snackbar
         open={openSnackbar}
         autoHideDuration={5000}
