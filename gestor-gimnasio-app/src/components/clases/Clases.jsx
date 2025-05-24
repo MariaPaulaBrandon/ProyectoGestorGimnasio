@@ -113,10 +113,10 @@ function Clases() {
   const getClaesIncripcionUsuario = async (usuario, token) => {
     setClasesParaTabla([]);
     setIsLoading(true);
-    const idUsaurio = usuario.id;
+    const idUsuario = usuario.id;
 
     try {
-      const response = await fetch(`${environment.apiUrl}/turnos-clase/user-inscription-status/${idUsaurio}`, {
+      const response = await fetch(`${environment.apiUrl}/turnos-clase/user-inscription-status/${idUsuario}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
