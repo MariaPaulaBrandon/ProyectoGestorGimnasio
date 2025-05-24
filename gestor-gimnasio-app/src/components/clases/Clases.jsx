@@ -18,6 +18,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { green, red } from '@mui/material/colors';
 import { Button } from '@mui/material';
+import SnackbarMensaje from '../utils/SnackbarMensaje';
 
 function Clases() {
   const [clasesParaTabla, setClasesParaTabla] = useState([]);
@@ -26,6 +27,24 @@ function Clases() {
   const [accionId, setAccionId] = useState(null);
   const usuario = new UsuarioAcceesToken(JSON.parse(localStorage.getItem('usuario'))).usuario;
   const token = localStorage.getItem('usuarioAccesToken');
+
+  const [abrirSnackbar, setAbrirSnackbar] = useState(false);
+  const [mensajeSnackbar, setMensajeSnackbar] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('info');
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setAbrirSnackbar(false);
+  };
+
+  const showSnackbar = (mensaje, severidad) => {
+    setMensajeSnackbar(mensaje);
+    setSnackbarSeverity(severidad);
+    setAbrirSnackbar(true);
+  };
 
   useEffect(() => {
     getClaesIncripcionUsuario(usuario, token);
@@ -50,13 +69,13 @@ function Clases() {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ message: 'Error desconocido al inscribirse' }));
-        console.error('Error al inscribirse a la clase:', errorData.message);
         throw new Error(errorData.message || 'Error al inscribirse a la clase');
       }
 
+      showSnackbar('Inscripción realizada con éxito', 'success');
       await getClaesIncripcionUsuario(usuario, token);
     } catch (error) {
-      console.error('Error en handleInscribirClick:', error);
+      showSnackbar(error.message || 'Error al inscribirse a la clase', 'error');
     } finally {
       setAccionEnProgreso(false);
       setAccionId(null);
@@ -78,13 +97,13 @@ function Clases() {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ message: 'Error desconocido al cancelar la inscripción' }));
-        console.error('Error al cancelar la inscripción:', errorData.message);
         throw new Error(errorData.message || 'Error al cancelar la inscripción');
       }
 
+      showSnackbar('Inscripción cancelada con éxito', 'success');
       await getClaesIncripcionUsuario(usuario, token);
     } catch (error) {
-      console.error('Error en handleCancelarInscripcionClick:', error);
+      showSnackbar(error.message || 'Error al cancelar la inscripción', 'error');
     } finally {
       setAccionEnProgreso(false);
       setAccionId(null);
@@ -113,7 +132,7 @@ function Clases() {
       const dataDto = data.map(item => new TurnoClaseIncripcionEstadoDto(item));
       setClasesParaTabla(dataDto);
     } catch (error) {
-      console.error(error.message);
+      showSnackbar(error.message || 'Error al tratar de obtener las clases', 'error');
       setClasesParaTabla([]);
     } finally {
       setIsLoading(false);
@@ -121,18 +140,27 @@ function Clases() {
   };
 
   return (
-    <TableContainer component={Paper} className="clases-table">
-      {isLoading ?
-        <ClasesCarga /> :
-        <ClasesTabla
-          clases={clasesParaTabla}
-          onInscribirClick={handleInscribirClick}
-          onCancelarInscripcionClick={handleCancelarInscripcionClick}
-          accionEnProgreso={accionEnProgreso}
-          accionId={accionId}
-        />
-      }
-    </TableContainer>
+    <>
+      <TableContainer component={Paper} className="clases-table">
+        {isLoading ?
+          <ClasesCarga /> :
+          <ClasesTabla
+            clases={clasesParaTabla}
+            onInscribirClick={handleInscribirClick}
+            onCancelarInscripcionClick={handleCancelarInscripcionClick}
+            accionEnProgreso={accionEnProgreso}
+            accionId={accionId}
+          />
+        }
+      </TableContainer>
+      <SnackbarMensaje
+        abrirSnackbar={abrirSnackbar}
+        duracionSnackbar={5000}
+        handleCloseSnackbar={handleCloseSnackbar}
+        mensajeSnackbar={mensajeSnackbar}
+        snackbarSeverity={snackbarSeverity}
+      />
+    </>
   );
 }
 
