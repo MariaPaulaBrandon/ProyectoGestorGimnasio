@@ -44,6 +44,6 @@ class InscripcionService implements InscripcionServiceInterface
             throw new \LogicException("Se esperaba eliminar una inscripción, pero se eliminaron {$filasAfectadas}");
         }
 
-        return true;
+        return $filasAfectadas;
     }
 }
