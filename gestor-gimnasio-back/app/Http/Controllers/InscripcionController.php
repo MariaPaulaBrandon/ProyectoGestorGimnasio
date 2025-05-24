@@ -16,13 +16,13 @@ class InscripcionController extends Controller
     public function inscribirUsuario(Request $request)
     {
         $request->validate([
-            'id_usuario' => 'required|integer',
-            'id_turno_clase' => 'required|integer',
+            'idUsuario' => 'required|integer',
+            'idTurnoClase' => 'required|integer',
         ]);
 
         $inscripcion = $this->inscripcionService->inscribirUsuario(
-            $request->input('id_usuario'),
-            $request->input('id_turno_clase')
+            $request->input('idUsuario'),
+            $request->input('idTurnoClase')
         );
 
         return response()->json($inscripcion, Response::HTTP_CREATED);

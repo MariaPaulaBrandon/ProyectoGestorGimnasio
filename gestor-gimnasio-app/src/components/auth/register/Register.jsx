@@ -14,7 +14,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router-dom';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import environment from '../../../environments/Environment';
+import environment from '../../../environments/environment';
 import './Register.css';
 
 function Register() {
