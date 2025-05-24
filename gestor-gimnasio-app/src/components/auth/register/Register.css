@@ -1,80 +1,105 @@
-.register-container {
+.register-page-container {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
+  background-color: #ffffff;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  background-color: #212121;
-  color: #ffffff;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
-.register-card {
-  border: 1px solid white;
-  background-color: transparent !important;
-  margin-top: 64px;
-  margin-bottom: 64px;
+.register-info-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 32px;
+  background-color: #ffffff;
 }
 
-.register-box-inner {
+.register-logo-white {
+  max-width: 150px;
+  height: auto;
+  margin-bottom: 16px;
+}
+
+.register-box-white {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 4%;
+  padding: 24px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
 }
 
-.register-title {
-  color: white;
+.register-title-white {
+  color: #000000;
+  margin-bottom: 24px !important;
+  font-weight: bold !important;
 }
 
-.register-form-box {
-  margin-top: 8px;
+.register-form-white {
   width: 100%;
 }
 
-.register-stack {
-  margin-top: 24px;
+.register-textfield-white .MuiInputLabel-root {
+  color: rgba(0, 0, 0, 0.6) !important;
 }
 
-.register-stack .MuiButton-contained,
-.register-stack .MuiButton-outlined {
-  padding-top: 12px;
-  padding-bottom: 12px;
+.register-textfield-white .MuiInputLabel-root.Mui-focused {
+  color: #000000 !important;
 }
 
-.register-container .MuiButton-outlined {
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.5);
+.register-textfield-white .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(0, 0, 0, 0.23) !important;
 }
 
-.register-container .MuiButton-outlined:hover {
-  border-color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.08);
+.register-textfield-white .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(0, 0, 0, 0.5) !important;
 }
 
-.register-container .MuiTextField-root .MuiInputLabel-root {
-  color: rgba(255, 255, 255, 0.7);
+.register-textfield-white .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #000000 !important;
 }
 
-.register-container .MuiTextField-root .MuiInputLabel-root.Mui-focused {
-  color: #ffffff;
+.register-textfield-white .MuiInputBase-input {
+  color: #000000 !important;
 }
 
-.register-container .MuiTextField-root .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
-  border-color: rgba(255, 255, 255, 0.23);
+.register-submit-button-white {
+  margin-top: 24px !important;
+  margin-bottom: 16px !important;
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
+  background-color: #000000 !important;
+  color: #ffffff !important;
 }
 
-.register-container .MuiTextField-root .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-  border-color: rgba(255, 255, 255, 0.5);
+.register-submit-button-white:hover {
+  background-color: #333333 !important;
 }
 
-.register-container .MuiTextField-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-  border-color: #ffffff;
+.login-link-white {
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
-.register-container .MuiTextField-root .MuiInputBase-input {
-  color: #ffffff;
+.register-visibility-icon-white {
+  color: rgba(0, 0, 0, 0.54) !important;
 }
 
-.register-visibility-icon {
-  color: rgba(255, 255, 255, 0.7) !important;
+.register-footer-text {
+  padding: 16px;
+  color: #000000;
+  background-color: #ffffff;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: auto;
 }
