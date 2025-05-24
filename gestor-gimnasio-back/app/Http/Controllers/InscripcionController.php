@@ -28,10 +28,10 @@ class InscripcionController extends Controller
         return response()->json($inscripcion, Response::HTTP_CREATED);
     }
 
-    public function cancelarInscripcion($id)
+    public function cancelarInscripcion($id_usuario, $id_turno_clase)
     {
         try {
-            $this->inscripcionService->cancelarInscripcion($id);
+            $this->inscripcionService->cancelarInscripcion($id_usuario, $id_turno_clase);
             return response()->json(null, Response::HTTP_NO_CONTENT);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Inscripción no encontrada'], Response::HTTP_NOT_FOUND);

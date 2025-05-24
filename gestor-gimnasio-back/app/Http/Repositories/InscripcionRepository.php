@@ -16,8 +16,10 @@ class InscripcionRepository implements InscripcionRepositoryInterface
         ]);
     }
 
-    public function cancelarInscripcion($id)
+    public function cancelarInscripcion($id_usuario, $id_turno_clase)
     {
-        return Inscripcion::destroy($id);
+        return Inscripcion::where('id_usuario', $id_usuario)
+            ->where('id_turno_clase', $id_turno_clase)
+            ->delete();
     }
 }

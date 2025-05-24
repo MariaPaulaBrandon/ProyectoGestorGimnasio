@@ -16,8 +16,9 @@ interface InscripcionRepositoryInterface
     /**
      * Cancela una inscripción específica.
      *
-     * @param int $id El ID de la inscripción que se va a cancelar.
+     * @param int $id_usuario El ID del usuario que va a cancelar la inscripción.
+     * @param int $id_turno_clase El ID del turno de clase al que cancelará la inscripción el usuario.
      * @return int El número de registros eliminados.
      */
-    public function cancelarInscripcion($id);
+    public function cancelarInscripcion($id_usuario, $id_turno_clase);
 }
