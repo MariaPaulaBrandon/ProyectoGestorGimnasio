@@ -35,7 +35,7 @@ Route::prefix('inscripciones')->group(function () {
     Route::middleware(AUTH_SANCTION)->group(function () {
         Route::post('/', [InscripcionController::class, 'inscribirUsuario'])
             ->name('inscripciones.inscribir-usuario');
-        Route::delete('/{id}', [InscripcionController::class, 'cancelarInscripcion'])
+        Route::delete('/{id_usuario}/{id_turno_clase}', [InscripcionController::class, 'cancelarInscripcion'])
             ->name('inscripciones.cancelar-inscripcion');
     });
 });

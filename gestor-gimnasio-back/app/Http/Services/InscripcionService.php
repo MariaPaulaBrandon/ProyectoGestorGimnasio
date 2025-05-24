@@ -28,19 +28,20 @@ class InscripcionService implements InscripcionServiceInterface
     /**
      * Cancela una inscripción específica.
      *
-     * @param int $id El ID de la inscripción que se va a cancelar.
-     * @return bool Verdadero si la inscripción fue cancelada con éxito, falso en caso contrario.
+     * @param int $id_usuario El ID del usuario que va a cancelar la inscripción.
+     * @param int $id_turno_clase El ID del turno de clase al que cancelará la inscripción el usuario.
+     * @return int El número de registros eliminados.
      */
-    public function cancelarInscripcion($id)
+    public function cancelarInscripcion($id_usuario, $id_turno_clase)
     {
-        $filasAfectadas = $this->inscripcionRepository->cancelarInscripcion($id);
+        $filasAfectadas = $this->inscripcionRepository->cancelarInscripcion($id_usuario, $id_turno_clase);
 
         if ($filasAfectadas === 0) {
-            throw (new ModelNotFoundException)->setModel(Inscripcion::class, [$id]);
+            throw (new ModelNotFoundException)->setModel(Inscripcion::class, [$id_usuario, $id_turno_clase]);
         }
 
         if ($filasAfectadas > 1) {
-            throw new \LogicException("Se esperaba eliminar una inscripción, pero se eliminaron {$filasAfectadas}. ID: {$id}");
+            throw new \LogicException("Se esperaba eliminar una inscripción, pero se eliminaron {$filasAfectadas}");
         }
 
         return true;

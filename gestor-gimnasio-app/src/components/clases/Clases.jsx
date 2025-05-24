@@ -22,6 +22,8 @@ import { Button } from '@mui/material';
 function Clases() {
   const [clasesParaTabla, setClasesParaTabla] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [accionEnProgreso, setAccionEnProgreso] = useState(false);
+  const [accionId, setAccionId] = useState(null);
   const usuario = new UsuarioAcceesToken(JSON.parse(localStorage.getItem('usuario'))).usuario;
   const token = localStorage.getItem('usuarioAccesToken');
 
@@ -30,6 +32,9 @@ function Clases() {
   }, []);
 
   const handleInscribirClick = async (idTurnoClase) => {
+    setAccionEnProgreso(true);
+    setAccionId(idTurnoClase);
+
     try {
       const response = await fetch(`${environment.apiUrl}/inscripciones`, {
         method: 'POST',
@@ -44,17 +49,46 @@ function Clases() {
       });
 
       if (!response.ok) {
-        throw new Error('Error al inscribirse a la clase');
+        const errorData = await response.json().catch(() => ({ message: 'Error desconocido al inscribirse' }));
+        console.error('Error al inscribirse a la clase:', errorData.message);
+        throw new Error(errorData.message || 'Error al inscribirse a la clase');
       }
 
-      getClaesIncripcionUsuario(usuario, token);
+      await getClaesIncripcionUsuario(usuario, token);
     } catch (error) {
-      console.error('Error al inscribirse a la clase:', error);
+      console.error('Error en handleInscribirClick:', error);
+    } finally {
+      setAccionEnProgreso(false);
+      setAccionId(null);
     }
   };
 
   const handleCancelarInscripcionClick = async (idTurnoClase) => {
-    console.log('Cancelando Inscripción a TurnoClase ID:', idTurnoClase);
+    setAccionEnProgreso(true);
+    setAccionId(idTurnoClase);
+
+    try {
+      const response = await fetch(`${environment.apiUrl}/inscripciones/${usuario.id}/${idTurnoClase}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: 'Error desconocido al cancelar la inscripción' }));
+        console.error('Error al cancelar la inscripción:', errorData.message);
+        throw new Error(errorData.message || 'Error al cancelar la inscripción');
+      }
+
+      await getClaesIncripcionUsuario(usuario, token);
+    } catch (error) {
+      console.error('Error en handleCancelarInscripcionClick:', error);
+    } finally {
+      setAccionEnProgreso(false);
+      setAccionId(null);
+    }
   };
 
   const getClaesIncripcionUsuario = async (usuario, token) => {
@@ -94,6 +128,8 @@ function Clases() {
           clases={clasesParaTabla}
           onInscribirClick={handleInscribirClick}
           onCancelarInscripcionClick={handleCancelarInscripcionClick}
+          accionEnProgreso={accionEnProgreso}
+          accionId={accionId}
         />
       }
     </TableContainer>
@@ -109,7 +145,7 @@ function ClasesCarga() {
   );
 }
 
-function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick }) {
+function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, accionEnProgreso, accionId }) {
   const encabezadoTabla = () => {
     return (
       <TableHead>
@@ -147,6 +183,7 @@ function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick }) {
         {clases.map((clase) => {
           const soloFechas = clase.fecha.split(' ')[0].split('-');
           const fechaFormateada = `${soloFechas[2]}/${soloFechas[1]}/${soloFechas[0]}`;
+          const isCurrentActionTarget = accionEnProgreso && accionId === clase.idTurnoClase;
           return (
             <TableRow
               key={clase.idTurnoClase}
@@ -163,12 +200,20 @@ function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick }) {
               </TableCell>
               <TableCell>
                 {clase.inscripto ? (
-                  <Button variant="outlined" onClick={() => onCancelarInscripcionClick(clase.idTurnoClase)}>
-                    Cancelar Inscripción
+                  <Button
+                    variant="outlined"
+                    onClick={() => onCancelarInscripcionClick(clase.idTurnoClase)}
+                    disabled={accionEnProgreso}
+                  >
+                    {isCurrentActionTarget ? <CircularProgress size={24} color="inherit" /> : 'Cancelar Inscripción'}
                   </Button>
                 ) : (
-                  <Button variant="outlined" onClick={() => onInscribirClick(clase.idTurnoClase)}>
-                    Inscribirse
+                  <Button
+                    variant="outlined"
+                    onClick={() => onInscribirClick(clase.idTurnoClase)}
+                    disabled={accionEnProgreso}
+                  >
+                    {isCurrentActionTarget ? <CircularProgress size={24} color="inherit" /> : 'Inscribirse'}
                   </Button>
                 )}
               </TableCell>
@@ -184,6 +229,8 @@ ClasesTabla.propTypes = {
   clases: PropTypes.arrayOf(PropTypes.instanceOf(TurnoClaseIncripcionEstadoDto)).isRequired,
   onInscribirClick: PropTypes.func.isRequired,
   onCancelarInscripcionClick: PropTypes.func.isRequired,
+  accionEnProgreso: PropTypes.bool.isRequired,
+  accionId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 export default Clases;
