@@ -17,46 +17,85 @@ import PropTypes from 'prop-types';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { green, red } from '@mui/material/colors';
+import { Button } from '@mui/material';
 
 function Clases() {
   const [clasesParaTabla, setClasesParaTabla] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const usuario = new UsuarioAcceesToken(JSON.parse(localStorage.getItem('usuario'))).usuario;
+  const token = localStorage.getItem('usuarioAccesToken');
 
   useEffect(() => {
-    (async () => {
-      setIsLoading(true);
-      const usuAccesTokenDto = new UsuarioAcceesToken(JSON.parse(localStorage.getItem('usuario')));
-      const idUsaurio = usuAccesTokenDto.usuario.id;
-      const token = localStorage.getItem('usuarioAccesToken');
-
-      try {
-        const response = await fetch(`${environment.apiUrl}/turnos-clase/user-inscription-status/${idUsaurio}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Error al obtener los datos de las clases');
-        }
-
-        const data = await response.json();
-        const dataDto = data.map(item => new TurnoClaseIncripcionEstadoDto(item));
-        setClasesParaTabla(dataDto);
-      } catch (error) {
-        console.error(error.message);
-        setClasesParaTabla([]);
-      } finally {
-        setIsLoading(false);
-      }
-    })();
+    getClaesIncripcionUsuario(usuario, token);
   }, []);
+
+  const handleInscribirClick = async (idTurnoClase) => {
+    try {
+      const response = await fetch(`${environment.apiUrl}/inscripciones`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          idUsuario: usuario.id,
+          idTurnoClase,
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al inscribirse a la clase');
+      }
+
+      getClaesIncripcionUsuario(usuario, token);
+    } catch (error) {
+      console.error('Error al inscribirse a la clase:', error);
+    }
+  };
+
+  const handleCancelarInscripcionClick = async (idTurnoClase) => {
+    console.log('Cancelando Inscripción a TurnoClase ID:', idTurnoClase);
+  };
+
+  const getClaesIncripcionUsuario = async (usuario, token) => {
+    setClasesParaTabla([]);
+    setIsLoading(true);
+    const idUsaurio = usuario.id;
+
+    try {
+      const response = await fetch(`${environment.apiUrl}/turnos-clase/user-inscription-status/${idUsaurio}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al obtener los datos de las clases');
+      }
+
+      const data = await response.json();
+      const dataDto = data.map(item => new TurnoClaseIncripcionEstadoDto(item));
+      setClasesParaTabla(dataDto);
+    } catch (error) {
+      console.error(error.message);
+      setClasesParaTabla([]);
+    } finally {
+      setIsLoading(false);
+    };
+  };
 
   return (
     <TableContainer component={Paper} className="clases-table">
-      {isLoading ? <ClasesCarga /> : <ClasesTabla clases={clasesParaTabla} />}
+      {isLoading ?
+        <ClasesCarga /> :
+        <ClasesTabla
+          clases={clasesParaTabla}
+          onInscribirClick={handleInscribirClick}
+          onCancelarInscripcionClick={handleCancelarInscripcionClick}
+        />
+      }
     </TableContainer>
   );
 }
@@ -70,19 +109,26 @@ function ClasesCarga() {
   );
 }
 
-function ClasesTabla({ clases }) {
+function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick }) {
+  const encabezadoTabla = () => {
+    return (
+      <TableHead>
+        <TableRow>
+          <TableCell>Actividad</TableCell>
+          <TableCell>Fecha</TableCell>
+          <TableCell>Horario Inicio</TableCell>
+          <TableCell>Horario Fin</TableCell>
+          <TableCell>Inscripto</TableCell>
+          <TableCell>Acción</TableCell>
+        </TableRow>
+      </TableHead>
+    )
+  }
+
   if (!clases || clases.length === 0) {
     return (
       <Table sx={{ minWidth: 900 }} aria-label="tabla de clases">
-        <TableHead>
-          <TableRow>
-            <TableCell>Actividad</TableCell>
-            <TableCell>Fecha</TableCell>
-            <TableCell>Horario Inicio</TableCell>
-            <TableCell>Horario Fin</TableCell>
-            <TableCell>Inscripto</TableCell>
-          </TableRow>
-        </TableHead>
+        {encabezadoTabla()}
         <TableBody>
           <TableRow>
             <TableCell colSpan={5} align="center">
@@ -96,15 +142,7 @@ function ClasesTabla({ clases }) {
 
   return (
     <Table sx={{ minWidth: 600 }} aria-label="tabla de clases">
-      <TableHead>
-        <TableRow>
-          <TableCell>Actividad</TableCell>
-          <TableCell>Fecha</TableCell>
-          <TableCell>Horario Inicio</TableCell>
-          <TableCell>Horario Fin</TableCell>
-          <TableCell>Inscripto</TableCell>
-        </TableRow>
-      </TableHead>
+      {encabezadoTabla()}
       <TableBody>
         {clases.map((clase) => {
           const soloFechas = clase.fecha.split(' ')[0].split('-');
@@ -123,6 +161,17 @@ function ClasesTabla({ clases }) {
                   <CheckCircleOutlineIcon sx={{ color: green[500] }} /> :
                   <HighlightOffIcon sx={{ color: red[500] }} />}
               </TableCell>
+              <TableCell>
+                {clase.inscripto ? (
+                  <Button variant="outlined" onClick={() => onCancelarInscripcionClick(clase.idTurnoClase)}>
+                    Cancelar Inscripción
+                  </Button>
+                ) : (
+                  <Button variant="outlined" onClick={() => onInscribirClick(clase.idTurnoClase)}>
+                    Inscribirse
+                  </Button>
+                )}
+              </TableCell>
             </TableRow>
           );
         })}
@@ -133,6 +182,8 @@ function ClasesTabla({ clases }) {
 
 ClasesTabla.propTypes = {
   clases: PropTypes.arrayOf(PropTypes.instanceOf(TurnoClaseIncripcionEstadoDto)).isRequired,
+  onInscribirClick: PropTypes.func.isRequired,
+  onCancelarInscripcionClick: PropTypes.func.isRequired,
 };
 
 export default Clases;
