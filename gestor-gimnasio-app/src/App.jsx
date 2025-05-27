@@ -6,6 +6,11 @@ import RutaProtegida from './components/auth/RutaProtegida/RutaProtegida';
 import Dashboard from './components/layouts/dashboard/Dashboard';
 import ForgottenPassword from './components/forgotten-password/ForgottenPassword';
 import Clases from './components/clases/Clases';
+import AbmTurnoClase from './abm-tunos-clases/AbmTurnoClase';
+import dayjs from 'dayjs';
+import 'dayjs/locale/es';
+
+dayjs.locale('es');
 
 function App() {
   const usuarioEstaLogueado = localStorage.getItem('usuarioAccesToken');
@@ -22,6 +27,7 @@ function App() {
         <Route element={<RutaProtegida />}>
           <Route path='/dashboard' element={<Dashboard />}>
             <Route path="/dashboard/clases" element={<Clases />} />
+            <Route path='/dashboard/abm/clases' element={<AbmTurnoClase />} />
           </Route>
         </Route>
 

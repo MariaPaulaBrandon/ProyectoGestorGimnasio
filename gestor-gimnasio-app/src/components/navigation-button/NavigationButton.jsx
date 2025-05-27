@@ -52,6 +52,7 @@ function NavigationButton({ usuario }) {
           color="inherit"
           startIcon={<BuildIcon />}
           sx={{ textTransform: 'none', mx: 1 }}
+          onClick={() => navigate('/dashboard/abm/clases')}
         >
           ABM
         </Button>
