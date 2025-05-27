@@ -28,6 +28,8 @@ Route::middleware(AUTH_SANCTION)->group(function () {
     Route::prefix('turnos-clase')->group(function () {
         Route::get('/', [TurnoClase::class, 'getAll'])
             ->name('turnos-clase.index');
+        Route::put('/{id}', [TurnoClase::class, 'update'])
+            ->name('turnos-clase.update');
         Route::get('/user-inscription-status/{userId}', [TurnoClase::class, 'getAllWithUserInscriptionStatus'])
             ->name('turnos-clase.user-inscription-status');
         Route::get('/cupo-maximo/{idTurnoClase}', [TurnoClase::class, 'getCupoMaximoFromTurnoClase'])

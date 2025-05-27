@@ -49,4 +49,9 @@ class TurnoClaseService implements TurnoClaseServiceInterface
     {
         return $this->turnoClaseRepository->create($turnoClase);
     }
+
+    public function update(int $idTurnoClase, array $turnoClase)
+    {
+        return $this->turnoClaseRepository->update($idTurnoClase, $turnoClase);
+    }
 }

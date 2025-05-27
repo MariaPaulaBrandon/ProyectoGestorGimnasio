@@ -34,4 +34,12 @@ interface TurnoClaseServiceInterface
      * @return mixed
      */
     public function create(array $turnoClase);
+
+    /**
+     * Actualiza un turno de clase existente.
+     * @param int $idTurnoClase El ID del turno de clase a actualizar.
+     * @param array $turnoClase Los nuevos datos del turno de clase.
+     * @return mixed
+     */
+    public function update(int $idTurnoClase, array $turnoClase);
 }
