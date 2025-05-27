@@ -40,3 +40,12 @@ Route::prefix('inscripciones')->group(function () {
             ->name('inscripciones.cancelar-inscripcion');
     });
 });
+
+Route::prefix('tipos-actividad')->group(function () {
+    Route::middleware(AUTH_SANCTION)->group(function () {
+        Route::get('/', [\App\Http\Controllers\TipoActividadController::class, 'index'])
+            ->name('tipos-actividad.index');
+        Route::post('/', [\App\Http\Controllers\TipoActividadController::class, 'create'])
+            ->name('tipos-actividad.create');
+    });
+});
