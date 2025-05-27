@@ -21,6 +21,7 @@ class TipoActividad extends Model
     ];
 
     protected $casts = [
+        'tipo' => 'string',
         'id_sala' => 'integer',
     ];
 }

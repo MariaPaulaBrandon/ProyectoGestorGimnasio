@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\DB;
 
 class TurnoClaseRepository implements TurnoClaseRepositoryInterface
 {
+    public function getAll(): Collection
+    {
+        return TurnoClase::with('tipoActividad')
+            ->orderBy('id')
+            ->get();
+    }
+
     public function getAllWithUserInscriptionStatus(int $userId): Collection
     {
         return TurnoClase::query()

@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Collection;
 interface TurnoClaseRepositoryInterface
 {
     /**
+     * Obtiene todos los turnos de clase
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getAll(): Collection;
+
+    /**
      * Obtiene todos los turnos de clase e indica si un usuario específico está inscrito en cada uno.
      *
      * @param int $userId El ID del usuario.
