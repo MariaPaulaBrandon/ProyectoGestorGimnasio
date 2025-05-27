@@ -5,9 +5,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
-import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
 import TurnoClaseIncripcionEstadoDto from '../../models/dtos/TurnoClaseIncripcionEstadoDto.dto';
 import environment from '../../environments/environment';
@@ -19,6 +17,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { green, red } from '@mui/material/colors';
 import { Button } from '@mui/material';
 import SnackbarMensaje from '../utils/SnackbarMensaje';
+import ClasesCarga from '../clases-carga/ClasesCarga';
 
 function Clases() {
   const [clasesParaTabla, setClasesParaTabla] = useState([]);
@@ -161,15 +160,6 @@ function Clases() {
         snackbarSeverity={snackbarSeverity}
       />
     </>
-  );
-}
-
-function ClasesCarga() {
-  return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: 3 }}>
-      <CircularProgress sx={{ mr: 2 }} />
-      <Typography>Cargando clases...</Typography>
-    </Box>
   );
 }
 
