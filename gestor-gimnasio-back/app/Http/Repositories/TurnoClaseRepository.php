@@ -56,4 +56,9 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
     {
         return TurnoClase::create($turnoClase);
     }
+
+    public function update(int $id, array $turnoClase)
+    {
+        return TurnoClase::where('id', $id)->update($turnoClase);
+    }
 }

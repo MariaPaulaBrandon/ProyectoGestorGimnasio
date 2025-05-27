@@ -44,4 +44,18 @@ class TurnoClase extends Controller
         $turnoClase = $this->turnoClaseService->create($validatedData);
         return response()->json($turnoClase, Response::HTTP_CREATED);
     }
+
+    public function update(int $idTurnoClase, Request $request)
+    {
+        $validatedData = $request->validate([
+            'id_actividad' => 'required|numeric',
+            'fecha' => 'required|date',
+            'horario_desde' => 'required|date_format:H:i',
+            'horario_hasta' => 'required|date_format:H:i|after:horarioDesde',
+            'cupo_maximo' => 'required|numeric|min:1',
+        ]);
+
+        $turnoClase = $this->turnoClaseService->update($idTurnoClase, $validatedData);
+        return response()->json($turnoClase, Response::HTTP_OK);
+    }
 }
