@@ -11,6 +11,12 @@ class TurnoClase extends Controller
         private readonly TurnoClaseServiceInterface $turnoClaseService
     ) {}
 
+    public function getAll()
+    {
+        $turnos = $this->turnoClaseService->getAll();
+        return response()->json($turnos, Response::HTTP_OK);
+    }
+
     public function getAllWithUserInscriptionStatus(int $userId)
     {
         $turnos = $this->turnoClaseService->getAllWithUserInscriptionStatus($userId);

@@ -2,8 +2,16 @@
 
 namespace App\Http\Interfaces;
 
+use Illuminate\Database\Eloquent\Collection;
+
 interface TurnoClaseServiceInterface
 {
+    /**
+     * Obtiene todos los turnos de clase
+     * @return App\Models\TurnoClaseDto[]|Collection
+     */
+    public function getAll();
+
     /**
      * Obtiene todos los turnos de clase e indica si un usuario específico está inscrito en cada uno.
      *

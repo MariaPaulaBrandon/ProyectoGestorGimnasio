@@ -4,13 +4,23 @@ namespace App\Http\Services;
 
 use App\Http\Interfaces\TurnoClaseRepositoryInterface;
 use App\Http\Interfaces\TurnoClaseServiceInterface;
+use App\Models\DTOs\TurnoClaseDto;
 use App\Models\DTOs\TurnoClaseIncriptionStatusDto;
+use Illuminate\Database\Eloquent\Collection;
 
 class TurnoClaseService implements TurnoClaseServiceInterface
 {
     public function __construct(
         private readonly TurnoClaseRepositoryInterface $turnoClaseRepository
     ) {}
+
+    public function getAll()
+    {
+        $turnos_clase = $this->turnoClaseRepository->getAll();
+        return $turnos_clase->map(function ($turno) {
+            return TurnoClaseDto::fromTurnoClase($turno);
+        });
+    }
 
     public function getAllWithUserInscriptionStatus(int $userId)
     {

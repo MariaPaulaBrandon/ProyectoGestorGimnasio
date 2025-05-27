@@ -24,6 +24,7 @@ Route::prefix('usuarios')->group(function () {
 
 Route::prefix('turnos-clase')->group(function () {
     Route::middleware(AUTH_SANCTION)->group(function () {
+        Route::get('/', [TurnoClase::class, 'getAll'])->name('turnos-clase.index');
         Route::get('/user-inscription-status/{userId}', [TurnoClase::class, 'getAllWithUserInscriptionStatus'])
             ->name('turnos-clase.user-inscription-status');
         Route::get('/cupo-maximo/{idTurnoClase}', [TurnoClase::class, 'getCupoMaximoFromTurnoClase'])
