@@ -12,7 +12,7 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
     public function getAll(): Collection
     {
         return TurnoClase::with('tipoActividad')
-            ->orderBy('id')
+            ->orderBy('id', 'DESC')
             ->get();
     }
 
@@ -50,5 +50,10 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
             ->select('cupo_maximo')
             ->where('id', $idTurnoClase)
             ->value('cupo_maximo');
+    }
+
+    public function create(array $turnoClase)
+    {
+        return TurnoClase::create($turnoClase);
     }
 }

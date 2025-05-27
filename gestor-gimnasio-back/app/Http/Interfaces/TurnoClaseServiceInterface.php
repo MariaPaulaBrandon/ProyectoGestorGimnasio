@@ -27,4 +27,11 @@ interface TurnoClaseServiceInterface
      * @return int La cantidad de cupos definidos para el turno de clase.
      */
     public function getCupoMaximoFromTurnoClase(int $idTurnoClase): int;
+
+    /**
+     * Crea un nuevo turno de clase.
+     * @param array $turnoClase Los datos del turno de clase a crear.
+     * @return mixed
+     */
+    public function create(array $turnoClase);
 }

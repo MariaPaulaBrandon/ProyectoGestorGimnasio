@@ -44,4 +44,9 @@ class TurnoClaseService implements TurnoClaseServiceInterface
     {
         return $this->turnoClaseRepository->getCupoMaximoFromTurnoClase($idTurnoClase);
     }
+
+    public function create(array $turnoClase)
+    {
+        return $this->turnoClaseRepository->create($turnoClase);
+    }
 }
