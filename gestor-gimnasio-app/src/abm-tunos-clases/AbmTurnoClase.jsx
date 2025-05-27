@@ -11,48 +11,29 @@ import dayjs from 'dayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
-const styleModal = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 1,
-};
-
 export default function AbmTurnoClase() {
   const userToken = localStorage.getItem('usuarioAccesToken');
 
   const [turnoClases, setTurnoClases] = useState([]);
+  const [actividades, setActividades] = useState([]);
   const [cargando, setCargando] = useState(true);
+  const [cargandoActividades, setCargandoActividades] = useState(true);
   const [abrirSnackbar, setAbrirSnackbar] = useState(false);
   const [mensajeSnackbar, setMensajeSnackbar] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('info');
 
   const [abrirModalCrear, setAbrirModalCrear] = useState(false);
-  const [actividadesDisponibles, setActividadesDisponibles] = useState([]);
 
   useEffect(() => {
     getTurnoClases(userToken);
-    setActividadesDisponibles([
-      { id: 1, tipoActividad: 'BOXEO' },
-      { id: 2, tipoActividad: 'NATACION' },
-      { id: 3, tipoActividad: 'PILATES' },
-      { id: 4, tipoActividad: 'ZUMBA' },
-    ]);
+    getActividades(userToken);
   }, [userToken]);
 
   const handleOpenModalCrear = () => setAbrirModalCrear(true);
   const handleCloseModalCrear = () => setAbrirModalCrear(false);
   const handleCrearTurnoClase = async (nuevoTurno) => {
-    //! TODO: Implementar la lógica para crear un nuevo turno de clase
     handleCloseModalCrear();
+    await createTurnoCLase(nuevoTurno, userToken);
   };
 
   const handleCloseSnackbar = (_, reason) => {
@@ -69,7 +50,7 @@ export default function AbmTurnoClase() {
     setAbrirSnackbar(true);
   };
 
-  const getTurnoClases = async (tokenParam) => {
+  const getTurnoClases = async (token) => {
     setTurnoClases([]);
     setCargando(true);
 
@@ -78,7 +59,8 @@ export default function AbmTurnoClase() {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${tokenParam}`,
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
         }
       });
 
@@ -96,6 +78,59 @@ export default function AbmTurnoClase() {
     }
   };
 
+  const createTurnoCLase = async (nuevoTurno, token) => {
+    setCargando(true);
+
+    try {
+      const response = await fetch(`${environment.apiUrl}/turnos-clase`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(nuevoTurno),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al crear el turno de clase');
+      }
+
+      showSnackbar('Turno de clase creado exitosamente', 'success');
+      await getTurnoClases(token);
+    } catch (error) {
+      showSnackbar(error.message ?? 'Error al crear el turno de clase', 'error');
+    }
+  }
+
+  const getActividades = async (token) => {
+    setActividades([]);
+    setCargandoActividades(true);
+
+    try {
+      const response = await fetch(`${environment.apiUrl}/tipos-actividad`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al obtener las actividades');
+      }
+
+      const data = await response.json();
+      setActividades(data);
+    } catch (error) {
+      showSnackbar(error.message ?? 'Error al obtener las actividades', 'error');
+      setActividades([]);
+    } finally {
+      setCargandoActividades(false);
+    }
+  }
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <TableContainer component={Paper} className="clases-table">
@@ -107,7 +142,7 @@ export default function AbmTurnoClase() {
         }
       </TableContainer>
       <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-        <Button variant="outlined" onClick={handleOpenModalCrear}>
+        <Button variant="outlined" disabled={cargandoActividades} onClick={handleOpenModalCrear}>
           Nuevo Turno Clase
         </Button>
         <Button variant="outlined" sx={{ ml: 2 }} onClick={() => getTurnoClases(userToken)}>
@@ -118,7 +153,7 @@ export default function AbmTurnoClase() {
         abrirModal={abrirModalCrear}
         handleCerrar={handleCloseModalCrear}
         handleConfirmar={handleCrearTurnoClase}
-        actividades={actividadesDisponibles}
+        actividades={actividades}
       />
       <SnackbarMensaje
         abrirSnackbar={abrirSnackbar}
@@ -168,13 +203,15 @@ function TurnoClasesTabla({ clases }) {
       <TableBody>
         {clases.map((clase) => (
           <TableRow key={clase.id}>
-            <TableCell>{clase.tipoActividad}</TableCell>
+            <TableCell>{clase.tipoActividad.charAt(0).toUpperCase() + clase.tipoActividad.slice(1).toLowerCase()}</TableCell>
             <TableCell>{clase.fecha}</TableCell>
             <TableCell>{clase.horarioDesde}</TableCell>
             <TableCell>{clase.horarioHasta}</TableCell>
             <TableCell>{clase.cupoMaximo}</TableCell>
             <TableCell>
-              Acciones
+              <Button variant="outlined">
+                Modificar registro
+              </Button>
             </TableCell>
           </TableRow>
         ))}
@@ -198,6 +235,20 @@ TurnoClasesTabla.propTypes = {
 }
 
 function CrearTurnoClaseModal({ abrirModal, handleCerrar, handleConfirmar, actividades }) {
+  const styleModal = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 1,
+  };
   const [idActividad, setIdActividad] = useState('');
   const [fecha, setFecha] = useState(null);
   const [horarioInicio, setHorarioInicio] = useState(null);
@@ -215,11 +266,11 @@ function CrearTurnoClaseModal({ abrirModal, handleCerrar, handleConfirmar, activ
 
   const handleSubmit = () => {
     const nuevoTurno = {
-      idActividad,
-      fecha: fecha ? dayjs(fecha).format('DD/MM/YYYY') : null,
-      horarioInicio: horarioInicio ? dayjs(horarioInicio).format('HH:mm') : null,
-      horarioFin: horarioFin ? dayjs(horarioFin).format('HH:mm') : null,
-      cupoMaximo: cupoMaximo ? parseInt(cupoMaximo, 10) : 0,
+      id_actividad: idActividad,
+      fecha: fecha ? dayjs(fecha).format('YYYY-MM-DD') : null,
+      horario_desde: horarioInicio ? dayjs(horarioInicio).format('HH:mm') : null,
+      horario_hasta: horarioFin ? dayjs(horarioFin).format('HH:mm') : null,
+      cupo_maximo: cupoMaximo ? parseInt(cupoMaximo, 10) : 0,
     };
     handleConfirmar(nuevoTurno);
   };
@@ -274,7 +325,7 @@ function CrearTurnoClaseModal({ abrirModal, handleCerrar, handleConfirmar, activ
             {actividades.map((actividad) => {
               return (
                 <MenuItem key={actividad.id} value={actividad.id}>
-                  {actividad.tipoActividad}
+                  {actividad.tipo.charAt(0).toUpperCase() + actividad.tipo.slice(1).toLowerCase()}
                 </MenuItem>
               )
             })}
@@ -339,7 +390,7 @@ CrearTurnoClaseModal.propTypes = {
   actividades: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.any.isRequired,
-      tipoActividad: PropTypes.string.isRequired,
+      tipo: PropTypes.string.isRequired,
     })
   ).isRequired,
 };
