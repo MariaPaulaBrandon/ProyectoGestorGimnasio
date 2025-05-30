@@ -25,6 +25,25 @@ class TipoActividadController extends Controller
     }
 
     /**
+     * Actualizar un tipo de actividad existente.
+     *
+     * @param int $id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(int $id, Request $request)
+    {
+        $validatedData = $request->validate([
+            'tipo' => 'required|string|max:255',
+            'id_sala' => 'required|numeric',
+        ]);
+
+        $tipoActividad = $this->tipo_actividad_service->update($id, $validatedData);
+
+        return response()->json($tipoActividad, Response::HTTP_OK);
+    }
+
+    /**
      * Crear un nuevo tipo de actividad.
      *
      * @param Request $request

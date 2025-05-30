@@ -7,6 +7,7 @@ import Dashboard from './components/layouts/dashboard/Dashboard';
 import ForgottenPassword from './components/forgotten-password/ForgottenPassword';
 import Clases from './components/clases/Clases';
 import AbmTurnoClase from './abm-tunos-clases/AbmTurnoClase';
+import AbmTipoActividad from './components/abm-tipo-actividad/AbmTipoActividad';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 
@@ -28,6 +29,7 @@ function App() {
           <Route path='/dashboard' element={<Dashboard />}>
             <Route path="/dashboard/clases" element={<Clases />} />
             <Route path='/dashboard/abm/clases' element={<AbmTurnoClase />} />
+            <Route path='/dashboard/abm/tipos-actividad' element={<AbmTipoActividad />} />
           </Route>
         </Route>
 
