@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\InscripcionController;
+use App\Http\Controllers\SalaController;
 use App\Http\Controllers\TurnoClase;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
@@ -50,5 +51,10 @@ Route::middleware(AUTH_SANCTION)->group(function () {
             ->name('tipos-actividad.index');
         Route::post('/', [\App\Http\Controllers\TipoActividadController::class, 'create'])
             ->name('tipos-actividad.create');
+    });
+
+    Route::prefix('salas')->group(function () {
+        Route::get('/', [SalaController::class, 'index'])
+            ->name('salas.index');
     });
 });
