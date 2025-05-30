@@ -78,10 +78,14 @@ function NavigationButton({ usuario }) {
             endIcon={<ArrowDropDownIcon />}
             sx={{ textTransform: 'none', mx: 1 }}
             onClick={handleAbmClick}
+            aria-controls="abm-menu"
+            aria-haspopup="true"
+            aria-expanded={Boolean(anchorEl)}
           >
             ABM
           </Button>
           <Menu
+            id="abm-menu"
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
             onClose={handleAbmClose}
