@@ -8,6 +8,7 @@ class TipoActividadDto
         public int $id,
         public string $tipo,
         public int $idSala,
+        public string $descripcionSala,
     ) {}
 
     public static function fromTipoActividad($tipoActividad)
@@ -16,6 +17,7 @@ class TipoActividadDto
             $tipoActividad->id,
             $tipoActividad->tipo,
             $tipoActividad->id_sala,
+            $tipoActividad->sala->descripcion,
         );
     }
 }

@@ -14,17 +14,33 @@ class TipoActividadRepository implements TipoActividadRepositoryInterface
      */
     public function getAll()
     {
-        return TipoActividad::all();
+        return TipoActividad::with('sala')
+            ->orderBy('id')
+            ->get();
+    }
+
+    /**
+     * Actualizar un tipo de actividad existente.
+     *
+     * @param int $id
+     * @param array $tipoActividad
+     * @return mixed
+     */
+    public function update(int $id, array $tipoActividad)
+    {
+        $tipoActividadModel = TipoActividad::findOrFail($id);
+        $tipoActividadModel->update($tipoActividad);
+        return $tipoActividadModel;
     }
 
     /**
      * Crear un nuevo tipo de actividad.
      *
-     * @param array $turnoClase
+     * @param array $tipoActividad
      * @return mixed
      */
-    public function create(array $turnoClase)
+    public function create(array $tipoActividad)
     {
-        return TipoActividad::create($turnoClase);
+        return TipoActividad::create($tipoActividad);
     }
 }

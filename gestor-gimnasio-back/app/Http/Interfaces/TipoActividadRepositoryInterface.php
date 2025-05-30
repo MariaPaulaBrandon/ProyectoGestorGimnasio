@@ -11,9 +11,17 @@ interface TipoActividadRepositoryInterface
     public function getAll();
 
     /**
-     * Crear un nuevo tipo de actividad.
-     * @param array $turnoClase
+     * Actualizar un tipo de actividad existente.
+     * @param int $id
+     * @param array $tipoActividad
      * @return mixed
      */
-    public function create(array $turnoClase);
+    public function update(int $id, array $tipoActividad);
+
+    /**
+     * Crear un nuevo tipo de actividad.
+     * @param array $tipoActividad
+     * @return mixed
+     */
+    public function create(array $tipoActividad);
 }

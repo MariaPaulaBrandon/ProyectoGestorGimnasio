@@ -26,13 +26,26 @@ class TipoActividadService implements TipoActividadServiceInterface
     }
 
     /**
-     * Crear un nuevo tipo de actividad.
+     * Actualizar un tipo de actividad existente.
      *
-     * @param array $turnoClase
+     * @param int $id
+     * @param array $tipoActividad
      * @return mixed
      */
-    public function create(array $turnoClase)
+    public function update(int $id, array $tipoActividad)
     {
-        return $this->tipo_actividad_repository->create($turnoClase);
+        $tipoActividadModel = $this->tipo_actividad_repository->update($id, $tipoActividad);
+        return TipoActividadDto::fromTipoActividad($tipoActividadModel);
+    }
+
+    /**
+     * Crear un nuevo tipo de actividad.
+     *
+     * @param array $tipoActividad
+     * @return mixed
+     */
+    public function create(array $tipoActividad)
+    {
+        return $this->tipo_actividad_repository->create($tipoActividad);
     }
 }
