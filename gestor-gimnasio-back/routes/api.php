@@ -12,6 +12,10 @@ if (!defined('AUTH_SANCTION')) {
     define('AUTH_SANCTION', 'auth:sanctum');
 }
 
+if (!defined('ID_ROUTE_PARAMETER')) {
+    define('ID_ROUTE_PARAMETER', '/{id}');
+}
+
 Route::post('auth/login', [AuthController::class, 'login']);
 
 Route::middleware(AUTH_SANCTION)->group(function () {
@@ -23,14 +27,14 @@ Route::middleware(AUTH_SANCTION)->group(function () {
             ->name('usuarios.checkEmail');
         Route::get('/', [UsuarioController::class, 'index'])
             ->name('usuarios.index');
-        Route::get('/{id}', [UsuarioController::class, 'show'])
+        Route::get(ID_ROUTE_PARAMETER, [UsuarioController::class, 'show'])
             ->name('usuarios.show');
     });
 
     Route::prefix('turnos-clase')->group(function () {
         Route::get('/', [TurnoClase::class, 'getAll'])
             ->name('turnos-clase.index');
-        Route::put('/{id}', [TurnoClase::class, 'update'])
+        Route::put(ID_ROUTE_PARAMETER, [TurnoClase::class, 'update'])
             ->name('turnos-clase.update');
         Route::get('/user-inscription-status/{userId}', [TurnoClase::class, 'getAllWithUserInscriptionStatus'])
             ->name('turnos-clase.user-inscription-status');
@@ -50,7 +54,7 @@ Route::middleware(AUTH_SANCTION)->group(function () {
     Route::prefix('tipos-actividad')->group(function () {
         Route::get('/', [TipoActividadController::class, 'index'])
             ->name('tipos-actividad.index');
-        Route::put('/{id}', [TipoActividadController::class, 'update'])
+        Route::put(ID_ROUTE_PARAMETER, [TipoActividadController::class, 'update'])
             ->name('tipos-actividad.update');
         Route::post('/', [TipoActividadController::class, 'create'])
             ->name('tipos-actividad.create');
