@@ -5,28 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TipoActividad extends Model
+class Sala extends Model
 {
     use HasFactory;
 
-    protected $table = 'tipo_actividad';
+    protected $table = 'sala';
 
     protected $primaryKey = 'id';
 
     public $timestamps = false;
 
     protected $fillable = [
-        'tipo',
-        'id_sala',
+        'descripcion',
     ];
 
     protected $casts = [
-        'tipo' => 'string',
-        'id_sala' => 'integer',
+        'descripcion' => 'string',
     ];
-
-    public function sala()
-    {
-        return $this->belongsTo(Sala::class, 'id_sala', 'id');
-    }
 }

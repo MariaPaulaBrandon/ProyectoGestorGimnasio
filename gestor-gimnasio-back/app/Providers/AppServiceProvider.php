@@ -10,15 +10,19 @@ use App\Http\Services\UsuarioService;
 use App\Http\Interfaces\AuthServiceInterface;
 use App\Http\Interfaces\InscripcionRepositoryInterface;
 use App\Http\Interfaces\InscripcionServiceInterface;
+use App\Http\Interfaces\SalaRepositoryInterface;
+use App\Http\Interfaces\SalaServiceInterface;
 use App\Http\Interfaces\TipoActividadRepositoryInterface;
 use App\Http\Interfaces\TipoActividadServiceInterface;
 use App\Http\Interfaces\TurnoClaseRepositoryInterface;
 use App\Http\Interfaces\TurnoClaseServiceInterface;
 use App\Http\Repositories\InscripcionRepository;
+use App\Http\Repositories\SalaRepository;
 use App\Http\Repositories\TipoActividadRepository;
 use App\Http\Repositories\TurnoClaseRepository;
 use App\Http\Services\AuthService;
 use App\Http\Services\InscripcionService;
+use App\Http\Services\SalaService;
 use App\Http\Services\TipoActividadService;
 use App\Http\Services\TurnoClaseService;
 
@@ -72,6 +76,16 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             TipoActividadServiceInterface::class,
             TipoActividadService::class
+        );
+
+        $this->app->bind(
+            SalaRepositoryInterface::class,
+            SalaRepository::class
+        );
+
+        $this->app->bind(
+            SalaServiceInterface::class,
+            SalaService::class
         );
     }
 
