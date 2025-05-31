@@ -62,6 +62,16 @@ function NavigationButton({ usuario }) {
           Clases
         </Button>
       )}
+       {puedeVerClases && (
+      <Button
+        color="inherit"
+        startIcon={<EventNoteIcon />}
+        sx={{ textTransform: 'none', mx: 1 }}
+        onClick={() => navigate('/dashboard/agendar')}
+      >
+        Agendar
+      </Button>
+      )}
       {puedeVerClases && (
         <Button
           color="inherit"
