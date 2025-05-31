@@ -6,7 +6,7 @@ import RutaProtegida from './components/auth/RutaProtegida/RutaProtegida';
 import Dashboard from './components/layouts/dashboard/Dashboard';
 import ForgottenPassword from './components/forgotten-password/ForgottenPassword';
 import Clases from './components/clases/Clases';
-import AbmTurnoClase from './abm-tunos-clases/AbmTurnoClase';
+import AbmTurnoClase from './components/abm-tunos-clases/AbmTurnoClase';
 import AbmTipoActividad from './components/abm-tipo-actividad/AbmTipoActividad';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';

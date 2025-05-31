@@ -1,15 +1,15 @@
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Modal, Typography, TextField, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
-import SnackbarMensaje from "../components/utils/SnackbarMensaje";
 import { useEffect, useState } from "react";
-import ClasesCarga from "../components/clases-carga/ClasesCarga";
 import PropTypes from "prop-types";
-import environment from "../environments/environment";
 import './AbmTurnoClase.css';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import environment from "../../environments/environment";
+import ClasesCarga from "../clases-carga/ClasesCarga";
+import SnackbarMensaje from "../utils/SnackbarMensaje";
 
 export default function AbmTurnoClase() {
   const userToken = localStorage.getItem('usuarioAccesToken');
