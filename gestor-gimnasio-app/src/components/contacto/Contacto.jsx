@@ -1,16 +1,74 @@
 import { useState } from 'react';
-import { Box, Typography, TextField, Button, Paper, Container } from '@mui/material';
+import { Box, Typography, TextField, Button, Paper, Container, CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../layouts/footer/Footer';
+import SnackbarMensaje from '../utils/SnackbarMensaje';
+import environment from '../../environments/environment';
 
 function Contacto() {
   const [asunto, setAsunto] = useState('');
   const [mensaje, setMensaje] = useState('');
-  const deshabilitarBotonEnviar = !asunto || !mensaje;
+  const [abrirSnackbar, setAbrirSnackbar] = useState(false);
+  const [mensajeSnackbar, setMensajeSnackbar] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('info');
+  const [enviando, setEnviando] = useState(false);
+
+  const camposCargados = asunto && mensaje;
+  const deshabilitarBotonEnviar = !asunto || !mensaje || enviando;
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const showSnackbar = (mensaje, severidad) => {
+    setMensajeSnackbar(mensaje);
+    setSnackbarSeverity(severidad);
+    setAbrirSnackbar(true);
+  };
+
+  const handleCloseSnackbar = (_, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setAbrirSnackbar(false);
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (!camposCargados) {
+      showSnackbar('Por favor, completa todos los campos', 'warning');
+      return;
+    }
+
+    setEnviando(true);
+
+    const emailJson = JSON.stringify({
+      asunto: asunto.trim(),
+      mensaje: mensaje.trim(),
+    });
+
+    try {
+      const response = await fetch(`${environment.apiUrl}/contactos`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: emailJson
+      });
+
+      if (response.ok) {
+        showSnackbar('Mensaje enviado exitosamente', 'success');
+        setAsunto('');
+        setMensaje('');
+      } else {
+        const errorData = await response.json();
+        showSnackbar(errorData.message || 'Error al enviar el mensaje', 'error');
+      }
+    } catch (error) {
+      showSnackbar(error.message || 'Error de conexión al enviar el mensaje', 'error');
+    } finally {
+      setEnviando(false);
+    }
   };
 
   const handleVolver = () => {
@@ -147,9 +205,14 @@ function Contacto() {
                   '&:hover': {
                     backgroundColor: '#333333',
                   },
+                  '&:disabled': {
+                    backgroundColor: '#666666',
+                    color: '#ffffff',
+                  },
                 }}
+                startIcon={enviando ? <CircularProgress size={20} color="inherit" /> : null}
               >
-                Enviar
+                {enviando ? 'Enviando...' : 'Enviar'}
               </Button>
               <Button
                 fullWidth
@@ -175,6 +238,13 @@ function Contacto() {
         </Container>
       </Box>
       <Footer />
+      <SnackbarMensaje
+        abrirSnackbar={abrirSnackbar}
+        duracionSnackbar={5000}
+        handleCloseSnackbar={handleCloseSnackbar}
+        mensajeSnackbar={mensajeSnackbar}
+        snackbarSeverity={snackbarSeverity}
+      />
     </Box>
   );
 }
