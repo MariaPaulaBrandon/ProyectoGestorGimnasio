@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ContactoController;
 use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\SalaController;
 use App\Http\Controllers\TipoActividadController;
@@ -17,6 +18,10 @@ if (!defined('ID_ROUTE_PARAMETER')) {
 }
 
 Route::post('auth/login', [AuthController::class, 'login']);
+Route::prefix('contactos')->group(function () {
+    Route::post('/', [ContactoController::class, 'create'])
+        ->name('contactos.create');
+});
 
 Route::middleware(AUTH_SANCTION)->group(function () {
     Route::prefix('usuarios')->group(function () {
