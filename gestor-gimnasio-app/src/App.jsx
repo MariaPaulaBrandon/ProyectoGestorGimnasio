@@ -8,8 +8,9 @@ import ForgottenPassword from './components/forgotten-password/ForgottenPassword
 import Clases from './components/clases/Clases';
 import AgendarClases from './components/agendar-clases/AgendarClases';
 import ContactoAlumno from './components/contacto-alumno/ContactoAlumno';
-import AbmTurnoClase from './abm-tunos-clases/AbmTurnoClase';
+import AbmTurnoClase from './components/abm-tunos-clases/AbmTurnoClase';
 import AbmTipoActividad from './components/abm-tipo-actividad/AbmTipoActividad';
+import Contacto from './components/contacto/Contacto';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 
@@ -25,6 +26,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/forgot-password' element={<ForgottenPassword />} />
+        <Route path='/contacto' element={<Contacto />} />
 
         {/* Rutas protegidas */}
         <Route element={<RutaProtegida />}>

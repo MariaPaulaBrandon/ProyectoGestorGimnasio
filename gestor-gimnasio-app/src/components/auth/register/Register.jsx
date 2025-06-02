@@ -176,99 +176,98 @@ function Register() {
     setOpenSnackbar(false);
   };
 
-  return (
-    <Box className="register-page-container">
-      <Grid container sx={{ flexGrow: 1, alignItems: 'stretch' }}>
-        <Grid item xs={12} md={6} className="register-info-column">
-          <img src="/logo_app.png" alt="Fit Manager Logo" className="register-logo-white" />
-          <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold', mt: 2, color: '#000000' }}>
-            Fit Manager
+  return (<Box className="register-page-container">
+    <Grid container sx={{ flexGrow: 1, alignItems: 'stretch' }}>
+      <Grid size={{ xs: 12, md: 6 }} className="register-info-column">
+        <img src="/logo_app.png" alt="Fit Manager Logo" className="register-logo-white" />
+        <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold', mt: 2, color: '#000000' }}>
+          Fit Manager
+        </Typography>
+        <Typography variant="h6" component="p" sx={{ mt: 1, mb: 3, color: '#333333', maxWidth: '80%' }}>
+          Gestioná tu cuenta de forma fácil y rápida
+        </Typography>
+        <Box sx={{ textAlign: 'left', width: '100%', maxWidth: '400px', color: '#000000' }}>
+          <Typography variant="body1" component="div" sx={{ mb: 1, fontWeight: '500' }}>
+            Con Fit Manager podés:
           </Typography>
-          <Typography variant="h6" component="p" sx={{ mt: 1, mb: 3, color: '#333333', maxWidth: '80%' }}>
-            Gestioná tu cuenta de forma fácil y rápida
+          <ul style={{ paddingLeft: '20px', margin: 0, listStyleType: 'disc' }}>
+            <li>Actualizar tus datos personales de forma rápida y segura</li>
+            <li>Inscribirte a clases y administrar tus turnos</li>
+            <li>Consultar tu historial de pagos y comprobantes</li>
+            <li>Revisar el historial de clases realizadas</li>
+            <li>Modificar tu plan según tus necesidades</li>
+          </ul>
+        </Box>
+      </Grid>
+      <Grid size={{ xs: 12, md: 6 }} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: { xs: '16px', md: '32px' } }}>
+        <Box className="register-box-white">
+          <Typography component="h1" variant="h5" className="register-title-white">
+            Crear Cuenta
           </Typography>
-          <Box sx={{ textAlign: 'left', width: '100%', maxWidth: '400px', color: '#000000' }}>
-            <Typography variant="body1" component="div" sx={{ mb: 1, fontWeight: '500' }}>
-              Con Fit Manager podés:
-            </Typography>
-            <ul style={{ paddingLeft: '20px', margin: 0, listStyleType: 'disc' }}>
-              <li>Actualizar tus datos personales de forma rápida y segura</li>
-              <li>Inscribirte a clases y administrar tus turnos</li>
-              <li>Consultar tu historial de pagos y comprobantes</li>
-              <li>Revisar el historial de clases realizadas</li>
-              <li>Modificar tu plan según tus necesidades</li>
-            </ul>
-          </Box>
-        </Grid>
-
-        <Grid item xs={12} md={6} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: { xs: '16px', md: '32px' } }}>
-          <Box className="register-box-white">
-            <Typography component="h1" variant="h5" className="register-title-white">
-              Crear Cuenta
-            </Typography>
-            <Box component="form" onSubmit={handleSubmit} noValidate className="register-form-white">
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="nombres"
-                label="Nombres"
-                name="nombres"
-                autoComplete="given-name"
-                value={nombres}
-                onChange={handleNombresChange}
-                onBlur={validateNombres}
-                error={!!nombresError}
-                helperText={nombresError}
-                className="register-textfield-white"
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="apellidos"
-                label="Apellidos"
-                name="apellidos"
-                autoComplete="family-name"
-                value={apellidos}
-                onChange={handleApellidosChange}
-                onBlur={validateApellidos}
-                error={!!apellidosError}
-                helperText={apellidosError}
-                className="register-textfield-white"
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email"
-                name="email"
-                autoComplete="email"
-                value={email}
-                onChange={handleEmailChange}
-                onBlur={validateEmail}
-                error={!!emailError}
-                helperText={emailError}
-                className="register-textfield-white"
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Contraseña"
-                type={showPassword ? 'text' : 'password'}
-                id="password"
-                autoComplete="new-password"
-                value={password}
-                onChange={handlePasswordChange}
-                onBlur={validatePassword}
-                error={!!passwordError}
-                helperText={passwordError}
-                className="register-textfield-white"
-                slotProps={{
-                  input: (
+          <Box component="form" onSubmit={handleSubmit} noValidate className="register-form-white">
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="nombres"
+              label="Nombres"
+              name="nombres"
+              autoComplete="given-name"
+              value={nombres}
+              onChange={handleNombresChange}
+              onBlur={validateNombres}
+              error={!!nombresError}
+              helperText={nombresError}
+              className="register-textfield-white"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="apellidos"
+              label="Apellidos"
+              name="apellidos"
+              autoComplete="family-name"
+              value={apellidos}
+              onChange={handleApellidosChange}
+              onBlur={validateApellidos}
+              error={!!apellidosError}
+              helperText={apellidosError}
+              className="register-textfield-white"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email"
+              name="email"
+              autoComplete="email"
+              value={email}
+              onChange={handleEmailChange}
+              onBlur={validateEmail}
+              error={!!emailError}
+              helperText={emailError}
+              className="register-textfield-white"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Contraseña"
+              type={showPassword ? 'text' : 'password'}
+              id="password"
+              autoComplete="new-password"
+              value={password}
+              onChange={handlePasswordChange}
+              onBlur={validatePassword}
+              error={!!passwordError}
+              helperText={passwordError}
+              className="register-textfield-white"
+              slotProps={{
+                input: {
+                  endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
                         aria-label="toggle password visibility"
@@ -281,40 +280,41 @@ function Register() {
                       </IconButton>
                     </InputAdornment>
                   ),
-                }}
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                className="register-submit-button-white"
-                disabled={isFormInvalid()}
-              >
-                Registrarse
-              </Button>
-              <Grid container justifyContent="center" sx={{ mt: 2 }}>
-                <Grid item>
-                  <RouterLink to="/login" variant="body2" className="login-link-white">
-                    ¿Ya tenés una cuenta? Iniciá Sesión
-                  </RouterLink>
-                </Grid>
+                },
+              }}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              className="register-submit-button-white"
+              disabled={isFormInvalid()}
+            >
+              Registrarse
+            </Button>
+            <Grid container justifyContent="center" sx={{ mt: 2 }}>
+              <Grid size={12} sx={{ textAlign: 'center' }}>
+                <RouterLink to="/login" variant="body2" className="login-link-white">
+                  ¿Ya tenés una cuenta? Iniciá Sesión
+                </RouterLink>
               </Grid>
-            </Box>
+            </Grid>
           </Box>
-        </Grid>
+        </Box>
       </Grid>
-      <Footer />
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={5000}
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
-    </Box>
+    </Grid>
+    <Footer />
+    <Snackbar
+      open={openSnackbar}
+      autoHideDuration={5000}
+      onClose={handleCloseSnackbar}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+    >
+      <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
+        {snackbarMessage}
+      </Alert>
+    </Snackbar>
+  </Box>
   );
 }
 

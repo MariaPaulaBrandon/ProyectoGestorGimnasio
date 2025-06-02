@@ -7,9 +7,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 
-class Usuario extends Authenticatable // Cambiar aquí
+class Usuario extends Authenticatable
 {
-    // Agregar HasApiTokens y Notifiable
     use HasFactory, HasApiTokens, Notifiable;
 
     /**
@@ -18,18 +17,21 @@ class Usuario extends Authenticatable // Cambiar aquí
      * @var string
      */
     protected $table = 'usuario';
+
     /**
      * La clave primaria asociada con la tabla.
      *
      * @var string
      */
     protected $primaryKey = 'id';
+
     /**
      * Indica si el modelo debe ser marcado con tiempo.
      *
      * @var bool
      */
     public $timestamps = false;
+
     /**
      * Los atributos que se pueden asignar masivamente.
      *
@@ -42,6 +44,7 @@ class Usuario extends Authenticatable // Cambiar aquí
         'password',
         'id_tipo_usuario',
     ];
+
     /**
      * Los atributos que deben ser ocultados para los arreglos y JSON.
      *
@@ -50,6 +53,7 @@ class Usuario extends Authenticatable // Cambiar aquí
     protected $hidden = [
         'password',
     ];
+
     /**
      * Los atributos que deben ser convertidos a tipos nativos.
      *
