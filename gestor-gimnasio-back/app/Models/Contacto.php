@@ -36,6 +36,7 @@ class Contacto extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'email',
         'asunto',
         'mensaje'
     ];

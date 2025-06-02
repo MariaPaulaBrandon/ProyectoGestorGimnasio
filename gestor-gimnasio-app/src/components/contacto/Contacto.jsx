@@ -6,15 +6,23 @@ import SnackbarMensaje from '../utils/SnackbarMensaje';
 import environment from '../../environments/environment';
 
 function Contacto() {
-  const [asunto, setAsunto] = useState('');
-  const [mensaje, setMensaje] = useState('');
+  const [formulario, setFormulario] = useState({
+    email: '',
+    asunto: '',
+    mensaje: ''
+  });
   const [abrirSnackbar, setAbrirSnackbar] = useState(false);
   const [mensajeSnackbar, setMensajeSnackbar] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('info');
   const [enviando, setEnviando] = useState(false);
 
-  const camposCargados = asunto && mensaje;
-  const deshabilitarBotonEnviar = !asunto || !mensaje || enviando;
+  const validarEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const camposCargados = formulario.email && validarEmail(formulario.email) && formulario.asunto && formulario.mensaje;
+  const deshabilitarBotonEnviar = !camposCargados || enviando;
   const navigate = useNavigate();
 
   const showSnackbar = (mensaje, severidad) => {
@@ -38,11 +46,10 @@ function Contacto() {
       return;
     }
 
-    setEnviando(true);
-
-    const emailJson = JSON.stringify({
-      asunto: asunto.trim(),
-      mensaje: mensaje.trim(),
+    setEnviando(true); const emailJson = JSON.stringify({
+      email: formulario.email.trim().toUpperCase(),
+      asunto: formulario.asunto.trim(),
+      mensaje: formulario.mensaje.trim(),
     });
 
     try {
@@ -56,14 +63,18 @@ function Contacto() {
         body: emailJson
       });
 
-      if (response.ok) {
-        showSnackbar('Mensaje enviado exitosamente', 'success');
-        setAsunto('');
-        setMensaje('');
-      } else {
+      if (!response.ok) {
         const errorData = await response.json();
         showSnackbar(errorData.message || 'Error al enviar el mensaje', 'error');
+
       }
+
+      showSnackbar('Mensaje enviado exitosamente', 'success');
+      setFormulario({
+        email: '',
+        asunto: '',
+        mensaje: ''
+      });
     } catch (error) {
       showSnackbar(error.message || 'Error de conexión al enviar el mensaje', 'error');
     } finally {
@@ -86,20 +97,21 @@ function Contacto() {
       }}
     >
       <Box
+        component={'main'}
         sx={{
           flexGrow: 1,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          py: 4,
-          px: 2
+          py: { xs: 2, sm: 4 },
+          px: { xs: 1, sm: 2 }
         }}
       >
         <Container maxWidth="md">
           <Paper
             elevation={3}
             sx={{
-              p: 5,
+              p: { xs: 2, sm: 3, md: 5 },
               borderRadius: 2,
               backgroundColor: '#ffffff',
               width: '100%',
@@ -111,7 +123,7 @@ function Contacto() {
               variant="h4"
               component="h1"
               sx={{
-                mb: 4,
+                mb: { xs: 2, sm: 3, md: 4 },
                 fontWeight: 'bold',
                 color: '#000000',
                 textAlign: 'left'
@@ -119,26 +131,17 @@ function Contacto() {
             >
               Envía tu mensaje
             </Typography>
-
             <Box component="form" onSubmit={handleSubmit}>
-              <Typography
-                variant="body1"
-                sx={{
-                  mb: 1,
-                  color: '#666666',
-                  fontWeight: 500
-                }}
-              >
-              </Typography>
               <TextField
                 fullWidth
                 required
-                label="Asunto"
-                value={asunto}
-                onChange={(e) => setAsunto(e.target.value)}
+                label="Email"
+                type='email'
+                placeholder='Ingresa tu email, ejemplo: miemail@email.com'
+                value={formulario.email} onChange={(e) => setFormulario({ ...formulario, email: e.target.value })}
                 variant="outlined"
                 sx={{
-                  mb: 3,
+                  mb: { xs: 1, sm: 1.5, md: 2 },
                   '& .MuiOutlinedInput-root': {
                     backgroundColor: '#ffffff',
                     '& fieldset': {
@@ -153,27 +156,38 @@ function Contacto() {
                   },
                 }}
               />
-
-              <Typography
-                variant="body1"
+              <TextField
+                fullWidth
+                required label="Asunto"
+                type='text'
+                value={formulario.asunto} onChange={(e) => setFormulario({ ...formulario, asunto: e.target.value })}
+                variant="outlined"
                 sx={{
-                  mb: 1,
-                  color: '#666666',
-                  fontWeight: 500
+                  mb: { xs: 1, sm: 1.5, md: 2 },
+                  '& .MuiOutlinedInput-root': {
+                    backgroundColor: '#ffffff',
+                    '& fieldset': {
+                      borderColor: '#cccccc',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#999999',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#1976d2',
+                    },
+                  },
                 }}
-              >
-              </Typography>
+              />
               <TextField
                 fullWidth
                 label="Mensaje"
-                required
-                multiline
-                rows={8}
-                value={mensaje}
-                onChange={(e) => setMensaje(e.target.value)}
+                type='text'
+                required multiline
+                rows={{ xs: 4, sm: 6, md: 8 }}
+                value={formulario.mensaje} onChange={(e) => setFormulario({ ...formulario, mensaje: e.target.value })}
                 variant="outlined"
                 sx={{
-                  mb: 4,
+                  mb: { xs: 2, sm: 2.5, md: 3 },
                   '& .MuiOutlinedInput-root': {
                     backgroundColor: '#ffffff',
                     '& fieldset': {
@@ -194,14 +208,14 @@ function Contacto() {
                 variant="contained"
                 disabled={deshabilitarBotonEnviar}
                 sx={{
-                  py: 2,
+                  py: { xs: 1.5, sm: 2 },
                   backgroundColor: '#000000',
                   color: '#ffffff',
-                  fontSize: '1rem',
+                  fontSize: { xs: '0.875rem', sm: '1rem' },
                   fontWeight: 'bold',
                   textTransform: 'none',
                   borderRadius: 1,
-                  mb: 2,
+                  mb: { xs: 1.5, sm: 2 },
                   '&:hover': {
                     backgroundColor: '#333333',
                   },
@@ -219,8 +233,8 @@ function Contacto() {
                 variant="contained"
                 onClick={handleVolver}
                 sx={{
-                  py: 2,
-                  fontSize: '1rem',
+                  py: { xs: 1.5, sm: 2 },
+                  fontSize: { xs: '0.875rem', sm: '1rem' },
                   fontWeight: 'bold',
                   textTransform: 'none',
                   borderRadius: 1,

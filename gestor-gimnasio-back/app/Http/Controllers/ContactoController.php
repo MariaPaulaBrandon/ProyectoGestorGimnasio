@@ -20,6 +20,7 @@ class ContactoController extends Controller
     public function create(Request $request)
     {
         $data = $request->validate([
+            'email' => 'required|email|max:255',
             'asunto' => 'required|string|max:255',
             'mensaje' => 'required|string',
         ]);
