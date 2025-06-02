@@ -4,6 +4,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import EventNoteIcon from '@mui/icons-material/EventNote';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import BuildIcon from '@mui/icons-material/Build';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import TiposUsuarioEnum from '../../models/enums/TiposUsuarioEnum.models.enum.js';
@@ -59,6 +60,26 @@ function NavigationButton({ usuario }) {
           onClick={() => navigate('/dashboard/clases')}
         >
           Clases
+        </Button>
+      )}
+       {puedeVerClases && (
+      <Button
+        color="inherit"
+        startIcon={<EventNoteIcon />}
+        sx={{ textTransform: 'none', mx: 1 }}
+        onClick={() => navigate('/dashboard/agendar')}
+      >
+        Agendar
+      </Button>
+      )}
+      {puedeVerClases && (
+        <Button
+          color="inherit"
+          startIcon={<MailOutlineIcon />}
+          sx={{ textTransform: 'none', mx: 1 }}
+          onClick={() => navigate('/dashboard/contacto')}
+        >
+          Contacto
         </Button>
       )}
       {puedeVerActividades && (
