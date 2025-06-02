@@ -5,7 +5,6 @@ import Register from './components/auth/register/Register';
 import RutaProtegida from './components/auth/RutaProtegida/RutaProtegida';
 import Dashboard from './components/layouts/dashboard/Dashboard';
 import ForgottenPassword from './components/forgotten-password/ForgottenPassword';
-import Clases from './components/clases/Clases';
 import AgendarClases from './components/agendar-clases/AgendarClases';
 import ContactoAlumno from './components/contacto-alumno/ContactoAlumno';
 import AbmTurnoClase from './components/abm-tunos-clases/AbmTurnoClase';
@@ -31,8 +30,7 @@ function App() {
         {/* Rutas protegidas */}
         <Route element={<RutaProtegida />}>
           <Route path='/dashboard' element={<Dashboard />}>
-            <Route path="/dashboard/clases" element={<Clases />} />
-            <Route path="/dashboard/agendar" element={<AgendarClases />} />
+            <Route path="/dashboard/clases" element={<AgendarClases />} />
             <Route path="/dashboard/contacto" element={<ContactoAlumno />} />
             <Route path='/dashboard/abm/clases' element={<AbmTurnoClase />} />
             <Route path='/dashboard/abm/tipos-actividad' element={<AbmTipoActividad />} />

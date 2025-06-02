@@ -59,18 +59,8 @@ function NavigationButton({ usuario }) {
           sx={{ textTransform: 'none', mx: 1 }}
           onClick={() => navigate('/dashboard/clases')}
         >
-          Clases
-        </Button>
-      )}
-       {puedeVerClases && (
-      <Button
-        color="inherit"
-        startIcon={<EventNoteIcon />}
-        sx={{ textTransform: 'none', mx: 1 }}
-        onClick={() => navigate('/dashboard/agendar')}
-      >
         Agendar
-      </Button>
+        </Button>
       )}
       {puedeVerClases && (
         <Button
