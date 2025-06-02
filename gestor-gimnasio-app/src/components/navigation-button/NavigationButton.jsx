@@ -57,7 +57,7 @@ function NavigationButton({ usuario }) {
           color="inherit"
           startIcon={<FitnessCenterIcon />}
           sx={{ textTransform: 'none', mx: 1 }}
-          onClick={() => navigate('/dashboard/clases')}
+          onClick={() => navigate('/dashboard/agendar-clases')}
         >
         Agendar
         </Button>
