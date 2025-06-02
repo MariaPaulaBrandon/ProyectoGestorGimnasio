@@ -22,10 +22,13 @@ function NavigationButton({ usuario }) {
 
   const idTipoUsuario = parseInt(usuario.idTipoUsuario, 10);
 
-  const puedeVerClases =
+  const puedeVerAgendarClases =
+    idTipoUsuario === TiposUsuarioEnum.ALUMNO;
+
+  // Tanto el alumno como el profesor  pueden ver el formulario de contacto que permite enviar mensajes a la administración.
+  const puedeVerContactoAlumno =
     idTipoUsuario === TiposUsuarioEnum.ALUMNO ||
-    idTipoUsuario === TiposUsuarioEnum.PROFESOR ||
-    idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR;
+    idTipoUsuario === TiposUsuarioEnum.PROFESOR;
 
   const puedeVerActividades =
     idTipoUsuario === TiposUsuarioEnum.PROFESOR ||
@@ -52,7 +55,7 @@ function NavigationButton({ usuario }) {
   };
   return (
     <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      {puedeVerClases && (
+      {puedeVerAgendarClases && (
         <Button
           color="inherit"
           startIcon={<FitnessCenterIcon />}
@@ -62,7 +65,7 @@ function NavigationButton({ usuario }) {
         Agendar
         </Button>
       )}
-      {puedeVerClases && (
+      {puedeVerContactoAlumno && (
         <Button
           color="inherit"
           startIcon={<MailOutlineIcon />}
