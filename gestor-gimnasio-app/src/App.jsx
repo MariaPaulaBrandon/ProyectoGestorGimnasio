@@ -30,7 +30,7 @@ function App() {
         {/* Rutas protegidas */}
         <Route element={<RutaProtegida />}>
           <Route path='/dashboard' element={<Dashboard />}>
-            <Route path="/dashboard/clases" element={<AgendarClases />} />
+            <Route path="/dashboard/agendar-clases" element={<AgendarClases />} />
             <Route path="/dashboard/contacto" element={<ContactoAlumno />} />
             <Route path='/dashboard/abm/clases' element={<AbmTurnoClase />} />
             <Route path='/dashboard/abm/tipos-actividad' element={<AbmTipoActividad />} />
