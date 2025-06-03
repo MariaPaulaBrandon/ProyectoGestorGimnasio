@@ -1,3 +1,7 @@
 .clases-table .MuiTableCell-root {
     text-align: center;
 }
+
+.cabecera-tabla-abm {
+  background: #f8fafc;
+}

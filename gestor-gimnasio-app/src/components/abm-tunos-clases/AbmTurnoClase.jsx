@@ -204,10 +204,10 @@ export default function AbmTurnoClase() {
         }
       </TableContainer>
       <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-        <Button variant="outlined" disabled={cargandoActividades} onClick={handleOpenModalCrear}>
+        <Button variant="outlined" className="boton-outlined-negro" disabled={cargandoActividades} onClick={handleOpenModalCrear}>
           Nuevo Turno Clase
         </Button>
-        <Button variant="outlined" sx={{ ml: 2 }} onClick={() => getTurnoClases(userToken)}>
+        <Button variant="outlined" className="boton-outlined-negro" sx={{ ml: 2 }} onClick={() => getTurnoClases(userToken)}>
           Actualizar
         </Button>
       </Box>
@@ -234,14 +234,14 @@ export default function AbmTurnoClase() {
 function TurnoClasesTabla({ clases, onEditar }) {
   const encabezadosTabla = () => {
     return (
-      <TableHead>
+      <TableHead className="cabecera-tabla-abm">
         <TableRow>
-          <TableCell>Actividad</TableCell>
-          <TableCell>Fecha</TableCell>
-          <TableCell>Horario Inicio</TableCell>
-          <TableCell>Horario Fin</TableCell>
-          <TableCell>Cupo Máximo</TableCell>
-          <TableCell>Acción</TableCell>
+          <TableCell>ACTIVIDAD</TableCell>
+          <TableCell>FECHA</TableCell>
+          <TableCell>DESDE</TableCell>
+          <TableCell>HASTA</TableCell>
+          <TableCell>CUPO MÁXIMO</TableCell>
+          <TableCell>ACCIÓN</TableCell>
         </TableRow>
       </TableHead>
     );
@@ -274,7 +274,7 @@ function TurnoClasesTabla({ clases, onEditar }) {
             <TableCell>{clase.horarioHasta}</TableCell>
             <TableCell>{clase.cupoMaximo}</TableCell>
             <TableCell>
-              <Button variant="outlined" onClick={() => onEditar(clase)}>
+              <Button variant="outlined" className="boton-outlined-negro" style={{ minWidth: 200 }} onClick={() => onEditar(clase)}>
                 Modificar registro
               </Button>
             </TableCell>
@@ -454,7 +454,7 @@ function TurnoClaseModal({ abrirModal, handleCerrar, handleConfirmar, actividade
         />
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3, gap: 1 }}>
-          <Button variant="outlined" onClick={handleCerrar}>Cancelar</Button>
+          <Button variant="outlined"className="boton-outlined-negro" onClick={handleCerrar}>Cancelar</Button>
           <Button variant="contained" onClick={handleSubmit} disabled={disabledConfirmButton}>Confirmar</Button>
         </Box>
       </Box>
