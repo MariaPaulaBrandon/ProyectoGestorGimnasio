@@ -198,10 +198,10 @@ export default function AbmTipoActividad() {
         }
       </TableContainer>
       <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-        <Button variant="outlined" disabled={cargandoSalas} onClick={handleOpenModalCrear}>
+        <Button variant="outlined" className="boton-principal" disabled={cargandoSalas} onClick={handleOpenModalCrear}>
           Nuevo Tipo de Actividad
         </Button>
-        <Button variant="outlined" sx={{ ml: 2 }} onClick={() => getTiposActividad(userToken)}>
+        <Button variant="outlined" className="boton-principal" sx={{ ml: 2 }} onClick={() => getTiposActividad(userToken)}>
           Actualizar
         </Button>
       </Box>
@@ -229,12 +229,12 @@ export default function AbmTipoActividad() {
 function TiposActividadTabla({ actividades, onEditar, salas }) {
   const encabezadosTabla = () => {
     return (
-      <TableHead>
+      <TableHead className="cabecera-tabla-abm">
         <TableRow>
           <TableCell>ID</TableCell>
-          <TableCell>Tipo de Actividad</TableCell>
-          <TableCell>Sala</TableCell>
-          <TableCell>Acción</TableCell>
+          <TableCell>TIPO DE ACTIVIDAD</TableCell>
+          <TableCell>SALA</TableCell>
+          <TableCell>ACCIÓN</TableCell>
         </TableRow>
       </TableHead>
     );
@@ -265,7 +265,7 @@ function TiposActividadTabla({ actividades, onEditar, salas }) {
             <TableCell>{actividad.tipo.charAt(0).toUpperCase() + actividad.tipo.slice(1).toLowerCase()}</TableCell>
             <TableCell>{actividad.descripcionSala.charAt(0).toUpperCase() + actividad.descripcionSala.slice(1).toLowerCase()}</TableCell>
             <TableCell>
-              <Button variant="outlined" onClick={() => onEditar(actividad)}>
+              <Button variant="outlined" className="boton-principal" onClick={() => onEditar(actividad)}>
                 Modificar registro
               </Button>
             </TableCell>
@@ -406,8 +406,8 @@ function TipoActividadModal({ abrirModal, handleCerrar, handleConfirmar, activid
         </FormControl>
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3, gap: 1 }}>
-          <Button variant="outlined" onClick={handleCerrar}>Cancelar</Button>
-          <Button variant="contained" onClick={handleSubmit} disabled={disabledConfirmButton}>Confirmar</Button>
+          <Button variant="outlined" className="boton-secundario" onClick={handleCerrar}>Cancelar</Button>
+          <Button variant="contained" className="boton-principal" onClick={handleSubmit} disabled={disabledConfirmButton}>Confirmar</Button>
         </Box>
       </Box>
     </Modal>

@@ -1,0 +1,49 @@
+.boton-principal {
+  background: #000 !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+  font-weight: 500;
+  box-shadow: 0 2px 6px rgba(60, 60, 60, 0.08);
+  padding: 10px 0;
+  min-width: 180px;
+  transition: background 0.2s;
+  border: none !important;
+}
+
+.boton-principal:hover,
+.boton-principal:focus {
+  background: #363636 !important;
+  color: #fff !important;
+}
+
+.boton-principal:disabled {
+  background: #cccccc !important;
+  color: #666666 !important;
+}
+
+.boton-secundario {
+  border: 2px solid #000 !important;
+  color: #000 !important;
+  background: #fff !important;
+  border-radius: 8px !important;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 10px 0;
+  min-width: 180px;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.boton-secundario:hover,
+.boton-secundario:focus {
+  background: #0e0e0e !important;
+  color: #fff !important;
+  border-color: #000 !important;
+}
+
+.cabecera-tabla {
+  background: #f8fafc;
+}
+
+.css-1m7gvpg-MuiCircularProgress-root {
+  color: black !important;
+}
