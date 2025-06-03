@@ -5,7 +5,6 @@ import SnackbarMensaje from '../utils/SnackbarMensaje';
 import environment from '../../environments/environment';
 
 function ContactoAlumno() {
-  // Supongamos que el email del usuario está en localStorage bajo la clave 'usuarioEmail'
   const usuario = JSON.parse(localStorage.getItem('usuario'));
   const usuarioEmail = usuario?.email || '';
   const [formulario, setFormulario] = useState({
