@@ -29,7 +29,7 @@ function Footer() {
           },
         }}
       >
-        Contáctenos
+        Contactate con el gimnasio
       </Link>
     </Box>
   );

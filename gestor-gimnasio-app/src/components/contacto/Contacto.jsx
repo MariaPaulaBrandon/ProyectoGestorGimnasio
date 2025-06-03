@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Typography, TextField, Button, Paper, Container, CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../layouts/footer/Footer';
@@ -6,6 +6,7 @@ import SnackbarMensaje from '../utils/SnackbarMensaje';
 import environment from '../../environments/environment';
 
 function Contacto() {
+  const usuarioEstaLogueado = localStorage.getItem('usuarioAccesToken') !== null;
   const [formulario, setFormulario] = useState({
     email: '',
     asunto: '',
@@ -15,6 +16,17 @@ function Contacto() {
   const [mensajeSnackbar, setMensajeSnackbar] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('info');
   const [enviando, setEnviando] = useState(false);
+
+  useEffect(() => {
+    if (usuarioEstaLogueado) {
+      const usuario = JSON.parse(localStorage.getItem('usuario'));
+      setFormulario({
+        email: usuario.email || '',
+        asunto: '',
+        mensaje: ''
+      });
+    }
+  }, [usuarioEstaLogueado]);
 
   const validarEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -132,30 +144,33 @@ function Contacto() {
               Envía tu mensaje
             </Typography>
             <Box component="form" onSubmit={handleSubmit}>
-              <TextField
-                fullWidth
-                required
-                label="Email"
-                type='email'
-                placeholder='Ingresa tu email, ejemplo: miemail@email.com'
-                value={formulario.email} onChange={(e) => setFormulario({ ...formulario, email: e.target.value })}
-                variant="outlined"
-                sx={{
-                  mb: { xs: 1, sm: 1.5, md: 2 },
-                  '& .MuiOutlinedInput-root': {
-                    backgroundColor: '#ffffff',
-                    '& fieldset': {
-                      borderColor: '#cccccc',
+              {!usuarioEstaLogueado && (
+                <TextField
+                  fullWidth
+                  required
+                  label="Email"
+                  type='email'
+                  placeholder='Ingresa tu email, ejemplo: miemail@email.com'
+                  value={formulario.email}
+                  onChange={(e) => setFormulario({ ...formulario, email: e.target.value })}
+                  variant="outlined"
+                  sx={{
+                    mb: { xs: 1, sm: 1.5, md: 2 },
+                    '& .MuiOutlinedInput-root': {
+                      backgroundColor: '#ffffff',
+                      '& fieldset': {
+                        borderColor: '#cccccc',
+                      },
+                      '&:hover fieldset': {
+                        borderColor: '#999999',
+                      },
+                      '&.Mui-focused fieldset': {
+                        borderColor: '#1976d2',
+                      },
                     },
-                    '&:hover fieldset': {
-                      borderColor: '#999999',
-                    },
-                    '&.Mui-focused fieldset': {
-                      borderColor: '#1976d2',
-                    },
-                  },
-                }}
-              />
+                  }}
+                />
+              )}
               <TextField
                 fullWidth
                 required label="Asunto"
