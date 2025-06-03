@@ -195,7 +195,7 @@ function Register() {
             <li>Inscribirte a clases y administrar tus turnos</li>
             <li>Consultar tu historial de pagos y comprobantes</li>
             <li>Revisar el historial de clases realizadas</li>
-            <li>Modificar tu plan según tus necesidades</li>
+            <li>Contactarte con nosotros</li>
           </ul>
         </Box>
       </Grid>

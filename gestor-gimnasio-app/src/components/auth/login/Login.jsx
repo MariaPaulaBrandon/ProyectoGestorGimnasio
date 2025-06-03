@@ -139,7 +139,7 @@ function Login() {
                 <li>Inscribirte a clases y administrar tus turnos</li>
                 <li>Consultar tu historial de pagos y comprobantes</li>
                 <li>Revisar el historial de clases realizadas</li>
-                <li>Modificar tu plan según tus necesidades</li>
+                <li>Contactarte con nosotros</li>
               </ul>
             </Typography>
           </Box>
@@ -148,7 +148,7 @@ function Login() {
         <Grid size={{ xs: 12, md: 6 }} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Box className="login-box-white" sx={{ paddingTop: '48px', paddingBottom: '40px' }}>
             <Typography component="h1" variant="h5" className="login-title-white">
-              Bienvenido al espacio del cliente
+              Bienvenido/a
             </Typography>
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, display: 'flex', flexDirection: 'column' }} className="login-form-white">
               <TextField
