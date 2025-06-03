@@ -1,5 +1,5 @@
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Modal, Typography, TextField, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import './AbmTurnoClase.css';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -12,7 +12,7 @@ import ClasesCarga from "../clases-carga/ClasesCarga";
 import SnackbarMensaje from "../utils/SnackbarMensaje";
 
 export default function AbmTurnoClase() {
-  const userToken = localStorage.getItem('usuarioAccesToken');
+  const userToken = useMemo(() => localStorage.getItem('usuarioAccesToken'), []);
 
   const [turnoClases, setTurnoClases] = useState([]);
   const [actividades, setActividades] = useState([]);
@@ -28,11 +28,6 @@ export default function AbmTurnoClase() {
     turno: null,
     titulo: '',
   });
-
-  useEffect(() => {
-    getTurnoClases(userToken);
-    getActividades(userToken);
-  }, [userToken]);
 
   const handleOpenModalCrear = () => {
     setModalConfig({
@@ -78,13 +73,13 @@ export default function AbmTurnoClase() {
     setAbrirSnackbar(false);
   };
 
-  const showSnackbar = (mensaje, severidad) => {
+  const showSnackbar = useCallback((mensaje, severidad) => {
     setMensajeSnackbar(mensaje);
     setSnackbarSeverity(severidad);
     setAbrirSnackbar(true);
-  };
+  }, []);
 
-  const getTurnoClases = async (token) => {
+  const getTurnoClases = useCallback(async (token) => {
     setTurnoClases([]);
     setCargando(true);
 
@@ -110,7 +105,7 @@ export default function AbmTurnoClase() {
     } finally {
       setCargando(false);
     }
-  };
+  }, [showSnackbar]);
 
   const createTurnoCLase = async (nuevoTurno, token) => {
     setCargando(true);
@@ -164,7 +159,7 @@ export default function AbmTurnoClase() {
     }
   };
 
-  const getActividades = async (token) => {
+  const getActividades = useCallback(async (token) => {
     setActividades([]);
     setCargandoActividades(true);
 
@@ -190,7 +185,12 @@ export default function AbmTurnoClase() {
     } finally {
       setCargandoActividades(false);
     }
-  }
+  }, [showSnackbar]);
+
+  useEffect(() => {
+    getTurnoClases(userToken);
+    getActividades(userToken);
+  }, [userToken, getTurnoClases, getActividades]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>

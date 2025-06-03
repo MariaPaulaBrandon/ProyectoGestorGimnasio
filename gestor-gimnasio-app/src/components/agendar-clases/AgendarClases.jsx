@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import TurnoClaseIncripcionEstadoDto from '../../models/dtos/TurnoClaseIncripcionEstadoDto.dto';
 import environment from '../../environments/environment';
 import './AgendarClases.css';
@@ -24,8 +24,8 @@ function Clases() {
   const [isLoading, setIsLoading] = useState(true);
   const [accionEnProgreso, setAccionEnProgreso] = useState(false);
   const [accionId, setAccionId] = useState(null);
-  const usuario = new UsuarioAcceesToken(JSON.parse(localStorage.getItem('usuario'))).usuario;
-  const token = localStorage.getItem('usuarioAccesToken');
+  const usuario = useMemo(() => new UsuarioAcceesToken(JSON.parse(localStorage.getItem('usuario'))).usuario, []);
+  const token = useMemo(() => localStorage.getItem('usuarioAccesToken'), []);
 
   const [abrirSnackbar, setAbrirSnackbar] = useState(false);
   const [mensajeSnackbar, setMensajeSnackbar] = useState('');
@@ -39,14 +39,10 @@ function Clases() {
     setAbrirSnackbar(false);
   };
 
-  const showSnackbar = (mensaje, severidad) => {
+  const showSnackbar = useCallback((mensaje, severidad) => {
     setMensajeSnackbar(mensaje);
     setSnackbarSeverity(severidad);
     setAbrirSnackbar(true);
-  };
-
-  useEffect(() => {
-    getClaesIncripcionUsuario(usuario, token);
   }, []);
 
   const handleInscribirClick = async (idTurnoClase) => {
@@ -72,7 +68,7 @@ function Clases() {
       }
 
       showSnackbar('Inscripción realizada con éxito', 'success');
-      await getClaesIncripcionUsuario(usuario, token);
+      await getClasesInscripcionUsuario(usuario, token);
     } catch (error) {
       showSnackbar(error.message || 'Error al inscribirse a la clase', 'error');
     } finally {
@@ -100,7 +96,7 @@ function Clases() {
       }
 
       showSnackbar('Inscripción cancelada con éxito', 'success');
-      await getClaesIncripcionUsuario(usuario, token);
+      await getClasesInscripcionUsuario(usuario, token);
     } catch (error) {
       showSnackbar(error.message || 'Error al cancelar la inscripción', 'error');
     } finally {
@@ -109,7 +105,7 @@ function Clases() {
     }
   };
 
-  const getClaesIncripcionUsuario = async (usuario, token) => {
+  const getClasesInscripcionUsuario = useCallback(async (usuario, token) => {
     setClasesParaTabla([]);
     setIsLoading(true);
     const idUsuario = usuario.id;
@@ -135,8 +131,12 @@ function Clases() {
       setClasesParaTabla([]);
     } finally {
       setIsLoading(false);
-    };
-  };
+    }
+  }, [showSnackbar]);
+
+  useEffect(() => {
+    getClasesInscripcionUsuario(usuario, token);
+  }, [getClasesInscripcionUsuario, usuario, token]);
 
   return (
     <>

@@ -1,13 +1,13 @@
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Modal, Typography, TextField, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import SnackbarMensaje from "../utils/SnackbarMensaje";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import ClasesCarga from "../clases-carga/ClasesCarga";
 import PropTypes from "prop-types";
 import environment from "../../environments/environment";
 import './AbmTipoActividad.css';
 
 export default function AbmTipoActividad() {
-  const userToken = localStorage.getItem('usuarioAccesToken');
+  const userToken = useMemo(() => localStorage.getItem('usuarioAccesToken'), []);
 
   const [tiposActividad, setTiposActividad] = useState([]);
   const [salas, setSalas] = useState([]);
@@ -23,11 +23,6 @@ export default function AbmTipoActividad() {
     actividad: null,
     titulo: '',
   });
-
-  useEffect(() => {
-    getTiposActividad(userToken);
-    getSalas(userToken);
-  }, [userToken]);
 
   const handleOpenModalCrear = () => {
     setModalConfig({
@@ -73,13 +68,13 @@ export default function AbmTipoActividad() {
     setAbrirSnackbar(false);
   };
 
-  const showSnackbar = (mensaje, severidad) => {
+  const showSnackbar = useCallback((mensaje, severidad) => {
     setMensajeSnackbar(mensaje);
     setSnackbarSeverity(severidad);
     setAbrirSnackbar(true);
-  };
+  }, []);
 
-  const getTiposActividad = async (token) => {
+  const getTiposActividad = useCallback(async (token) => {
     setTiposActividad([]);
     setCargando(true);
 
@@ -105,7 +100,7 @@ export default function AbmTipoActividad() {
     } finally {
       setCargando(false);
     }
-  };
+  }, [showSnackbar]);
 
   const createTipoActividad = async (nuevaActividad, token) => {
     setCargando(true);
@@ -158,7 +153,7 @@ export default function AbmTipoActividad() {
     }
   };
 
-  const getSalas = async (token) => {
+  const getSalas = useCallback(async (token) => {
     setSalas([]);
     setCargandoSalas(true);
 
@@ -184,7 +179,12 @@ export default function AbmTipoActividad() {
     } finally {
       setCargandoSalas(false);
     }
-  };
+  }, [showSnackbar]);
+
+  useEffect(() => {
+    getTiposActividad(userToken);
+    getSalas(userToken);
+  }, [userToken, getTiposActividad, getSalas]);
 
   return (
     <>
@@ -226,7 +226,7 @@ export default function AbmTipoActividad() {
   );
 }
 
-function TiposActividadTabla({ actividades, onEditar, salas }) {
+function TiposActividadTabla({ actividades, onEditar }) {
   const encabezadosTabla = () => {
     return (
       <TableHead className="cabecera-tabla-abm">
@@ -286,12 +286,6 @@ TiposActividadTabla.propTypes = {
     })
   ).isRequired,
   onEditar: PropTypes.func.isRequired,
-  salas: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      descripcion: PropTypes.string.isRequired,
-    })
-  ).isRequired,
 }
 
 function TipoActividadModal({ abrirModal, handleCerrar, handleConfirmar, actividadExistente, esEdicion, tituloModal, salas, cargandoSalas }) {

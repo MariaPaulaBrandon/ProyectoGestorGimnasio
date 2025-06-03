@@ -158,6 +158,25 @@ function Register() {
     }
   };
 
+  const validarMensajesErrorRegistro = (errores) => {
+    const erroresEmail = errores.email;
+    const erroresPassword = errores.password;
+
+    let mensajesErrorEmail = '';
+    let mennsajesErrorPassword = '';
+
+    if (erroresEmail && erroresEmail.length > 0) {
+      mensajesErrorEmail = erroresEmail.join(', ');
+    }
+
+    if (erroresPassword && erroresPassword.length > 0) {
+      mennsajesErrorPassword = erroresPassword.join(', ');
+    }
+
+    const mensajesError = `${mensajesErrorEmail} ${mennsajesErrorPassword}`;
+    return mensajesError;
+  }
+
   const handleNavigateToLogin = () => {
     navigate('/login');
   };
