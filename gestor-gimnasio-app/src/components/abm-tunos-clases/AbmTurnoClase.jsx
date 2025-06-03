@@ -203,11 +203,18 @@ export default function AbmTurnoClase() {
           />
         }
       </TableContainer>
-      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-        <Button variant="outlined" className="boton-outlined-negro" disabled={cargandoActividades} onClick={handleOpenModalCrear}>
+      <Box sx={{
+        maxWidth: 900,
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'flex-end',
+        gap: 2,
+      }}>
+        <Button variant="outlined" className="boton-principal" disabled={cargandoActividades} onClick={handleOpenModalCrear}>
           Nuevo Turno Clase
         </Button>
-        <Button variant="outlined" className="boton-outlined-negro" sx={{ ml: 2 }} onClick={() => getTurnoClases(userToken)}>
+        <Button variant="outlined" className="boton-principal" onClick={() => getTurnoClases(userToken)}>
           Actualizar
         </Button>
       </Box>
@@ -274,7 +281,7 @@ function TurnoClasesTabla({ clases, onEditar }) {
             <TableCell>{clase.horarioHasta}</TableCell>
             <TableCell>{clase.cupoMaximo}</TableCell>
             <TableCell>
-              <Button variant="outlined" className="boton-outlined-negro" style={{ minWidth: 200 }} onClick={() => onEditar(clase)}>
+              <Button variant="outlined" className="boton-principal" style={{ minWidth: 200 }} onClick={() => onEditar(clase)}>
                 Modificar registro
               </Button>
             </TableCell>
@@ -454,7 +461,7 @@ function TurnoClaseModal({ abrirModal, handleCerrar, handleConfirmar, actividade
         />
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3, gap: 1 }}>
-          <Button variant="outlined"className="boton-outlined-negro" onClick={handleCerrar}>Cancelar</Button>
+          <Button variant="outlined" className="boton-secundario" onClick={handleCerrar}>Cancelar</Button>
           <Button variant="contained" onClick={handleSubmit} disabled={disabledConfirmButton}>Confirmar</Button>
         </Box>
       </Box>

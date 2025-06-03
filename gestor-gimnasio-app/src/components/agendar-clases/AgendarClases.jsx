@@ -140,7 +140,7 @@ function Clases() {
 
   return (
     <>
-    <h2 className="titulo-clases">Próximas clases</h2>
+      <h2 className="titulo-clases">Próximas clases</h2>
       <TableContainer component={Paper} className="clases-table">
         {isLoading ?
           <ClasesCarga /> :
@@ -210,8 +210,8 @@ function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, acc
             >
               <TableCell>{clase.tipoActividad}</TableCell>
               <TableCell>{fechaFormateada}</TableCell>
-              <TableCell>{clase.horarioDesde.slice(0,5)}</TableCell>
-              <TableCell>{clase.horarioHasta.slice(0,5)}</TableCell>
+              <TableCell>{clase.horarioDesde.slice(0, 5)}</TableCell>
+              <TableCell>{clase.horarioHasta.slice(0, 5)}</TableCell>
               <TableCell>
                 {clase.inscripto ?
                   <CheckCircleOutlineIcon sx={{ color: green[500] }} /> :
@@ -221,7 +221,7 @@ function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, acc
                 {clase.inscripto ? (
                   <Button
                     variant="outlined"
-                    className="boton-outlined-negro"
+                    className="boton-secundario"
                     onClick={() => onCancelarInscripcionClick(clase.idTurnoClase)}
                     disabled={accionEnProgreso}
                   >
@@ -230,7 +230,7 @@ function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, acc
                 ) : (
                   <Button
                     variant="outlined"
-                    className="boton-negro"
+                    className="boton-principal"
                     onClick={() => onInscribirClick(clase.idTurnoClase)}
                     disabled={accionEnProgreso}
                   >

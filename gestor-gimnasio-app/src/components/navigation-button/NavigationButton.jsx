@@ -23,12 +23,13 @@ function NavigationButton({ usuario, colorButtons = '#000' }) {
   const idTipoUsuario = parseInt(usuario.idTipoUsuario, 10);
 
   const puedeVerAgendarClases =
-    idTipoUsuario === TiposUsuarioEnum.ALUMNO;
+    idTipoUsuario === TiposUsuarioEnum.ALUMNO ||
+    idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR;
 
-  // Tanto el alumno como el profesor  pueden ver el formulario de contacto que permite enviar mensajes a la administración.
   const puedeVerContactoAlumno =
     idTipoUsuario === TiposUsuarioEnum.ALUMNO ||
-    idTipoUsuario === TiposUsuarioEnum.PROFESOR;
+    idTipoUsuario === TiposUsuarioEnum.PROFESOR ||
+    idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR;
 
   const puedeVerActividades =
     idTipoUsuario === TiposUsuarioEnum.PROFESOR ||
@@ -62,7 +63,7 @@ function NavigationButton({ usuario, colorButtons = '#000' }) {
           sx={{ textTransform: 'none', mx: 1, color: colorButtons, fontSize: '1em' }}
           onClick={() => navigate('/dashboard/agendar-clases')}
         >
-        Agendar
+          Agendar
         </Button>
       )}
       {puedeVerContactoAlumno && (
@@ -133,6 +134,7 @@ NavigationButton.propTypes = {
       TiposUsuarioEnum.ADMINISTRADOR,
     ]).isRequired,
   }),
+  colorButtons: PropTypes.string,
 };
 
 export default NavigationButton;
