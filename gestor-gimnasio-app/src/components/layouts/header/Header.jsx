@@ -47,14 +47,13 @@ function Header() {
     <>
       {usuario && (
         <Box sx={{ flexGrow: 1 }}>
-          <AppBar position="static">
+          <AppBar position="static" sx={{ backgroundColor: '#f8fafc' }}>
             <Toolbar>
-              <Typography variant="h6" component="div">
+              <img src="/logo_app.png" alt="Logo" style={{ height: 40, marginRight: 10 }} />
+              <Typography variant="h5" component="div" sx={{ color: '#000' }}>
                 Fit Manager
               </Typography>
-              <NavigationButton
-                usuario={usuario}
-              />
+              <NavigationButton usuario={usuario} colorButtons="#000" />
               <div>
                 <IconButton
                   size="large"
@@ -62,9 +61,9 @@ function Header() {
                   aria-controls="menu-appbar"
                   aria-haspopup="true"
                   onClick={handleMenu}
-                  color="inherit"
+                  sx={{ color: '#000' }}
                 >
-                  <AccountCircle />
+                  <AccountCircle sx={{ fontSize: 35 }} />
                 </IconButton>
                 <Menu
                   id="menu-appbar"

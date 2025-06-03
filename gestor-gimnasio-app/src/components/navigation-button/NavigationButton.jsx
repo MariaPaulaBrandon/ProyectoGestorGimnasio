@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
-function NavigationButton({ usuario }) {
+function NavigationButton({ usuario, colorButtons = '#000' }) {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -54,12 +54,12 @@ function NavigationButton({ usuario }) {
     handleAbmClose();
   };
   return (
-    <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '1.15rem' }}>
       {puedeVerAgendarClases && (
         <Button
           color="inherit"
           startIcon={<FitnessCenterIcon />}
-          sx={{ textTransform: 'none', mx: 1 }}
+          sx={{ textTransform: 'none', mx: 1, color: colorButtons, fontSize: '1em' }}
           onClick={() => navigate('/dashboard/agendar-clases')}
         >
         Agendar
@@ -69,7 +69,7 @@ function NavigationButton({ usuario }) {
         <Button
           color="inherit"
           startIcon={<MailOutlineIcon />}
-          sx={{ textTransform: 'none', mx: 1 }}
+          sx={{ textTransform: 'none', mx: 1, color: colorButtons, fontSize: '1em' }}
           onClick={() => navigate('/dashboard/contacto')}
         >
           Contacto
@@ -79,7 +79,7 @@ function NavigationButton({ usuario }) {
         <Button
           color="inherit"
           startIcon={<EventNoteIcon />}
-          sx={{ textTransform: 'none', mx: 1 }}
+          sx={{ textTransform: 'none', mx: 1, color: colorButtons, fontSize: '1em' }}
         >
           Actividades
         </Button>
@@ -90,7 +90,7 @@ function NavigationButton({ usuario }) {
             color="inherit"
             startIcon={<BuildIcon />}
             endIcon={<ArrowDropDownIcon />}
-            sx={{ textTransform: 'none', mx: 1 }}
+            sx={{ textTransform: 'none', mx: 1, color: colorButtons, fontSize: '1em' }}
             onClick={handleAbmClick}
             aria-controls="abm-menu"
             aria-haspopup="true"
