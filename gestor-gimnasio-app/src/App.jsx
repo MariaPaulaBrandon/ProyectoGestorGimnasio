@@ -9,6 +9,7 @@ import AgendarClases from './components/agendar-clases/AgendarClases';
 import ContactoAlumno from './components/contacto-alumno/ContactoAlumno';
 import AbmTurnoClase from './components/abm-tunos-clases/AbmTurnoClase';
 import AbmTipoActividad from './components/abm-tipo-actividad/AbmTipoActividad';
+import AbmSalas from './components/abm-salas/AbmSalas';
 import Contacto from './components/contacto/Contacto';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
@@ -34,6 +35,7 @@ function App() {
             <Route path="/dashboard/contacto" element={<ContactoAlumno />} />
             <Route path='/dashboard/abm/clases' element={<AbmTurnoClase />} />
             <Route path='/dashboard/abm/tipos-actividad' element={<AbmTipoActividad />} />
+            <Route path='/dashboard/abm/salas' element={<AbmSalas />} />
           </Route>
         </Route>
 
