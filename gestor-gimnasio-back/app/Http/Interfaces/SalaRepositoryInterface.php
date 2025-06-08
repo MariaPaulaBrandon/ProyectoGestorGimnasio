@@ -12,6 +12,14 @@ interface SalaRepositoryInterface
     public function getAll();
 
     /**
+     * Actualizar una sala existente.
+     * @param int $id
+     * @param array $sala
+     * @return mixed
+     */
+    public function update(int $id, array $sala);
+
+    /**
      * Crear una nueva sala.
      * @param array $sala
      * @return mixed

@@ -70,6 +70,8 @@ Route::middleware(AUTH_SANCTION)->group(function () {
     Route::prefix('salas')->group(function () {
         Route::get('/', [SalaController::class, 'index'])
             ->name('salas.index');
+        Route::put(ID_ROUTE_PARAMETER, [SalaController::class, 'update'])
+            ->name('salas.update');
         Route::post('/', [SalaController::class, 'create'])
             ->name('salas.create');
     });

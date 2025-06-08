@@ -18,6 +18,20 @@ class SalaRepository implements SalaRepositoryInterface
     }
 
     /**
+     * Actualizar una sala existente.
+     *
+     * @param int $id
+     * @param array $sala
+     * @return mixed
+     */
+    public function update(int $id, array $sala): Sala
+    {
+        $salaModel = Sala::findOrFail($id);
+        $salaModel->update($sala);
+        return $salaModel;
+    }
+
+    /**
      * Crear una nueva sala.
      *
      * @param array $sala

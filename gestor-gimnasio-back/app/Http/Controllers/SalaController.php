@@ -25,6 +25,25 @@ class SalaController extends Controller
     }
 
     /**
+     * Actualizar una sala existente.
+     *
+     * @param int $id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(int $id, Request $request)
+    {
+        $validatedData = $request->validate([
+            'descripcion' => 'required|string|max:50'
+        ]);
+
+        $sala = $this->salaService->update($id, $validatedData);
+
+        return response()->json($sala, Response::HTTP_OK);
+    }
+
+
+    /**
      * Crear una nueva sala.
      *
      * @param Request $request
