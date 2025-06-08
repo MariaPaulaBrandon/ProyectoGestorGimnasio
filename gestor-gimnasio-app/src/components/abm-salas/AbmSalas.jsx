@@ -95,12 +95,12 @@ export default function AbmSalas() {
     })
   }
 
-  const handleOpenModalEditar = (actividadParaEditar) => {
+  const handleOpenModalEditar = (salaParaEditar) => {
     setModalConfig({
       abrir: true,
       esEdicion: true,
-      actividad: actividadParaEditar,
-      titulo: "Modificar salaf",
+      sala: salaParaEditar,
+      titulo: "Modificar sala",
     })
   }
 
@@ -108,18 +108,18 @@ export default function AbmSalas() {
     setModalConfig({
       abrir: false,
       esEdicion: false,
-      actividad: null,
+      sala: null,
       titulo: "",
     })
   }
 
   const handleConfirmarModal = async (datosSala) => {
     handleCloseModal()
-    /* if (modalConfig.esEdicion) {
-      await updateTipoActividad(datosActividad, userToken)
-    } else { */
-    await createSala(datosSala, userToken)
-    // }
+    if (modalConfig.esEdicion) {
+      await updateSala(datosSala, userToken)
+    } else {
+      await createSala(datosSala, userToken)
+    }
   }
 
   const createSala = async (nuevaSala, token) => {
@@ -132,7 +132,7 @@ export default function AbmSalas() {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(nuevaSala),
+        body: JSON.stringify({ descripcion: nuevaSala.descripcion.toLocaleUpperCase("es-AR") }),
       })
 
       if (!response.ok) {
@@ -149,10 +149,39 @@ export default function AbmSalas() {
     }
   }
 
+  const updateSala = async (salaActualizada, token) => {
+    setCargando(true)
+    try {
+      const response = await fetch(`${environment.apiUrl}/salas/${salaActualizada.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          ...salaActualizada,
+          descripcion: salaActualizada.descripcion.toLocaleUpperCase("es-AR"),
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.message ?? "Error al modificar la sala")
+      }
+
+      showSnackbar("Sala modificada exitosamente", "success")
+      await getSalas(token)
+    } catch (error) {
+      showSnackbar(error.message ?? "Error al modificar la sala", "error")
+      setCargando(false)
+    }
+  }
+
   return (
     <>
       <TableContainer component={Paper} className="salas-table">
-        {cargando ? <ClasesCarga /> : <SalasTabla salas={salas} />}
+        {cargando ? <ClasesCarga /> : <SalasTabla salas={salas} onEditar={handleOpenModalEditar} />}
       </TableContainer>
       <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mt: 2 }}>
         <Button variant="outlined" className="boton-principal" disabled={cargando} onClick={handleOpenModalCrear}>
@@ -194,6 +223,7 @@ function SalasTabla({ salas, onEditar }) {
         <TableRow>
           <TableCell>ID</TableCell>
           <TableCell>SALA</TableCell>
+          <TableCell>ACCIÓN</TableCell>
         </TableRow>
       </TableHead>
     )
@@ -222,11 +252,11 @@ function SalasTabla({ salas, onEditar }) {
           <TableRow key={sala.id}>
             <TableCell>{sala.id}</TableCell>
             <TableCell>{sala.descripcion.charAt(0).toUpperCase() + sala.descripcion.slice(1).toLowerCase()}</TableCell>
-            {/*  <TableCell>
-              <Button variant="outlined" className="boton-principal" onClick={() => onEditar(actividad)}>
+            <TableCell>
+              <Button variant="outlined" className="boton-principal" onClick={() => onEditar(sala)}>
                 Modificar registro
               </Button>
-            </TableCell> */}
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -235,6 +265,7 @@ function SalasTabla({ salas, onEditar }) {
 }
 
 function SalasModal({ abrirModal, handleCerrar, handleConfirmar, salaExistente, esEdicion, tituloModal }) {
+  console.log("SalasModal renderizado", { abrirModal, esEdicion, salaExistente, tituloModal })
   const styleModal = {
     position: "absolute",
     top: "50%",
@@ -250,13 +281,13 @@ function SalasModal({ abrirModal, handleCerrar, handleConfirmar, salaExistente, 
     gap: 1,
   }
 
-  const [sala, setTipo] = useState("")
+  const [sala, setSala] = useState("")
   const [idSala, setIdSala] = useState(null)
 
   const disabledConfirmButton = !sala.trim()
 
   const resetFormValues = () => {
-    setTipo("")
+    setSala("")
     setIdSala(null)
   }
 
@@ -272,7 +303,7 @@ function SalasModal({ abrirModal, handleCerrar, handleConfirmar, salaExistente, 
 
   useEffect(() => {
     if (abrirModal && esEdicion && salaExistente) {
-      setTipo(salaExistente.tipo ?? "")
+      setSala(salaExistente.descripcion ?? "")
       setIdSala(salaExistente.id ?? null)
     } else {
       resetFormValues()
@@ -282,7 +313,7 @@ function SalasModal({ abrirModal, handleCerrar, handleConfirmar, salaExistente, 
   const handleSalaChange = (event) => {
     const value = event.target.value
     if (value.length <= 50) {
-      setTipo(value)
+      setSala(value)
     }
   }
 
