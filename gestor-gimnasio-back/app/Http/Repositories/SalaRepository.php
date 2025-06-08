@@ -16,4 +16,15 @@ class SalaRepository implements SalaRepositoryInterface
     {
         return Sala::orderBy('id')->get();
     }
+
+    /**
+     * Crear una nueva sala.
+     *
+     * @param array $sala
+     * @return mixed
+     */
+    public function create(array $sala)
+    {
+        return Sala::create($sala);
+    }
 }

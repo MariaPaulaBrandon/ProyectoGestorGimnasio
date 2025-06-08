@@ -10,4 +10,11 @@ interface SalaRepositoryInterface
      * @return \Illuminate\Database\Eloquent\Collection|array Colección de todas las salas registradas
      */
     public function getAll();
+
+    /**
+     * Crear una nueva sala.
+     * @param array $sala
+     * @return mixed
+     */
+    public function create(array $sala);
 }

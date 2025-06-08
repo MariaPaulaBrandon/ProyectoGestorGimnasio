@@ -20,4 +20,16 @@ class SalaService implements SalaServiceInterface
     {
         return $this->sala_repository->getAll();
     }
+
+     /**
+     * Crear una nueva sala.
+     *
+     * @param array $sala
+     * @return mixed
+     */
+    public function create(array $sala)
+    {
+        return $this->sala_repository->create($sala);
+    }
+
 }

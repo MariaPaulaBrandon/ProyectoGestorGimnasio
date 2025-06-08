@@ -70,5 +70,7 @@ Route::middleware(AUTH_SANCTION)->group(function () {
     Route::prefix('salas')->group(function () {
         Route::get('/', [SalaController::class, 'index'])
             ->name('salas.index');
+        Route::post('/', [SalaController::class, 'create'])
+            ->name('salas.create');
     });
 });

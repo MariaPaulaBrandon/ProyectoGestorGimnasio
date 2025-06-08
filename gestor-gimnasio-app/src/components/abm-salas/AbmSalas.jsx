@@ -3,7 +3,24 @@ import environment from "../../environments/environment"
 import ClasesCarga from "../clases-carga/ClasesCarga"
 
 import SnackbarMensaje from "../utils/SnackbarMensaje"
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
+import {
+  Box,
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Modal,
+  Typography,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material"
 
 export default function AbmSalas() {
   const userToken = useMemo(() => localStorage.getItem("usuarioAccesToken"), [])
@@ -14,11 +31,25 @@ export default function AbmSalas() {
   const [mensajeSnackbar, setMensajeSnackbar] = useState("")
   const [snackbarSeverity, setSnackbarSeverity] = useState("info")
 
+  const [modalConfig, setModalConfig] = useState({
+    abrir: false,
+    esEdicion: false,
+    sala: null,
+    titulo: "",
+  })
+
   const showSnackbar = useCallback((mensaje, severidad) => {
     setMensajeSnackbar(mensaje)
     setSnackbarSeverity(severidad)
     setAbrirSnackbar(true)
   }, [])
+  const handleCloseSnackbar = (_, reason) => {
+    if (reason === "clickaway") {
+      return
+    }
+
+    setAbrirSnackbar(false)
+  }
 
   const getSalas = useCallback(
     async (token) => {
@@ -55,12 +86,104 @@ export default function AbmSalas() {
     getSalas(userToken)
   }, [userToken, getSalas])
 
-  console.log("Salas:", salas)
+  const handleOpenModalCrear = () => {
+    setModalConfig({
+      abrir: true,
+      esEdicion: false,
+      sala: null,
+      titulo: "Crear nueva sala",
+    })
+  }
+
+  const handleOpenModalEditar = (actividadParaEditar) => {
+    setModalConfig({
+      abrir: true,
+      esEdicion: true,
+      actividad: actividadParaEditar,
+      titulo: "Modificar salaf",
+    })
+  }
+
+  const handleCloseModal = () => {
+    setModalConfig({
+      abrir: false,
+      esEdicion: false,
+      actividad: null,
+      titulo: "",
+    })
+  }
+
+  const handleConfirmarModal = async (datosSala) => {
+    handleCloseModal()
+    /* if (modalConfig.esEdicion) {
+      await updateTipoActividad(datosActividad, userToken)
+    } else { */
+    await createSala(datosSala, userToken)
+    // }
+  }
+
+  const createSala = async (nuevaSala, token) => {
+    setCargando(true)
+    try {
+      const response = await fetch(`${environment.apiUrl}/salas`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(nuevaSala),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.message ?? "Error al crear la sala")
+      }
+
+      showSnackbar("Sala creada exitosamente", "success")
+      await getSalas(token)
+    } catch (error) {
+      showSnackbar(error.message ?? "Error al crear la sala", "error")
+    } finally {
+      setCargando(false)
+    }
+  }
 
   return (
-    <TableContainer component={Paper} className="salas-table">
-      {cargando ? <ClasesCarga /> : <SalasTabla salas={salas} />}
-    </TableContainer>
+    <>
+      <TableContainer component={Paper} className="salas-table">
+        {cargando ? <ClasesCarga /> : <SalasTabla salas={salas} />}
+      </TableContainer>
+      <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mt: 2 }}>
+        <Button variant="outlined" className="boton-principal" disabled={cargando} onClick={handleOpenModalCrear}>
+          Nueva Sala
+        </Button>
+        <Button
+          variant="outlined"
+          disabled={cargando}
+          className="boton-principal"
+          sx={{ ml: 2 }}
+          onClick={() => getSalas(userToken)}
+        >
+          Actualizar
+        </Button>
+      </Box>
+      <SalasModal
+        abrirModal={modalConfig.abrir}
+        handleCerrar={handleCloseModal}
+        handleConfirmar={handleConfirmarModal}
+        salaExistente={modalConfig.sala}
+        esEdicion={modalConfig.esEdicion}
+        tituloModal={modalConfig.titulo}
+      />
+      <SnackbarMensaje
+        abrirSnackbar={abrirSnackbar}
+        duracionSnackbar={5000}
+        handleCloseSnackbar={handleCloseSnackbar}
+        mensajeSnackbar={mensajeSnackbar}
+        snackbarSeverity={snackbarSeverity}
+      />
+    </>
   )
 }
 
@@ -108,5 +231,102 @@ function SalasTabla({ salas, onEditar }) {
         ))}
       </TableBody>
     </Table>
+  )
+}
+
+function SalasModal({ abrirModal, handleCerrar, handleConfirmar, salaExistente, esEdicion, tituloModal }) {
+  const styleModal = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+    display: "flex",
+    flexDirection: "column",
+    gap: 1,
+  }
+
+  const [sala, setTipo] = useState("")
+  const [idSala, setIdSala] = useState(null)
+
+  const disabledConfirmButton = !sala.trim()
+
+  const resetFormValues = () => {
+    setTipo("")
+    setIdSala(null)
+  }
+
+  const handleSubmit = () => {
+    const salaDatos = {
+      descripcion: sala.trim(),
+    }
+    if (esEdicion && idSala) {
+      salaDatos.id = idSala
+    }
+    handleConfirmar(salaDatos)
+  }
+
+  useEffect(() => {
+    if (abrirModal && esEdicion && salaExistente) {
+      setTipo(salaExistente.tipo ?? "")
+      setIdSala(salaExistente.id ?? null)
+    } else {
+      resetFormValues()
+    }
+  }, [abrirModal, esEdicion, salaExistente])
+
+  const handleSalaChange = (event) => {
+    const value = event.target.value
+    if (value.length <= 50) {
+      setTipo(value)
+    }
+  }
+
+  return (
+    <Modal
+      open={abrirModal}
+      onClose={handleCerrar}
+      aria-labelledby="modal-crear-tipo-actividad-title"
+      aria-describedby="modal-crear-tipo-actividad-description"
+    >
+      <Box sx={styleModal}>
+        <Typography variant="h6" component="h2" sx={{ mb: 2, color: "black", textAlign: "center" }}>
+          {tituloModal}
+        </Typography>
+
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Sala"
+          type="text"
+          value={sala}
+          onChange={handleSalaChange}
+          placeholder="Ingrese el nombre de la sala"
+          slotProps={{
+            htmlInput: {
+              maxLength: 50,
+            },
+          }}
+        />
+
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3, gap: 1 }}>
+          <Button variant="outlined" className="boton-secundario" onClick={handleCerrar}>
+            Cancelar
+          </Button>
+          <Button
+            variant="contained"
+            className="boton-principal"
+            onClick={handleSubmit}
+            disabled={disabledConfirmButton}
+          >
+            Confirmar
+          </Button>
+        </Box>
+      </Box>
+    </Modal>
   )
 }
