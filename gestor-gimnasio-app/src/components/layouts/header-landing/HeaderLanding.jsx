@@ -15,6 +15,7 @@ function HeaderLanding() {
           py: 4,
           backgroundColor: "#fff",
           borderBottom: "1px solid #ddd",
+          boxShadow: "0 4px 12px -4px rgba(0,0,0,0.10)",
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>

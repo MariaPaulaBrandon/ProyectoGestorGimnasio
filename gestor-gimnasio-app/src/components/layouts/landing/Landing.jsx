@@ -74,7 +74,6 @@ function Landing() {
           justifyContent: "center",
           alignItems: "center",
           py: 4,
-          borderBottom: "1px solid #ddd",
         }}
       >
         <Box
@@ -94,14 +93,14 @@ function Landing() {
             autoPlay={true}
             interval={5000}
             animation="slide"
-            sx={{ height: 500 }}
+            sx={{ height: 700 }}
           >
             {carouselItems.map((item, idx) => (
               <Box
                 key={idx}
                 sx={{
                   width: "100%",
-                  height: 500,
+                  height: 700,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -116,7 +115,7 @@ function Landing() {
                     position: "absolute",
                     width: "100%",
                     height: "100%",
-                    background: "rgba(255,255,255,0.45)",
+                    background: "rgba(46, 46, 46, 0.45)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -127,7 +126,7 @@ function Landing() {
                       sx={{
                         fontSize: 26,
                         fontWeight: 500,
-                        color: "#111",
+                        color: "white",
                       }}
                     >
                       {item.text}
@@ -197,7 +196,7 @@ function Landing() {
               textAlign: "center",
             }}
           >
-            Sistema administrativo Web
+            Sistema Administrativo Web
           </Box>
           <Box
             sx={{
@@ -405,6 +404,7 @@ function Landing() {
               Escribí una consulta y tendrás una respuesta a la brevedad
             </Box>
             <Button
+              href="/#contactoExterno"
               variant="contained"
               sx={{
                 backgroundColor: "#111",
