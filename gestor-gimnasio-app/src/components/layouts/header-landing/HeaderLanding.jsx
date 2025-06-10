@@ -24,11 +24,11 @@ function HeaderLanding() {
             Fit Manager
           </Typography>
         </Box>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <a href="#features" style={{ color: "#111", textDecoration: "none", fontSize: 22 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 7 }}>
+          <a href="#caracteristicas" style={{ color: "#111", textDecoration: "none", fontSize: 22 }}>
             Características
           </a>
-          <a href="#prices" style={{ color: "#111", textDecoration: "none", fontSize: 22 }}>
+          <a href="#precios" style={{ color: "#111", textDecoration: "none", fontSize: 22 }}>
             Precios
           </a>
           <a href="#faq" style={{ color: "#111", textDecoration: "none", fontSize: 22 }}>
