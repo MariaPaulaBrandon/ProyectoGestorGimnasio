@@ -30,6 +30,11 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
                 'turno_clase.horario_desde AS horarioDesde',
                 'turno_clase.horario_hasta AS horarioHasta',
                 'turno_clase.cupo_maximo AS cupoMaximo',
+                DB::raw('(
+                    SELECT COUNT(*)
+                    FROM inscripcion
+                    WHERE id_turno_clase = turno_clase.id
+                ) AS totalInscriptos'),
                 DB::raw('CASE WHEN inscripcion.id IS NOT NULL THEN TRUE ELSE FALSE END AS inscripto')
             ])
             ->leftJoin('tipo_actividad', 'turno_clase.id_actividad', '=', 'tipo_actividad.id')

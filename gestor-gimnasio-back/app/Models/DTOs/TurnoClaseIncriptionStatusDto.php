@@ -12,6 +12,7 @@ class TurnoClaseIncriptionStatusDto
         public string $horarioDesde,
         public string $horarioHasta,
         public int $cupoMaximo,
+        public int $totalInscriptos,
         public bool $inscripto
     ) {}
 }
