@@ -35,6 +35,7 @@ class TurnoClaseService implements TurnoClaseServiceInterface
                 horarioDesde: $turno->horarioDesde,
                 horarioHasta: $turno->horarioHasta,
                 cupoMaximo: $turno->cupoMaximo,
+                totalInscriptos: $turno->totalInscriptos,
                 inscripto: $turno->inscripto
             );
         });
