@@ -20,4 +20,27 @@ class SalaService implements SalaServiceInterface
     {
         return $this->sala_repository->getAll();
     }
+
+    /**
+     * Actualizar una sala existente.
+     *
+     * @param int $id
+     * @param array $sala
+     * @return mixed
+     */
+    public function update(int $id, array $sala): mixed
+    {
+        return $this->sala_repository->update($id, $sala);
+    }
+
+    /**
+     * Crear una nueva sala.
+     *
+     * @param array $sala
+     * @return mixed
+     */
+    public function create(array $sala)
+    {
+        return $this->sala_repository->create($sala);
+    }
 }

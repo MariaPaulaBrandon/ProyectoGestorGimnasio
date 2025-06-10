@@ -54,6 +54,12 @@ function NavigationButton({ usuario, colorButtons = '#000' }) {
     navigate('/dashboard/abm/tipos-actividad');
     handleAbmClose();
   };
+
+  const handleAbmSalasClick = () => {
+    navigate('/dashboard/abm/salas');
+    handleAbmClose();
+  };
+
   return (
     <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '1.15rem' }}>
       {puedeVerAgendarClases && (
@@ -118,6 +124,9 @@ function NavigationButton({ usuario, colorButtons = '#000' }) {
             </MenuItem>
             <MenuItem onClick={handleAbmTiposActividadClick}>
               ABM Tipos de Actividad
+            </MenuItem>
+            <MenuItem onClick={handleAbmSalasClick}>
+              ABM Salas
             </MenuItem>
           </Menu>
         </>
