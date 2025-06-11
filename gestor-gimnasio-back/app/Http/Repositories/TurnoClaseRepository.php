@@ -11,7 +11,7 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
 {
     public function getAll(): Collection
     {
-        return TurnoClase::with('tipoActividad')
+        return TurnoClase::with(['tipoActividad', 'profesor'])
             ->orderBy('id', 'DESC')
             ->get();
     }
@@ -59,6 +59,25 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
             ->select('cupo_maximo')
             ->where('id', $idTurnoClase)
             ->value('cupo_maximo');
+    }
+
+    public function getCupoActual(int $idTurnoClase)
+    {
+        return TurnoClase::query()
+            ->select(DB::raw('cupo_maximo - COUNT(inscripcion.id) AS cupoActual'))
+            ->join('inscripcion', 'turno_clase.id', '=', 'inscripcion.id_turno_clase')
+            ->where('turno_clase.id', $idTurnoClase)
+            ->groupBy('turno_clase.cupo_maximo')
+            ->value('cupoActual');
+    }
+
+    public function getTurnosByFechaHorario(string $fecha, string $horarioDesde, string $horarioHasta)
+    {
+        return TurnoClase::query()
+            ->whereDate('fecha', $fecha)
+            ->whereTime('horario_desde', '>=', $horarioDesde)
+            ->whereTime('horario_hasta', '<=', $horarioHasta)
+            ->count();
     }
 
     public function create(array $turnoClase)

@@ -188,6 +188,43 @@ function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, acc
     )
   }
 
+  const renderizarBotonAcciones = (clase, disponibilidad, isCurrentActionTarget) => {
+    if (clase.inscripto) {
+      return (
+        <Button
+          variant='outlined'
+          className='boton-secundario'
+          onClick={() => onCancelarInscripcionClick(clase.idTurnoClase)}
+          disabled={accionEnProgreso}
+        >
+          {isCurrentActionTarget ? <CircularProgress size={24} color='inherit' /> : 'Cancelar Inscripción'}
+        </Button>
+      )
+    }
+
+    if (disponibilidad <= 0) {
+      return (
+        <Button
+          variant='outlined'
+          disabled
+        >
+          Sin disponibilidad
+        </Button>
+      )
+    }
+
+    return (
+      <Button
+        variant='outlined'
+        className='boton-principal'
+        onClick={() => onInscribirClick(clase.idTurnoClase)}
+        disabled={accionEnProgreso}
+      >
+        {isCurrentActionTarget ? <CircularProgress size={24} color='inherit' /> : 'Inscribirse'}
+      </Button>
+    )
+  }
+
   if (!clases || clases.length === 0) {
     return (
       <Table sx={{ minWidth: 900 }} aria-label="tabla de clases">
@@ -211,8 +248,8 @@ function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, acc
           const soloFechas = clase.fecha.split(" ")[0].split("-")
           const fechaFormateada = `${soloFechas[2]}/${soloFechas[1]}/${soloFechas[0]}`
           const isCurrentActionTarget = accionEnProgreso && accionId === clase.idTurnoClase
-
           const disponibilidad = clase.cupoMaximo - clase.totalInscriptos
+
           return (
             <TableRow key={clase.idTurnoClase} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
               <TableCell>{clase.tipoActividad}</TableCell>
@@ -229,25 +266,7 @@ function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, acc
                 )}
               </TableCell>
               <TableCell>
-                {clase.inscripto ? (
-                  <Button
-                    variant="outlined"
-                    className="boton-secundario"
-                    onClick={() => onCancelarInscripcionClick(clase.idTurnoClase)}
-                    disabled={accionEnProgreso}
-                  >
-                    {isCurrentActionTarget ? <CircularProgress size={24} color="inherit" /> : "Cancelar Inscripción"}
-                  </Button>
-                ) : (
-                  <Button
-                    variant="outlined"
-                    className="boton-principal"
-                    onClick={() => onInscribirClick(clase.idTurnoClase)}
-                    disabled={accionEnProgreso}
-                  >
-                    {isCurrentActionTarget ? <CircularProgress size={24} color="inherit" /> : "Inscribirse"}
-                  </Button>
-                )}
+                {renderizarBotonAcciones(clase, disponibilidad, isCurrentActionTarget)}
               </TableCell>
             </TableRow>
           )
