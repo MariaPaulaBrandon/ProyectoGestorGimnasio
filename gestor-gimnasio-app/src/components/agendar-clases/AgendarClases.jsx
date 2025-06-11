@@ -17,7 +17,7 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff"
 import { green, red } from "@mui/material/colors"
 import { Button } from "@mui/material"
 import SnackbarMensaje from "../utils/SnackbarMensaje"
-import ClasesCarga from "../clases-carga/ClasesCarga"
+import CargaTabla from "../clases-carga/CargaTabla"
 
 function Clases() {
   const [clasesParaTabla, setClasesParaTabla] = useState([])
@@ -127,7 +127,6 @@ function Clases() {
         }
 
         const data = await response.json()
-        console.log("Datos obtenidos:", data)
         const dataDto = data.map((item) => new TurnoClaseIncripcionEstadoDto(item))
         setClasesParaTabla(dataDto)
       } catch (error) {
@@ -149,7 +148,7 @@ function Clases() {
       <h2 className="titulo-clases">Próximas clases</h2>
       <TableContainer component={Paper} className="clases-table">
         {isLoading ? (
-          <ClasesCarga />
+          <CargaTabla texto="Cargando clases..." />
         ) : (
           <ClasesTabla
             clases={clasesParaTabla}
@@ -177,6 +176,7 @@ function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, acc
       <TableHead className="cabecera-tabla">
         <TableRow>
           <TableCell>ACTIVIDAD</TableCell>
+          <TableCell>PROFESOR</TableCell>
           <TableCell>FECHA</TableCell>
           <TableCell>DESDE</TableCell>
           <TableCell>HASTA</TableCell>
@@ -194,7 +194,7 @@ function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, acc
         {encabezadoTabla()}
         <TableBody>
           <TableRow>
-            <TableCell colSpan={5} align="center">
+            <TableCell colSpan={8} align="center">
               No hay clases para mostrar
             </TableCell>
           </TableRow>
@@ -203,13 +203,11 @@ function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, acc
     )
   }
 
-  const clasesOrdenadas = [...clases].sort((a, b) => new Date(a.fecha) - new Date(b.fecha))
-
   return (
-    <Table sx={{ minWidth: 600 }} aria-label="tabla de clases">
+    <Table sx={{ minWidth: 900 }} aria-label="tabla de clases">
       {encabezadoTabla()}
       <TableBody>
-        {clasesOrdenadas.map((clase) => {
+        {clases.map((clase) => {
           const soloFechas = clase.fecha.split(" ")[0].split("-")
           const fechaFormateada = `${soloFechas[2]}/${soloFechas[1]}/${soloFechas[0]}`
           const isCurrentActionTarget = accionEnProgreso && accionId === clase.idTurnoClase
@@ -218,6 +216,7 @@ function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, acc
           return (
             <TableRow key={clase.idTurnoClase} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
               <TableCell>{clase.tipoActividad}</TableCell>
+              <TableCell>{`${clase.nombresProfesor} ${clase.apellidosProfesor}`}</TableCell>
               <TableCell>{fechaFormateada}</TableCell>
               <TableCell>{clase.horarioDesde.slice(0, 5)}</TableCell>
               <TableCell>{clase.horarioHasta.slice(0, 5)}</TableCell>

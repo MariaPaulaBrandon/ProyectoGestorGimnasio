@@ -8,8 +8,8 @@ import dayjs from 'dayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import environment from "../../environments/environment";
-import ClasesCarga from "../clases-carga/ClasesCarga";
 import SnackbarMensaje from "../utils/SnackbarMensaje";
+import CargaTabla from "../clases-carga/CargaTabla";
 
 export default function AbmTurnoClase() {
   const userToken = useMemo(() => localStorage.getItem('usuarioAccesToken'), []);
@@ -196,7 +196,7 @@ export default function AbmTurnoClase() {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <TableContainer component={Paper} className="clases-table">
         {cargando ?
-          <ClasesCarga /> :
+          <CargaTabla texto="Cargando clases..." /> :
           <TurnoClasesTabla
             clases={turnoClases}
             onEditar={handleOpenModalEditar}

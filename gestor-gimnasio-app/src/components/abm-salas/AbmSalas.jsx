@@ -1,6 +1,5 @@
 import { useMemo, useCallback, useEffect, useState } from "react"
 import environment from "../../environments/environment"
-import ClasesCarga from "../clases-carga/ClasesCarga"
 
 import SnackbarMensaje from "../utils/SnackbarMensaje"
 import {
@@ -21,6 +20,7 @@ import {
   Select,
   MenuItem,
 } from "@mui/material"
+import CargaTabla from "../clases-carga/CargaTabla"
 
 export default function AbmSalas() {
   const userToken = useMemo(() => localStorage.getItem("usuarioAccesToken"), [])
@@ -181,7 +181,7 @@ export default function AbmSalas() {
   return (
     <>
       <TableContainer component={Paper} className="salas-table">
-        {cargando ? <ClasesCarga /> : <SalasTabla salas={salas} onEditar={handleOpenModalEditar} />}
+        {cargando ? <CargaTabla texto="Cargando salas..." /> : <SalasTabla salas={salas} onEditar={handleOpenModalEditar} />}
       </TableContainer>
       <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mt: 2 }}>
         <Button variant="outlined" className="boton-principal" disabled={cargando} onClick={handleOpenModalCrear}>

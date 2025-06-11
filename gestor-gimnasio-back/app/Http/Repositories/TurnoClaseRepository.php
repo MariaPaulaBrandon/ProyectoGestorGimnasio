@@ -26,6 +26,9 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
                     LEFT(tipo_actividad.tipo, 1),
                     SUBSTRING(LOWER(tipo_actividad.tipo), 2)
                 ) AS tipoActividad'),
+                'turno_clase.id_profesor AS idProfesor',
+                'usuario.nombres AS nombresProfesor',
+                'usuario.apellidos AS apellidosProfesor',
                 'turno_clase.fecha',
                 'turno_clase.horario_desde AS horarioDesde',
                 'turno_clase.horario_hasta AS horarioHasta',
@@ -42,6 +45,7 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
                 $join->on('turno_clase.id', '=', 'inscripcion.id_turno_clase')
                     ->where('inscripcion.id_usuario', '=', $userId);
             })
+            ->join('usuario', 'turno_clase.id_profesor', '=', 'usuario.id')
             ->orderBy('turno_clase.fecha', 'DESC')
             ->orderBy('turno_clase.id_actividad')
             ->orderBy('turno_clase.horario_desde')

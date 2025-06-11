@@ -1,7 +1,7 @@
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Modal, Typography, TextField, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import SnackbarMensaje from "../utils/SnackbarMensaje";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import ClasesCarga from "../clases-carga/ClasesCarga";
+import CargaTabla from "../clases-carga/CargaTabla";
 import PropTypes from "prop-types";
 import environment from "../../environments/environment";
 import './AbmTipoActividad.css';
@@ -190,7 +190,7 @@ export default function AbmTipoActividad() {
     <>
       <TableContainer component={Paper} className="tipos-actividad-table">
         {cargando ?
-          <ClasesCarga /> : <TiposActividadTabla
+          <CargaTabla texto="Cargando tipos de actividad..." /> : <TiposActividadTabla
             actividades={tiposActividad}
             onEditar={handleOpenModalEditar}
             salas={salas}
