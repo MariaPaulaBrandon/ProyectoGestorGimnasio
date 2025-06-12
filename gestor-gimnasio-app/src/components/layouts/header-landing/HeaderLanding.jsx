@@ -32,7 +32,7 @@ function HeaderLanding() {
             Precios
           </a>
           <a href="#faq" style={{ color: "#111", textDecoration: "none", fontSize: 22 }}>
-            Preguntas
+            Preguntas frecuentes
           </a>
           <a href="#contactoLanding" style={{ color: "#111", textDecoration: "none", fontSize: 22 }}>
             Contacto

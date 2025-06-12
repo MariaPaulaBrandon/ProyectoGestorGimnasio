@@ -47,3 +47,33 @@
 .css-1m7gvpg-MuiCircularProgress-root {
   color: black !important;
 }
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #ffffff !important;
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
+  width: auto;
+  height: auto;
+  transition: color 0.2s;
+}
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: #ffffff !important;
+  opacity: 0.5;
+}
+
+.swiper-pagination-bullet {
+  background: #fff !important;
+  opacity: 0.5;
+}
+
+.swiper-pagination-bullet-active {
+  background: #fff !important;
+  opacity: 1;
+}
+
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #696969 !important;
+}

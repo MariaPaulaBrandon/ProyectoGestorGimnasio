@@ -3,7 +3,6 @@ import Container from "@mui/material/Container"
 import Box from "@mui/material/Box"
 import FooterLanding from "../footer-landing/FooterLanding"
 import { Outlet } from "react-router-dom"
-import Carousel from "react-material-ui-carousel"
 import Button from "@mui/material/Button"
 import React from "react"
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined"
@@ -14,6 +13,11 @@ import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined"
 import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined"
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp"
 import ContactoLandingForm from "./ContactoLandingForm"
+import { Swiper, SwiperSlide } from "swiper/react"
+import "swiper/css"
+import "swiper/css/navigation"
+import "swiper/css/pagination"
+import { Navigation, Pagination, Autoplay } from "swiper/modules"
 
 function Landing() {
   const carouselItems = [
@@ -90,108 +94,57 @@ function Landing() {
         <Box
           sx={{
             width: "100%",
-            background: "#fff",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            py: 4,
+            maxWidth: 1900,
+            height: 750,
+            margin: "0 auto",
+            borderRadius: 2,
+            overflow: "hidden",
+            marginTop: "10px",
           }}
         >
-          <Box
-            sx={{
-              width: "100%",
-              maxWidth: 1900,
-              minHeight: 500,
-              boxShadow: 2,
-              borderRadius: 2,
-              overflow: "hidden",
-              background: "#fafafa",
-            }}
+          <Swiper
+            modules={[Navigation, Pagination, Autoplay]}
+            navigation
+            pagination={{ clickable: true }}
+            autoplay={{ delay: 5000 }}
+            loop={true}
+            style={{ height: "750px" }}
           >
-            <Carousel
-              indicators={true}
-              navButtonsAlwaysVisible={true}
-              autoPlay={true}
-              interval={5000}
-              animation="slide"
-              sx={{ height: 700 }}
-            >
-              {carouselItems.map((item, i) => (
-                <Box
-                  key={i}
-                  sx={{
-                    position: "relative",
-                    height: 700,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "white",
-                    overflow: "hidden",
-                  }}
-                >
+            {carouselItems.map((item, i) => (
+              <SwiperSlide key={i}>
+                <Box sx={{ position: "relative", height: "750px" }}>
                   <Box
                     component="img"
                     src={item.image}
                     alt="carousel-img"
-                    sx={{
-                      position: "absolute",
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      zIndex: 1,
-                    }}
+                    sx={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
                   <Box
                     sx={{
                       position: "absolute",
+                      top: 0,
+                      left: 0,
                       width: "100%",
                       height: "100%",
                       background: "rgba(0,0,0,0.45)",
-                      zIndex: 2,
-                      top: 0,
-                      left: 0,
-                    }}
-                  />
-                  <Box
-                    sx={{
-                      position: "relative",
-                      zIndex: 3,
-                      width: "100%",
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
                       justifyContent: "center",
+                      color: "white",
                       px: 2,
                     }}
                   >
-                    <Box
-                      sx={{
-                        fontSize: { xs: 54, md: 80 },
-                        fontWeight: 600,
-                        mb: { xs: 2, md: 3 },
-                        textAlign: "center",
-                        lineHeight: 1.1,
-                      }}
-                    >
-                      Gestión Integral
-                    </Box>
-                    <Box
-                      sx={{
-                        fontSize: { xs: 22, md: 30 },
-                        fontWeight: 400,
-                        mb: { xs: 2, md: 3 },
-                        textAlign: "center",
-                        lineHeight: 1.2,
-                      }}
-                    >
+                    <Box sx={{ fontSize: { xs: 54, md: 80 }, fontWeight: 600, mb: 3 }}>Gestión Integral</Box>
+                    <Box sx={{ fontSize: { xs: 22, md: 30 }, maxWidth: 900, mb: 3, textAlign: "center" }}>
                       {item.text}
                     </Box>
                     {i === 0 && (
                       <Button
-                        href="#contactoExterno"
+                        href="#contactoLanding"
                         variant="contained"
                         sx={{
-                          mt: { xs: 2, md: 3 },
+                          mt: 3,
                           fontWeight: 600,
                           fontSize: 16,
                           borderRadius: 8,
@@ -206,9 +159,9 @@ function Landing() {
                     )}
                   </Box>
                 </Box>
-              ))}
-            </Carousel>
-          </Box>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </Box>
 
         <Box
@@ -221,14 +174,17 @@ function Landing() {
             alignItems: "center",
             py: { xs: 6, md: 8 },
             px: 2,
+            marginTop: "25px",
           }}
         >
           <Box
             sx={{
-              fontSize: 28,
+              fontSize: 32,
               fontWeight: 400,
-              mb: 2,
+              mb: 3,
               textAlign: "center",
+              letterSpacing: 0.2,
+              lineHeight: 1.2,
             }}
           >
             Características{" "}
@@ -240,9 +196,11 @@ function Landing() {
             sx={{
               fontSize: 18,
               color: "#444",
-              mb: 1,
+              mb: 3,
               textAlign: "center",
               maxWidth: 900,
+              lineHeight: 1.6,
+              letterSpacing: 0.1,
             }}
           >
             Fit Manager brinda un sistema integral de soluciones informáticas para la gestión diaria.
@@ -267,50 +225,60 @@ function Landing() {
               maxWidth: 1100,
             }}
           >
-            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", px: 2 }}>
+            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", px: 2, gap: 2 }}>
               <LockOutlinedIcon sx={{ fontSize: 48, mb: 1 }} />
-              <Box sx={{ fontSize: 20, fontWeight: 500, mb: 1, textAlign: "center" }}>Accesos personalizados</Box>
-              <Box sx={{ fontSize: 16, color: "#444", textAlign: "center" }}>
+              <Box sx={{ fontSize: 20, fontWeight: 500, mb: 1, textAlign: "center", lineHeight: 1.3 }}>
+                Accesos personalizados
+              </Box>
+              <Box sx={{ fontSize: 16, color: "#444", textAlign: "center", lineHeight: 1.6, maxWidth: 340 }}>
                 Cada usuario tiene su perfil: Administrador, Profesor o Alumno, con funcionalidades específicas
                 adaptadas a sus necesidades diarias.
               </Box>
             </Box>
-            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", px: 2 }}>
+            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", px: 2, gap: 2 }}>
               <EventAvailableOutlinedIcon sx={{ fontSize: 48, mb: 1 }} />
-              <Box sx={{ fontSize: 20, fontWeight: 500, mb: 1, textAlign: "center" }}>Gestión de clases</Box>
-              <Box sx={{ fontSize: 16, color: "#444", textAlign: "center" }}>
+              <Box sx={{ fontSize: 20, fontWeight: 500, mb: 1, textAlign: "center", lineHeight: 1.3 }}>
+                Gestión de clases
+              </Box>
+              <Box sx={{ fontSize: 16, color: "#444", textAlign: "center", lineHeight: 1.6, maxWidth: 340 }}>
                 Los alumnos pueden reservar clases desde la plataforma, ver sus horarios y reprogramar si lo necesitan.
                 El administrador controla cupos y asistencia en tiempo real.
               </Box>
             </Box>
-            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", px: 2 }}>
+            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", px: 2, gap: 2 }}>
               <FitnessCenterOutlinedIcon sx={{ fontSize: 48, mb: 1 }} />
-              <Box sx={{ fontSize: 20, fontWeight: 500, mb: 1, textAlign: "center" }}>Rutinas</Box>
-              <Box sx={{ fontSize: 16, color: "#444", textAlign: "center" }}>
+              <Box sx={{ fontSize: 20, fontWeight: 500, mb: 1, textAlign: "center", lineHeight: 1.3 }}>Rutinas</Box>
+              <Box sx={{ fontSize: 16, color: "#444", textAlign: "center", lineHeight: 1.6, maxWidth: 340 }}>
                 Los profesores suben las rutinas desde su perfil, y los alumnos pueden consultarlas según su actividad o
                 nivel de entrenamiento.
               </Box>
             </Box>
-            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", px: 2 }}>
+            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", px: 2, gap: 2 }}>
               <CreditCardOutlinedIcon sx={{ fontSize: 48, mb: 1 }} />
-              <Box sx={{ fontSize: 20, fontWeight: 500, mb: 1, textAlign: "center" }}>Control de pagos</Box>
-              <Box sx={{ fontSize: 16, color: "#444", textAlign: "center" }}>
+              <Box sx={{ fontSize: 20, fontWeight: 500, mb: 1, textAlign: "center", lineHeight: 1.3 }}>
+                Control de pagos
+              </Box>
+              <Box sx={{ fontSize: 16, color: "#444", textAlign: "center", lineHeight: 1.6, maxWidth: 340 }}>
                 El sistema permite registrar cuotas abonadas, visualizar deudas y enviar notificaciones automáticas
                 sobre vencimientos o recordatorios.
               </Box>
             </Box>
-            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", px: 2 }}>
+            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", px: 2, gap: 2 }}>
               <Inventory2OutlinedIcon sx={{ fontSize: 48, mb: 1 }} />
-              <Box sx={{ fontSize: 20, fontWeight: 500, mb: 1, textAlign: "center" }}>Control de equipamiento</Box>
-              <Box sx={{ fontSize: 16, color: "#444", textAlign: "center" }}>
+              <Box sx={{ fontSize: 20, fontWeight: 500, mb: 1, textAlign: "center", lineHeight: 1.3 }}>
+                Control de equipamiento
+              </Box>
+              <Box sx={{ fontSize: 16, color: "#444", textAlign: "center", lineHeight: 1.6, maxWidth: 340 }}>
                 Administrá los insumos y materiales del gimnasio para evitar faltantes en las clases (pesas,
                 colchonetas, bicicletas, etc.).
               </Box>
             </Box>
-            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", px: 2 }}>
+            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", px: 2, gap: 2 }}>
               <MailOutlineOutlinedIcon sx={{ fontSize: 48, mb: 1 }} />
-              <Box sx={{ fontSize: 20, fontWeight: 500, mb: 1, textAlign: "center" }}>Notificaciones</Box>
-              <Box sx={{ fontSize: 16, color: "#444", textAlign: "center" }}>
+              <Box sx={{ fontSize: 20, fontWeight: 500, mb: 1, textAlign: "center", lineHeight: 1.3 }}>
+                Notificaciones
+              </Box>
+              <Box sx={{ fontSize: 16, color: "#444", textAlign: "center", lineHeight: 1.6, maxWidth: 340 }}>
                 Recordatorios de vencimientos, turnos agendados, o novedades del gimnasio, todo desde una sola
                 plataforma.
               </Box>
@@ -335,6 +303,8 @@ function Landing() {
               fontWeight: 500,
               mb: 2,
               textAlign: "center",
+              lineHeight: 1.2,
+              letterSpacing: 0.2,
             }}
           >
             Precios
@@ -345,6 +315,8 @@ function Landing() {
               color: "#444",
               mb: 4,
               textAlign: "center",
+              lineHeight: 1.6,
+              letterSpacing: 0.1,
             }}
           >
             Precios expresados en Pesos y sólo válidos para la República Argentina.
@@ -362,19 +334,21 @@ function Landing() {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              gap: 2,
             }}
           >
-            <Box sx={{ fontSize: 28, fontWeight: 400, mb: 1 }}>Estándar</Box>
-            <Box sx={{ fontSize: 18, color: "#444", mb: 2 }}>Desde...</Box>
-            <Box sx={{ fontSize: 54, fontWeight: 400, mb: 1 }}>$ 30000</Box>
-            <Box sx={{ fontSize: 18, color: "#444", mb: 1 }}>por mes*</Box>
-            <Box sx={{ fontSize: 18, color: "#444", mb: 2 }}>Incluye:</Box>
+            <Box sx={{ fontSize: 28, fontWeight: 400, mb: 1, lineHeight: 1.2 }}>Estándar</Box>
+            <Box sx={{ fontSize: 18, color: "#444", mb: 2, lineHeight: 1.5 }}>Desde...</Box>
+            <Box sx={{ fontSize: 54, fontWeight: 400, mb: 1, lineHeight: 1.1 }}>$ 30000</Box>
+            <Box sx={{ fontSize: 18, color: "#444", mb: 1, lineHeight: 1.5 }}>por mes*</Box>
+            <Box sx={{ fontSize: 18, color: "#444", mb: 2, lineHeight: 1.5 }}>Incluye:</Box>
             <Box
               sx={{
                 fontSize: 17,
                 color: "#222",
                 mb: 1,
                 textAlign: "center",
+                lineHeight: 1.6,
               }}
             >
               Sistema Administrativo Web
@@ -385,6 +359,7 @@ function Landing() {
                 color: "#222",
                 mb: 1,
                 textAlign: "center",
+                lineHeight: 1.6,
               }}
             >
               Cantidad ilimitada de usuarios administradores, profesionales, salas
@@ -395,6 +370,7 @@ function Landing() {
                 color: "#222",
                 mb: 1,
                 textAlign: "center",
+                lineHeight: 1.6,
               }}
             >
               Posibilidad de varias Sucursales
@@ -405,6 +381,7 @@ function Landing() {
                 color: "#222",
                 mb: 3,
                 textAlign: "center",
+                lineHeight: 1.6,
               }}
             >
               WebApp para los clientes
@@ -434,6 +411,7 @@ function Landing() {
               mt: 4,
               textAlign: "center",
               maxWidth: 600,
+              lineHeight: 1.6,
             }}
           >
             El valor del plan Estándar mínimo es hasta 50 clientes activos.
@@ -471,6 +449,8 @@ function Landing() {
                   fontWeight: 500,
                   mb: 1,
                   textAlign: "center",
+                  lineHeight: 1.2,
+                  letterSpacing: 0.2,
                 }}
               >
                 Preguntas y respuestas FAQ
@@ -481,6 +461,8 @@ function Landing() {
                   color: "#444",
                   mb: 4,
                   textAlign: "center",
+                  lineHeight: 1.6,
+                  letterSpacing: 0.1,
                 }}
               >
                 En esta sección se responden algunas preguntas frecuentes.
@@ -510,6 +492,7 @@ function Landing() {
                         borderBottomLeftRadius: openFaq === idx ? 0 : 4,
                         borderBottomRightRadius: openFaq === idx ? 0 : 4,
                         boxShadow: openFaq === idx ? "0 2px 8px 0 rgba(0,0,0,0.04)" : "none",
+                        lineHeight: 1.4,
                       }}
                     >
                       {item.question}
@@ -541,6 +524,7 @@ function Landing() {
                           mb: 1.5,
                           boxShadow: "0 2px 8px 0 rgba(0,0,0,0.04)",
                           animation: "fadeInFaq 0.2s",
+                          lineHeight: 1.6,
                         }}
                       >
                         {item.answer}
@@ -563,6 +547,9 @@ function Landing() {
                 flexDirection: "column",
                 alignItems: "center",
                 maxWidth: 350,
+                gap: 2,
+                mt: { xs: 4, md: "163px" },
+                height: "fit-content",
               }}
             >
               <Box
@@ -571,6 +558,7 @@ function Landing() {
                   fontWeight: 500,
                   mb: 1,
                   textAlign: "center",
+                  lineHeight: 1.3,
                 }}
               >
                 ¿Tenés más dudas?
@@ -581,12 +569,13 @@ function Landing() {
                   color: "#444",
                   mb: 3,
                   textAlign: "center",
+                  lineHeight: 1.6,
                 }}
               >
-                Escribí una consulta y tendrás una respuesta a la brevedad
+                Escribí una consulta y tendrás una respuesta a la brevedad.
               </Box>
               <Button
-                href="/#contactoExterno"
+                href="/#contactoLanding"
                 variant="contained"
                 sx={{
                   backgroundColor: "#111",
@@ -604,55 +593,6 @@ function Landing() {
                 }}
               >
                 Contacto
-              </Button>
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: "#111",
-                  color: "#fff",
-                  borderRadius: 2,
-                  px: 4,
-                  py: 1.5,
-                  fontWeight: 500,
-                  fontSize: 18,
-                  boxShadow: "none",
-                  textTransform: "none",
-                  width: "100%",
-                  mb: 2,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1.5,
-                  "&:hover": { backgroundColor: "#222" },
-                }}
-              >
-                <Box component="span" sx={{ fontSize: 22, mr: 1 }}>
-                  <i className="fab fa-facebook" />
-                </Box>
-                Facebook
-              </Button>
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: "#111",
-                  color: "#fff",
-                  borderRadius: 2,
-                  px: 4,
-                  py: 1.5,
-                  fontWeight: 500,
-                  fontSize: 18,
-                  boxShadow: "none",
-                  textTransform: "none",
-                  width: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1.5,
-                  "&:hover": { backgroundColor: "#222" },
-                }}
-              >
-                <Box component="span" sx={{ fontSize: 22, mr: 1 }}>
-                  <i className="fab fa-instagram" />
-                </Box>
-                Instagram
               </Button>
             </Box>
           </Box>
@@ -707,10 +647,13 @@ function Landing() {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              gap: 2,
             }}
           >
-            <Box sx={{ fontSize: 32, fontWeight: 500, mb: 2, textAlign: "center" }}>Consultar o Contratar</Box>
-            <Box sx={{ fontSize: 18, color: "#444", mb: 4, textAlign: "center", maxWidth: 800 }}>
+            <Box sx={{ fontSize: 32, fontWeight: 500, mb: 2, textAlign: "center", lineHeight: 1.2 }}>
+              Consultar o Contratar
+            </Box>
+            <Box sx={{ fontSize: 18, color: "#444", mb: 4, textAlign: "center", maxWidth: 800, lineHeight: 1.6 }}>
               ¿Tenés un gimnasio? Si querés contratar el servicio del sistema de gestión Fit Manager,
               <br />
               por favor completá el formulario y nos comunicaremos a la brevedad.
