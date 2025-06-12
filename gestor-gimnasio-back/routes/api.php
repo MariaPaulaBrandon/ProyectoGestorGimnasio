@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ContactoController;
+use App\Http\Controllers\ContactoLandingController;
 use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\SalaController;
 use App\Http\Controllers\TipoActividadController;
@@ -26,6 +27,8 @@ Route::prefix('contactos')->group(function () {
     Route::post('/', [ContactoController::class, 'create'])
         ->name('contactos.create');
 });
+
+Route::post('/contactoslanding', [ContactoLandingController::class, 'enviar']);
 
 Route::middleware(AUTH_SANCTION)->group(function () {
     Route::prefix('usuarios')->group(function () {
