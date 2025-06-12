@@ -8,6 +8,7 @@ use App\Http\Controllers\SalaController;
 use App\Http\Controllers\TipoActividadController;
 use App\Http\Controllers\TurnoClase;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\EquipamientoController;
 use Illuminate\Support\Facades\Route;
 
 if (!defined('AUTH_SANCTION')) {
@@ -77,5 +78,10 @@ Route::middleware(AUTH_SANCTION)->group(function () {
             ->name('salas.update');
         Route::post('/', [SalaController::class, 'create'])
             ->name('salas.create');
+    });
+
+    Route::prefix('equipamiento')->group(function () {
+        Route::get('/', [EquipamientoController::class, 'index'])
+            ->name('equipamiento.index');
     });
 });
