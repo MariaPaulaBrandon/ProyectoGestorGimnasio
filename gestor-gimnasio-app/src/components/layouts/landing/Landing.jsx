@@ -22,12 +22,14 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules"
 function Landing() {
   const carouselItems = [
     {
-      image: "/hombre_celular.jpg",
-      text: "Gestioná tu gimnasio de forma simple y profesional",
+      image: "/computadora.jpg",
+      title: "Gestión Integral",
+      text: "Gestioná tu gimnasio de forma simple y profesional desde un solo lugar.",
     },
     {
-      image: "/computadora.jpg",
-      text: "Reservá clases y controlá asistencia online",
+      image: "/hombre_celular.jpg",
+      title: "Facilidad de uso",
+      text: "Desde una plataforma web, en cualquier lugar con tu compu, celu o tablet administrá de manera sencilla la gestión de turnos, pagos, fichas, mails, equipamiento, etc.",
     },
   ]
 
@@ -99,7 +101,7 @@ function Landing() {
             margin: "0 auto",
             borderRadius: 2,
             overflow: "hidden",
-            marginTop: "10px",
+            marginTop: "15px",
           }}
         >
           <Swiper
@@ -135,28 +137,26 @@ function Landing() {
                       px: 2,
                     }}
                   >
-                    <Box sx={{ fontSize: { xs: 54, md: 80 }, fontWeight: 600, mb: 3 }}>Gestión Integral</Box>
+                    <Box sx={{ fontSize: { xs: 54, md: 80 }, fontWeight: 600, mb: 3 }}>{item.title}</Box>
                     <Box sx={{ fontSize: { xs: 22, md: 30 }, maxWidth: 900, mb: 3, textAlign: "center" }}>
                       {item.text}
                     </Box>
-                    {i === 0 && (
-                      <Button
-                        href="#contactoLanding"
-                        variant="contained"
-                        sx={{
-                          mt: 3,
-                          fontWeight: 600,
-                          fontSize: 16,
-                          borderRadius: 8,
-                          px: 4,
-                          py: 1.5,
-                          background: "black",
-                          "&:hover": { background: "#222" },
-                        }}
-                      >
-                        CONTRATÁ AHORA
-                      </Button>
-                    )}
+                    <Button
+                      href="#contactoLanding"
+                      variant="contained"
+                      sx={{
+                        mt: 3,
+                        fontWeight: 600,
+                        fontSize: 16,
+                        borderRadius: 8,
+                        px: 4,
+                        py: 1.5,
+                        background: "black",
+                        "&:hover": { background: "#222" },
+                      }}
+                    >
+                      CONTRATÁ AHORA
+                    </Button>
                   </Box>
                 </Box>
               </SwiperSlide>
@@ -324,7 +324,8 @@ function Landing() {
           <Box
             sx={{
               background: "#fff",
-              boxShadow: "0 2px 8px 0 rgba(0,0,0,0.10), 0 1.5px 3px 0 rgba(0,0,0,0.08)",
+              boxShadow:
+                "0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)",
               border: "1px solid #ddd",
               borderRadius: 2,
               maxWidth: 400,
@@ -539,7 +540,8 @@ function Landing() {
                 flex: 1,
                 minWidth: 300,
                 background: "#fff",
-                boxShadow: "0 2px 8px 0 rgba(0,0,0,0.10)",
+                boxShadow:
+                  "0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)",
                 border: "1px solid #ddd",
                 borderRadius: 2,
                 p: 4,
@@ -639,7 +641,8 @@ function Landing() {
               width: "100%",
               maxWidth: 900,
               background: "#fff",
-              boxShadow: "0 2px 8px 0 rgba(0,0,0,0.10)",
+              boxShadow:
+                "0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)",
               border: "1px solid #ddd",
               borderRadius: 2,
               p: { xs: 2, sm: 6 },

@@ -13,9 +13,10 @@ function HeaderLanding() {
           justifyContent: "space-between",
           px: 4,
           py: 4,
-          backgroundColor: "#fff",
+          backgroundColor: "#f8fafc",
           borderBottom: "1px solid #ddd",
-          boxShadow: "0 4px 12px -4px rgba(0,0,0,0.10)",
+          boxShadow:
+            "0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)",
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
