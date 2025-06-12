@@ -5,7 +5,6 @@ import FooterLanding from "../footer-landing/FooterLanding"
 import { Outlet } from "react-router-dom"
 import Carousel from "react-material-ui-carousel"
 import Button from "@mui/material/Button"
-import TextField from "@mui/material/TextField"
 import React from "react"
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined"
 import EventAvailableOutlinedIcon from "@mui/icons-material/EventAvailableOutlined"
@@ -14,6 +13,7 @@ import CreditCardOutlinedIcon from "@mui/icons-material/CreditCardOutlined"
 import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined"
 import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined"
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp"
+import ContactoLandingForm from "./ContactoLandingForm"
 
 function Landing() {
   const carouselItems = [
@@ -683,7 +683,7 @@ function Landing() {
           </Box>
         </Container>
         <Box
-          id="contactoExterno"
+          id="contactoLanding"
           sx={{
             width: "100%",
             background: "#fff",
@@ -715,80 +715,7 @@ function Landing() {
               <br />
               por favor completá el formulario y nos comunicaremos a la brevedad.
             </Box>
-            <Box
-              component="form"
-              sx={{ width: "100%", maxWidth: 900, display: "flex", flexDirection: "column", gap: 2 }}
-              autoComplete="off"
-            >
-              <Box sx={{ display: "flex", gap: 2, flexDirection: { xs: "column", sm: "row" } }}>
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  placeholder="Nombre de tu negocio"
-                  size="medium"
-                  InputProps={{ sx: { background: "#fff" } }}
-                />
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  placeholder="Email"
-                  size="medium"
-                  InputProps={{ sx: { background: "#fff" } }}
-                />
-              </Box>
-              <Box sx={{ display: "flex", gap: 2, flexDirection: { xs: "column", sm: "row" } }}>
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  placeholder="Cantidad promedio de clientes activos"
-                  size="medium"
-                  InputProps={{ sx: { background: "#fff" } }}
-                />
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  placeholder="Teléfono"
-                  size="medium"
-                  InputProps={{ sx: { background: "#fff" } }}
-                />
-              </Box>
-              <TextField
-                fullWidth
-                variant="outlined"
-                placeholder="Nombre"
-                size="medium"
-                InputProps={{ sx: { background: "#fff" } }}
-              />
-              <TextField
-                fullWidth
-                variant="outlined"
-                placeholder="Escribí aquí tu consulta..."
-                size="medium"
-                multiline
-                minRows={6}
-                InputProps={{ sx: { background: "#fff" } }}
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                sx={{
-                  backgroundColor: "#111",
-                  color: "#fff",
-                  borderRadius: 2,
-                  px: 4,
-                  py: 1.5,
-                  fontWeight: 500,
-                  fontSize: 18,
-                  boxShadow: "none",
-                  textTransform: "none",
-                  width: "100%",
-                  mt: 2,
-                  "&:hover": { backgroundColor: "#222" },
-                }}
-              >
-                Enviar
-              </Button>
-            </Box>
+            <ContactoLandingForm />
           </Box>
         </Box>
         <FooterLanding />

@@ -34,7 +34,7 @@ function HeaderLanding() {
           <a href="#faq" style={{ color: "#111", textDecoration: "none", fontSize: 22 }}>
             Preguntas
           </a>
-          <a href="#contactoExterno" style={{ color: "#111", textDecoration: "none", fontSize: 22 }}>
+          <a href="#contactoLanding" style={{ color: "#111", textDecoration: "none", fontSize: 22 }}>
             Contacto
           </a>
           <Button

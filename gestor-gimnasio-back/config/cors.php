@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'paths' => ['api/*'],
+    'paths' => ['api/*', 'contacto-landing'],
     'allowed_methods' => ['*'],
     'allowed_origins' => [env('FRONTEND_URL', 'http://localhost:5173')],
     'allowed_origins_patterns' => [],
@@ -12,7 +12,10 @@ return [
         'Accept',
         'X-XSRF-TOKEN'
     ],
+
     'exposed_headers' => [],
+
     'max_age' => 0,
+
     'supports_credentials' => true,
 ];
