@@ -1,25 +1,31 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
-import "./App.css"
-import Login from "./components/auth/login/Login"
-import Register from "./components/auth/register/Register"
-import RutaProtegida from "./components/auth/RutaProtegida/RutaProtegida"
-import Dashboard from "./components/layouts/dashboard/Dashboard"
-import ForgottenPassword from "./components/forgotten-password/ForgottenPassword"
-import AgendarClases from "./components/agendar-clases/AgendarClases"
-import ContactoAlumno from "./components/contacto-alumno/ContactoAlumno"
-import AbmTurnoClase from "./components/abm-tunos-clases/AbmTurnoClase"
-import AbmTipoActividad from "./components/abm-tipo-actividad/AbmTipoActividad"
-import AbmSalas from "./components/abm-salas/AbmSalas"
-import Contacto from "./components/contacto/Contacto"
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import "./App.css";
+import Login from "./components/auth/login/Login";
+import Register from "./components/auth/register/Register";
+import RutaProtegida from "./components/auth/RutaProtegida/RutaProtegida";
+import Dashboard from "./components/layouts/dashboard/Dashboard";
+import ForgottenPassword from "./components/forgotten-password/ForgottenPassword";
+import AgendarClases from "./components/agendar-clases/AgendarClases";
+import ContactoAlumno from "./components/contacto-alumno/ContactoAlumno";
+import AbmTurnoClase from "./components/abm-tunos-clases/AbmTurnoClase";
+import AbmTipoActividad from "./components/abm-tipo-actividad/AbmTipoActividad";
+import AbmSalas from "./components/abm-salas/AbmSalas";
+import Contacto from "./components/contacto/Contacto";
+import HistorialPagos from "./components/historial-pagos/HistorialPagos";
 
-import dayjs from "dayjs"
-import "dayjs/locale/es"
-import Landing from "./components/layouts/landing/Landing"
+import dayjs from "dayjs";
+import "dayjs/locale/es";
+import Landing from "./components/layouts/landing/Landing";
 
-dayjs.locale("es")
+dayjs.locale("es");
 
 function App() {
-  const usuarioEstaLogueado = localStorage.getItem("usuarioAccesToken")
+  const usuarioEstaLogueado = localStorage.getItem("usuarioAccesToken");
 
   return (
     <Router>
@@ -39,16 +45,14 @@ function App() {
             <Route path="/dashboard/abm/clases" element={<AbmTurnoClase />} />
             <Route path="/dashboard/abm/tipos-actividad" element={<AbmTipoActividad />} />
             <Route path="/dashboard/abm/salas" element={<AbmSalas />} />
+            <Route path="/dashboard/historial-pagos" element={<HistorialPagos />} />
           </Route>
         </Route>
-
-        <Route
-          path="*"
-          element={usuarioEstaLogueado ? <Navigate to="/dashboard" replace /> : <Navigate to="/" replace />}
-        />
+          <Route path="*" element={usuarioEstaLogueado ? 
+            (<Navigate to="/dashboard" replace />) : ( <Navigate to="/" replace />)} />
       </Routes>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;

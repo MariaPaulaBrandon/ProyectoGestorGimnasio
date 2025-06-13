@@ -37,6 +37,10 @@ function NavigationButton({ usuario, colorButtons = '#000' }) {
 
   const puedeVerAbm = idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR;
 
+  const puedeVerHistorialPagos =
+    idTipoUsuario === TiposUsuarioEnum.ALUMNO ||
+    idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR;
+
   const handleAbmClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -130,6 +134,15 @@ function NavigationButton({ usuario, colorButtons = '#000' }) {
             </MenuItem>
           </Menu>
         </>
+      )}
+      {puedeVerHistorialPagos && (
+        <Button
+          color="inherit"
+          sx={{ textTransform: 'none', mx: 1, color: colorButtons, fontSize: '1em' }}
+          onClick={() => navigate('/dashboard/historial-pagos')}
+        >
+          Historial de Pagos
+        </Button>
       )}
     </Box>
   );

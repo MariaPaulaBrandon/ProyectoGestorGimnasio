@@ -9,6 +9,9 @@ use App\Http\Controllers\TipoActividadController;
 use App\Http\Controllers\TurnoClase;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PagoController;
+
+Route::middleware('auth:sanctum')->get('/pagos/historial', [PagoController::class, 'historial']);
 
 if (!defined('AUTH_SANCTION')) {
     define('AUTH_SANCTION', 'auth:sanctum');
