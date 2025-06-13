@@ -78,6 +78,8 @@ Route::middleware(AUTH_SANCTION)->group(function () {
             ->name('salas.update');
         Route::post('/', [SalaController::class, 'create'])
             ->name('salas.create');
+        Route::delete(ID_ROUTE_PARAMETER, [SalaController::class, 'destroy'])
+            ->name('salas.destroy');
     });
 
     Route::prefix('equipamiento')->group(function () {
