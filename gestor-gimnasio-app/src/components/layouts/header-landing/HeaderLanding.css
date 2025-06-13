@@ -1,0 +1,12 @@
+.css-1rju2q6-MuiButtonBase-root-MuiMenuItem-root.Mui-disabled {
+  opacity: 1 !important;
+}
+
+.logout-button-custom-red {
+  background-color: #ef5350 !important;
+  color: white !important;
+}
+
+.logout-button-custom-red:hover {
+  background-color: #d32f2f !important;
+}
