@@ -192,22 +192,19 @@ function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, acc
     if (clase.inscripto) {
       return (
         <Button
-          variant='outlined'
-          className='boton-secundario'
+          variant="outlined"
+          className="boton-secundario"
           onClick={() => onCancelarInscripcionClick(clase.idTurnoClase)}
           disabled={accionEnProgreso}
         >
-          {isCurrentActionTarget ? <CircularProgress size={24} color='inherit' /> : 'Cancelar Inscripción'}
+          {isCurrentActionTarget ? <CircularProgress size={24} color="inherit" /> : "Cancelar Inscripción"}
         </Button>
       )
     }
 
     if (disponibilidad <= 0) {
       return (
-        <Button
-          variant='outlined'
-          disabled
-        >
+        <Button variant="outlined" disabled>
           Sin disponibilidad
         </Button>
       )
@@ -215,12 +212,12 @@ function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, acc
 
     return (
       <Button
-        variant='outlined'
-        className='boton-principal'
+        variant="outlined"
+        className="boton-principal"
         onClick={() => onInscribirClick(clase.idTurnoClase)}
         disabled={accionEnProgreso}
       >
-        {isCurrentActionTarget ? <CircularProgress size={24} color='inherit' /> : 'Inscribirse'}
+        {isCurrentActionTarget ? <CircularProgress size={24} color="inherit" /> : "Inscribirse"}
       </Button>
     )
   }
@@ -240,11 +237,17 @@ function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, acc
     )
   }
 
+  const clasesOrdenadas = [...clases].sort((a, b) => {
+    const fechaA = new Date(a.fecha)
+    const fechaB = new Date(b.fecha)
+    return fechaA - fechaB // menor a mayor
+  })
+
   return (
     <Table sx={{ minWidth: 900 }} aria-label="tabla de clases">
       {encabezadoTabla()}
       <TableBody>
-        {clases.map((clase) => {
+        {clasesOrdenadas.map((clase) => {
           const soloFechas = clase.fecha.split(" ")[0].split("-")
           const fechaFormateada = `${soloFechas[2]}/${soloFechas[1]}/${soloFechas[0]}`
           const isCurrentActionTarget = accionEnProgreso && accionId === clase.idTurnoClase
@@ -265,9 +268,7 @@ function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, acc
                   <HighlightOffIcon sx={{ color: red[500] }} />
                 )}
               </TableCell>
-              <TableCell>
-                {renderizarBotonAcciones(clase, disponibilidad, isCurrentActionTarget)}
-              </TableCell>
+              <TableCell>{renderizarBotonAcciones(clase, disponibilidad, isCurrentActionTarget)}</TableCell>
             </TableRow>
           )
         })}
