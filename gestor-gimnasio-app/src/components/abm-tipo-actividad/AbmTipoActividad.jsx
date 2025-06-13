@@ -18,7 +18,7 @@ import {
 } from "@mui/material"
 import SnackbarMensaje from "../utils/SnackbarMensaje"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import CargaTabla from "../clases-carga/CargaTabla";
+import CargaTabla from "../clases-carga/CargaTabla"
 import PropTypes from "prop-types"
 import environment from "../../environments/environment"
 import "./AbmTipoActividad.css"
@@ -284,6 +284,27 @@ export default function AbmTipoActividad() {
 }
 
 function TiposActividadTabla({ actividades, onEditar, onEliminar }) {
+  const [openEliminar, setOpenEliminar] = useState(false)
+  const [materialAEliminar, setMaterialAEliminar] = useState(null)
+
+  const handleClickEliminar = (material) => {
+    setMaterialAEliminar(material)
+    setOpenEliminar(true)
+  }
+
+  const handleConfirmarEliminar = () => {
+    if (materialAEliminar) {
+      onEliminar(materialAEliminar)
+    }
+    setOpenEliminar(false)
+    setMaterialAEliminar(null)
+  }
+
+  const handleCancelarEliminar = () => {
+    setOpenEliminar(false)
+    setMaterialAEliminar(null)
+  }
+
   const encabezadosTabla = () => {
     return (
       <TableHead className="cabecera-tabla-abm">
@@ -313,32 +334,69 @@ function TiposActividadTabla({ actividades, onEditar, onEliminar }) {
   }
 
   return (
-    <Table aria-label="tabla de abm tipos actividad">
-      {encabezadosTabla()}
-      <TableBody>
-        {actividades.map((tipoActividad) => (
-          <TableRow key={tipoActividad.id}>
-            <TableCell>
-              {tipoActividad.tipo.charAt(0).toUpperCase() + tipoActividad.tipo.slice(1).toLowerCase()}
-            </TableCell>
-            <TableCell>
-              {tipoActividad.descripcionSala.charAt(0).toUpperCase() +
-                tipoActividad.descripcionSala.slice(1).toLowerCase()}
-            </TableCell>
-            <TableCell>
-              <Button variant="outlined" className="boton-principal" onClick={() => onEditar(tipoActividad)}>
-                Modificar
-              </Button>
-            </TableCell>
-            <TableCell>
-              <Button variant="outlined" className="boton-principal" onClick={() => onEliminar(tipoActividad)}>
-                Eliminar
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <>
+      <Table aria-label="tabla de abm tipos actividad">
+        {encabezadosTabla()}
+        <TableBody>
+          {actividades.map((tipoActividad) => (
+            <TableRow key={tipoActividad.id}>
+              <TableCell>
+                {tipoActividad.tipo.charAt(0).toUpperCase() + tipoActividad.tipo.slice(1).toLowerCase()}
+              </TableCell>
+              <TableCell>
+                {tipoActividad.descripcionSala.charAt(0).toUpperCase() +
+                  tipoActividad.descripcionSala.slice(1).toLowerCase()}
+              </TableCell>
+              <TableCell>
+                <Button variant="outlined" className="boton-principal" onClick={() => onEditar(tipoActividad)}>
+                  Modificar
+                </Button>
+              </TableCell>
+              <TableCell>
+                <Button
+                  variant="outlined"
+                  className="boton-principal"
+                  onClick={() => handleClickEliminar(tipoActividad)}
+                >
+                  Eliminar
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <Modal open={openEliminar} onClose={handleCancelarEliminar}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "background.paper",
+            border: "2px solid #000",
+            boxShadow: 24,
+            p: 4,
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
+        >
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            Confirmar eliminación
+          </Typography>
+          <Typography sx={{ mb: 3 }}>¿Está seguro de que desea eliminar la actividad?</Typography>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+            <Button variant="outlined" className="boton-secundario" onClick={handleCancelarEliminar}>
+              Cancelar
+            </Button>
+            <Button variant="contained" className="boton-principal" onClick={handleConfirmarEliminar} color="error">
+              Eliminar
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
+    </>
   )
 }
 

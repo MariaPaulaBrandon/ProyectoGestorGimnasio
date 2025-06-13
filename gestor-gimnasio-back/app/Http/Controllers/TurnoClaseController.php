@@ -10,7 +10,7 @@ if (!defined('REQUIRED_NUMERIC')) {
     define('REQUIRED_NUMERIC', 'required|numeric');
 }
 
-class TurnoClase extends Controller
+class TurnoClaseController extends Controller
 {
     public function __construct(
         private readonly TurnoClaseServiceInterface $turnoClaseService
@@ -77,5 +77,17 @@ class TurnoClase extends Controller
 
         $turnoClase = $this->turnoClaseService->update($idTurnoClase, $validatedData);
         return response()->json($turnoClase, Response::HTTP_OK);
+    }
+
+    /**
+     * Eliminar una clase existente.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(int $id)
+    {
+        $this->turnoClaseService->destroy($id);
+        return response()->json(['message' => 'Clase eliminada correctamente'], \Illuminate\Http\Response::HTTP_OK);
     }
 }

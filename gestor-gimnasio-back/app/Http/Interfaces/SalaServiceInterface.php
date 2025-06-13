@@ -27,7 +27,7 @@ interface SalaServiceInterface
     public function create(array $sala);
 
     /**
-     * Eliminar un material existente.
+     * Eliminar una sala existente.
      * @param int $id
      * @return mixed
      */

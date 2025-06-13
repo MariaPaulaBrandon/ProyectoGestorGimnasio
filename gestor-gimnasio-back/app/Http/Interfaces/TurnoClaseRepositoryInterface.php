@@ -64,4 +64,11 @@ interface TurnoClaseRepositoryInterface
      * @return mixed
      */
     public function update(int $idTurnoClase, array $turnoClase);
+
+    /**
+     * Eliminar una clase existente.
+     * @param int $id
+     * @return mixed
+     */
+    public function destroy(int $id);
 }
