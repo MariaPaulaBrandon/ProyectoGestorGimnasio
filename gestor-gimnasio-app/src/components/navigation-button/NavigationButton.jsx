@@ -90,6 +90,7 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
           color="inherit"
           startIcon={<EventNoteIcon />}
           sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
+          onClick={() => navigate("/dashboard/actividades")}
         >
           Actividades
         </Button>

@@ -17,7 +17,7 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff"
 import { green, red } from "@mui/material/colors"
 import { Button } from "@mui/material"
 import SnackbarMensaje from "../utils/SnackbarMensaje"
-import ClasesCarga from "../clases-carga/ClasesCarga"
+import Carga from "../carga/Carga"
 
 function Clases() {
   const [clasesParaTabla, setClasesParaTabla] = useState([])
@@ -149,7 +149,7 @@ function Clases() {
       <h2 className="titulo-clases">Próximas clases</h2>
       <TableContainer component={Paper} className="clases-table">
         {isLoading ? (
-          <ClasesCarga />
+          <Carga />
         ) : (
           <ClasesTabla
             clases={clasesParaTabla}
