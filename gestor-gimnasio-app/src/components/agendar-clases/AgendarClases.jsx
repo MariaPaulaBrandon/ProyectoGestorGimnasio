@@ -24,8 +24,9 @@ function Clases() {
   const [isLoading, setIsLoading] = useState(true)
   const [accionEnProgreso, setAccionEnProgreso] = useState(false)
   const [accionId, setAccionId] = useState(null)
-  const usuario = useMemo(() => new UsuarioAcceesToken(JSON.parse(localStorage.getItem("usuario"))).usuario, [])
-  const token = useMemo(() => localStorage.getItem("usuarioAccesToken"), [])
+  const [busqueda, setBusqueda] = useState('')
+  const usuario = useMemo(() => new UsuarioAcceesToken(JSON.parse(localStorage.getItem('usuario'))).usuario, [])
+  const token = useMemo(() => localStorage.getItem('usuarioAccesToken'), [])
 
   const [abrirSnackbar, setAbrirSnackbar] = useState(false)
   const [mensajeSnackbar, setMensajeSnackbar] = useState("")
@@ -147,12 +148,22 @@ function Clases() {
   return (
     <>
       <h2 className="titulo-clases">Próximas clases</h2>
+      <div style={{ marginBottom: '16px' }}>
+        <input
+          type="text"
+          placeholder="Buscar por actividad..."
+          value={busqueda}
+          onChange={e => setBusqueda(e.target.value)}
+          style={{ padding: '8px', width: '100%', maxWidth: '350px', fontSize: '1rem' }}
+        />
+      </div>
       <TableContainer component={Paper} className="clases-table">
         {isLoading ? (
           <ClasesCarga />
         ) : (
           <ClasesTabla
             clases={clasesParaTabla}
+            busqueda={busqueda}
             onInscribirClick={handleInscribirClick}
             onCancelarInscripcionClick={handleCancelarInscripcionClick}
             accionEnProgreso={accionEnProgreso}
@@ -171,7 +182,7 @@ function Clases() {
   )
 }
 
-function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, accionEnProgreso, accionId }) {
+function ClasesTabla({ clases, busqueda, onInscribirClick, onCancelarInscripcionClick, accionEnProgreso, accionId }) {
   const encabezadoTabla = () => {
     return (
       <TableHead className="cabecera-tabla">
@@ -188,7 +199,13 @@ function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, acc
     )
   }
 
-  if (!clases || clases.length === 0) {
+  const clasesFiltradas = busqueda
+    ? clases.filter(clase =>
+        clase.tipoActividad.toLowerCase().includes(busqueda.toLowerCase())
+      )
+    : clases
+
+  if (!clasesFiltradas || clasesFiltradas.length === 0) {
     return (
       <Table sx={{ minWidth: 900 }} aria-label="tabla de clases">
         {encabezadoTabla()}
@@ -203,7 +220,7 @@ function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, acc
     )
   }
 
-  const clasesOrdenadas = [...clases].sort((a, b) => new Date(a.fecha) - new Date(b.fecha))
+  const clasesOrdenadas = [...clasesFiltradas].sort((a, b) => new Date(a.fecha) - new Date(b.fecha))
 
   return (
     <Table sx={{ minWidth: 600 }} aria-label="tabla de clases">
@@ -260,6 +277,7 @@ function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, acc
 
 ClasesTabla.propTypes = {
   clases: PropTypes.arrayOf(PropTypes.instanceOf(TurnoClaseIncripcionEstadoDto)).isRequired,
+  busqueda: PropTypes.string,
   onInscribirClick: PropTypes.func.isRequired,
   onCancelarInscripcionClick: PropTypes.func.isRequired,
   accionEnProgreso: PropTypes.bool.isRequired,
