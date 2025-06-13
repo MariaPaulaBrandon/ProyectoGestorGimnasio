@@ -219,12 +219,11 @@ export default function AbmTurnoClase() {
     <>
       <h2 className="titulo-clases">ABM Clases</h2>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <TableContainer component={Paper} className="clases-table">
+        <TableContainer component={Paper} className="equipamiento-table">
           {cargando ? <ClasesCarga /> : <TurnoClasesTabla clases={turnoClases} onEditar={handleOpenModalEditar} />}
         </TableContainer>
         <Box
           sx={{
-            maxWidth: 900,
             width: "100%",
             display: "flex",
             justifyContent: "flex-end",
@@ -238,7 +237,7 @@ export default function AbmTurnoClase() {
             disabled={cargandoActividades}
             onClick={handleOpenModalCrear}
           >
-            Nuevo Turno Clase
+            Nueva Clase
           </Button>
           <Button variant="outlined" className="boton-principal" onClick={() => getTurnoClases(userToken)}>
             Actualizar
@@ -275,7 +274,8 @@ function TurnoClasesTabla({ clases, onEditar }) {
           <TableCell>DESDE</TableCell>
           <TableCell>HASTA</TableCell>
           <TableCell>CUPO MÁXIMO</TableCell>
-          <TableCell>ACCIÓN</TableCell>
+          <TableCell>MODIFICAR</TableCell>
+          <TableCell>ELIMINAR</TableCell>
         </TableRow>
       </TableHead>
     )
@@ -283,7 +283,7 @@ function TurnoClasesTabla({ clases, onEditar }) {
 
   if (!clases || clases.length === 0) {
     return (
-      <Table sx={{ minWidth: 900 }} aria-label="tabla de abm turno clases">
+      <Table aria-label="tabla de abm turno clases">
         {encabezadosTabla()}
         <TableBody>
           <TableRow>
@@ -316,7 +316,17 @@ function TurnoClasesTabla({ clases, onEditar }) {
                 style={{ minWidth: 200 }}
                 onClick={() => onEditar(clase)}
               >
-                Modificar registro
+                Modificar
+              </Button>
+            </TableCell>
+            <TableCell>
+              <Button
+                variant="outlined"
+                className="boton-principal"
+                style={{ minWidth: 200 }}
+                onClick={() => onEditar(clase)}
+              >
+                Eliminar
               </Button>
             </TableCell>
           </TableRow>
