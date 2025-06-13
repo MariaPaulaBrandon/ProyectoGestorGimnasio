@@ -178,10 +178,43 @@ export default function AbmSalas() {
     }
   }
 
+  const deleteSala = async (salaEliminada, token) => {
+    setCargando(true)
+    try {
+      const response = await fetch(`${environment.apiUrl}/salas/${salaEliminada.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.message ?? "Error al eliminar la sala")
+      }
+
+      showSnackbar("Sala eliminado exitosamente", "success")
+      await getSalas(token)
+    } catch (error) {
+      showSnackbar(error.message ?? "Error al eliminar la sala", "error")
+      setCargando(false)
+    }
+  }
+
   return (
     <>
       <TableContainer component={Paper} className="equipamiento-table">
-        {cargando ? <ClasesCarga /> : <SalasTabla salas={salas} onEditar={handleOpenModalEditar} />}
+        {cargando ? (
+          <ClasesCarga />
+        ) : (
+          <SalasTabla
+            salas={salas}
+            onEditar={handleOpenModalEditar}
+            onEliminar={(sala) => deleteSala(sala, userToken)}
+          />
+        )}
       </TableContainer>
       <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mt: 2 }}>
         <Button variant="outlined" className="boton-principal" disabled={cargando} onClick={handleOpenModalCrear}>
@@ -216,7 +249,7 @@ export default function AbmSalas() {
   )
 }
 
-const SalasTabla = ({ salas, onEditar }) => {
+const SalasTabla = ({ salas, onEditar, onEliminar }) => {
   const encabezadosTabla = () => (
     <TableHead className="cabecera-tabla-abm">
       <TableRow>
@@ -255,7 +288,7 @@ const SalasTabla = ({ salas, onEditar }) => {
               </Button>
             </TableCell>
             <TableCell>
-              <Button variant="outlined" className="boton-principal" onClick={() => onEditar(sala)}>
+              <Button variant="outlined" className="boton-principal" onClick={() => onEliminar(sala)}>
                 Eliminar
               </Button>
             </TableCell>
