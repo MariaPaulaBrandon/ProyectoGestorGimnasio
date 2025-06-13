@@ -280,6 +280,31 @@ export default function AbmTurnoClase() {
     getProfesores(userToken)
   }, [userToken, getTurnoClases, getActividades, getProfesores])
 
+  const deleteTurnoClase = async (turnoClaseEliminado, token) => {
+    setCargando(true)
+    try {
+      const response = await fetch(`${environment.apiUrl}/turnos-clase/${turnoClaseEliminado.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.message ?? "Error al eliminar la clase")
+      }
+
+      showSnackbar("Sala eliminado exitosamente", "success")
+      await getTurnoClases(token)
+    } catch (error) {
+      showSnackbar(error.message ?? "Error al eliminar la clase", "error")
+      setCargando(false)
+    }
+  }
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <h2 className="titulo">ABM Clases</h2>
@@ -354,7 +379,11 @@ export default function AbmTurnoClase() {
         {cargando ? (
           <CargaTabla texto="Cargando clases..." />
         ) : (
-          <TurnoClasesTabla clases={turnoClasesFiltradas} onEditar={handleOpenModalEditar} />
+          <TurnoClasesTabla
+            clases={turnoClasesFiltradas}
+            onEditar={handleOpenModalEditar}
+            onEliminar={(turnoClase) => deleteTurnoClase(turnoClase, userToken)}
+          />
         )}
       </TableContainer>
       <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mt: 2 }}>
@@ -391,7 +420,56 @@ export default function AbmTurnoClase() {
   )
 }
 
-function TurnoClasesTabla({ clases, onEditar }) {
+function formatearFecha(fechaStr) {
+  if (!fechaStr) return ""
+  if (fechaStr.includes("-")) {
+    const soloFecha = fechaStr.split(" ")[0]
+    const [anio, mes, dia] = soloFecha.split("-")
+    return `${dia}/${mes}/${anio}`
+  }
+  if (fechaStr.includes("/")) {
+    return fechaStr.split(" ")[0]
+  }
+  return fechaStr
+}
+
+function parseFecha(fechaStr) {
+  if (!fechaStr) return new Date(0)
+  if (fechaStr.includes("-")) {
+    const soloFecha = fechaStr.split(" ")[0]
+    const [anio, mes, dia] = soloFecha.split("-")
+    return new Date(`${anio}-${mes}-${dia}`)
+  }
+  if (fechaStr.includes("/")) {
+    const soloFecha = fechaStr.split(" ")[0]
+    const [dia, mes, anio] = soloFecha.split("/")
+    return new Date(`${anio}-${mes}-${dia}`)
+  }
+  return new Date(fechaStr)
+}
+
+function TurnoClasesTabla({ clases, onEditar, onEliminar }) {
+  const [openEliminar, setOpenEliminar] = useState(false)
+  const [materialAEliminar, setMaterialAEliminar] = useState(null)
+
+  const handleClickEliminar = (material) => {
+    setMaterialAEliminar(material)
+    setOpenEliminar(true)
+  }
+
+  const handleConfirmarEliminar = () => {
+    if (materialAEliminar) {
+      onEliminar(materialAEliminar)
+    }
+    setOpenEliminar(false)
+    setMaterialAEliminar(null)
+  }
+
+  const handleCancelarEliminar = () => {
+    setOpenEliminar(false)
+    setMaterialAEliminar(null)
+  }
+
   const encabezadosTabla = () => {
     return (
       <TableHead className="cabecera-tabla-abm">
@@ -425,49 +503,85 @@ function TurnoClasesTabla({ clases, onEditar }) {
   }
 
   const clasesOrdenadas = [...clases].sort((a, b) => {
-    const fechaA = new Date(a.fecha)
-    const fechaB = new Date(b.fecha)
-    return fechaA - fechaB // menor a mayor
+    const fechaA = parseFecha(a.fecha)
+    const fechaB = parseFecha(b.fecha)
+    return fechaA - fechaB
   })
 
   return (
-    <Table sx={{ minWidth: 900 }} aria-label="tabla de abm turno clases">
-      {encabezadosTabla()}
-      <TableBody>
-        {clasesOrdenadas.map((clase) => (
-          <TableRow key={clase.id}>
-            <TableCell>
-              {clase.tipoActividad.charAt(0).toUpperCase() + clase.tipoActividad.slice(1).toLowerCase()}
-            </TableCell>
-            <TableCell>{clase.profesor.charAt(0).toUpperCase() + clase.profesor.slice(1).toLowerCase()}</TableCell>
-            <TableCell>{clase.fecha}</TableCell>
-            <TableCell>{clase.horarioDesde}</TableCell>
-            <TableCell>{clase.horarioHasta}</TableCell>
-            <TableCell>{clase.cupoMaximo}</TableCell>
-            <TableCell>
-              <Button
-                variant="outlined"
-                className="boton-principal"
-                style={{ minWidth: 200 }}
-                onClick={() => onEditar(clase)}
-              >
-                Modificar
-              </Button>
-            </TableCell>
-            <TableCell>
-              <Button
-                variant="outlined"
-                className="boton-principal"
-                style={{ minWidth: 200 }}
-                /* onClick={() => onEliminar(clase)} */
-              >
-                Eliminar
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <>
+      <Table sx={{ minWidth: 900 }} aria-label="tabla de abm turno clases">
+        {encabezadosTabla()}
+        <TableBody>
+          {clasesOrdenadas.map((clase) => {
+            const fechaFormateada = formatearFecha(clase.fecha)
+            return (
+              <TableRow key={clase.id}>
+                <TableCell>
+                  {clase.tipoActividad.charAt(0).toUpperCase() + clase.tipoActividad.slice(1).toLowerCase()}
+                </TableCell>
+                <TableCell>{clase.profesor.charAt(0).toUpperCase() + clase.profesor.slice(1).toLowerCase()}</TableCell>
+                <TableCell>{fechaFormateada}</TableCell>
+                <TableCell>{clase.horarioDesde}</TableCell>
+                <TableCell>{clase.horarioHasta}</TableCell>
+                <TableCell>{clase.cupoMaximo}</TableCell>
+                <TableCell>
+                  <Button
+                    variant="outlined"
+                    className="boton-principal"
+                    style={{ minWidth: 200 }}
+                    onClick={() => onEditar(clase)}
+                  >
+                    Modificar
+                  </Button>
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant="outlined"
+                    className="boton-principal"
+                    style={{ minWidth: 200 }}
+                    onClick={() => handleClickEliminar(clase)}
+                  >
+                    Eliminar
+                  </Button>
+                </TableCell>
+              </TableRow>
+            )
+          })}
+        </TableBody>
+      </Table>
+      <Modal open={openEliminar} onClose={handleCancelarEliminar}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "background.paper",
+            border: "2px solid #000",
+            boxShadow: 24,
+            p: 4,
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
+        >
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            Confirmar eliminación
+          </Typography>
+          <Typography sx={{ mb: 3 }}>¿Está seguro de que desea eliminar la clase?</Typography>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+            <Button variant="outlined" className="boton-secundario" onClick={handleCancelarEliminar}>
+              Cancelar
+            </Button>
+            <Button variant="contained" className="boton-principal" onClick={handleConfirmarEliminar} color="error">
+              Eliminar
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
+    </>
   )
 }
 

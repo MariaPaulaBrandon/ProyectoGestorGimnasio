@@ -89,4 +89,16 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
     {
         return TurnoClase::where('id', $id)->update($turnoClase);
     }
+
+    /**
+     * Eliminar una clase existente.
+     *
+     * @param int $id
+     * @return mixed
+     */
+    public function destroy(int $id)
+    {
+        $turnoClase = TurnoClase::findOrFail($id);
+        return $turnoClase->delete();
+    }
 }

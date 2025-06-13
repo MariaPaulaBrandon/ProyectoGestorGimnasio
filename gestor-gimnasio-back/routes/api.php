@@ -6,7 +6,7 @@ use App\Http\Controllers\ContactoLandingController;
 use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\SalaController;
 use App\Http\Controllers\TipoActividadController;
-use App\Http\Controllers\TurnoClase;
+use App\Http\Controllers\TurnoClaseController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\MaterialController;
 use Illuminate\Support\Facades\Route;
@@ -49,20 +49,22 @@ Route::middleware(AUTH_SANCTION)->group(function () {
     });
 
     Route::prefix('turnos-clase')->group(function () {
-        Route::get('/', [TurnoClase::class, 'getAll'])
+        Route::get('/', [TurnoClaseController::class, 'getAll'])
             ->name('turnos-clase.index');
 
-        Route::put(ID_ROUTE_PARAMETER, [TurnoClase::class, 'update'])
+        Route::put(ID_ROUTE_PARAMETER, [TurnoClaseController::class, 'update'])
             ->name('turnos-clase.update');
 
-        Route::get('/user-inscription-status/{userId}', [TurnoClase::class, 'getAllWithUserInscriptionStatus'])
+        Route::get('/user-inscription-status/{userId}', [TurnoClaseController::class, 'getAllWithUserInscriptionStatus'])
             ->name('turnos-clase.user-inscription-status');
 
-        Route::get('/cupo-maximo/{idTurnoClase}', [TurnoClase::class, 'getCupoMaximoFromTurnoClase'])
+        Route::get('/cupo-maximo/{idTurnoClase}', [TurnoClaseController::class, 'getCupoMaximoFromTurnoClase'])
             ->name('turnos-clase.cupo-maximo');
 
-        Route::post('/', [TurnoClase::class, 'create'])
+        Route::post('/', [TurnoClaseController::class, 'create'])
             ->name('turnos-clase.create');
+        Route::delete(ID_ROUTE_PARAMETER, [TurnoClaseController::class, 'destroy'])
+            ->name('turnos-clase.destroy');
     });
 
     Route::prefix('inscripciones')->group(function () {

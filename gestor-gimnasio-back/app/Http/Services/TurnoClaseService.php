@@ -68,6 +68,17 @@ class TurnoClaseService implements TurnoClaseServiceInterface
     {
         return $this->turnoClaseRepository->update($idTurnoClase, $turnoClase);
     }
+
+    /**
+     * Eliminar una clase existente.
+     *
+     * @param int $id
+     * @return mixed
+     */
+    public function destroy(int $id)
+    {
+        return $this->turnoClaseRepository->destroy($id);
+    }
 }
 
 class TurnoFechaHorarioException extends \Exception
