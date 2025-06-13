@@ -25,19 +25,55 @@ import dayjs from "dayjs"
 import { DatePicker } from "@mui/x-date-pickers/DatePicker"
 import { TimePicker } from "@mui/x-date-pickers/TimePicker"
 import environment from "../../environments/environment"
-import Carga from "../carga/Carga"
+import CargaTabla from "../clases-carga/CargaTabla";
 import SnackbarMensaje from "../utils/SnackbarMensaje"
 
 export default function AbmTurnoClase() {
-  const userToken = useMemo(() => localStorage.getItem("usuarioAccesToken"), [])
+  const [busquedaActividad, setBusquedaActividad] = useState('');
+  const [busquedaProfesor, setBusquedaProfesor] = useState('');
+  const [busquedaFecha, setBusquedaFecha] = useState(null);
+  const [turnoClases, setTurnoClases] = useState([]);
+  const [actividades, setActividades] = useState([]);
+  const [profesores, setProfesores] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [cargandoActividades, setCargandoActividades] = useState(true);
+  const [cargandoProfesores, setCargandoProfesores] = useState(true);
+  const [abrirSnackbar, setAbrirSnackbar] = useState(false);
+  const [mensajeSnackbar, setMensajeSnackbar] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('info');
 
-  const [turnoClases, setTurnoClases] = useState([])
-  const [actividades, setActividades] = useState([])
-  const [cargando, setCargando] = useState(true)
-  const [cargandoActividades, setCargandoActividades] = useState(true)
-  const [abrirSnackbar, setAbrirSnackbar] = useState(false)
-  const [mensajeSnackbar, setMensajeSnackbar] = useState("")
-  const [snackbarSeverity, setSnackbarSeverity] = useState("info")
+  const userToken = useMemo(() => localStorage.getItem('usuarioAccesToken'), []);
+
+  const turnoClasesFiltradas = useMemo(() => {
+    let filtradas = turnoClases;
+
+    if (busquedaActividad.trim()) {
+      filtradas = filtradas.filter(turno =>
+        turno.tipoActividad.toLowerCase().includes(busquedaActividad.toLowerCase())
+      );
+    }
+
+    if (busquedaProfesor.trim()) {
+      filtradas = filtradas.filter(turno =>
+        turno.profesor.toLowerCase().includes(busquedaProfesor.toLowerCase())
+      );
+    }
+
+    if (busquedaFecha) {
+      const fechaBusqueda = dayjs(busquedaFecha).format('DD/MM/YYYY');
+      filtradas = filtradas.filter(turno =>
+        turno.fecha === fechaBusqueda
+      );
+    }
+
+    return filtradas;
+  }, [turnoClases, busquedaActividad, busquedaProfesor, busquedaFecha]);
+
+  const resetBuscadores = useCallback(() => {
+    setBusquedaActividad('');
+    setBusquedaProfesor('');
+    setBusquedaFecha(null);
+  }, []);
 
   const [modalConfig, setModalConfig] = useState({
     abrir: false,
@@ -96,34 +132,34 @@ export default function AbmTurnoClase() {
     setAbrirSnackbar(true)
   }, [])
 
-  const getTurnoClases = useCallback(
-    async (token) => {
-      setTurnoClases([])
-      setCargando(true)
+  const getTurnoClases = useCallback(async (token) => {
+    setTurnoClases([]);
+    resetBuscadores();
+    setCargando(true);
 
-      try {
-        const response = await fetch(`${environment.apiUrl}/turnos-clase`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        })
+    try {
+      const response = await fetch(`${environment.apiUrl}/turnos-clase`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
 
-        if (!response.ok) {
-          throw new Error("Error al obtener los turnos de clases")
-        }
-
-        const data = await response.json()
-        setTurnoClases(data)
-      } catch (error) {
-        showSnackbar(error.message ?? "Error al obtener los turnos de clases", "error")
-        setTurnoClases([])
-      } finally {
-        setCargando(false)
+      if (!response.ok) {
+        throw new Error("Error al obtener los turnos de clases")
       }
-    },
+
+      const data = await response.json()
+      setTurnoClases(data)
+    } catch (error) {
+      showSnackbar(error.message ?? "Error al obtener los turnos de clases", "error")
+      setTurnoClases([])
+    } finally {
+      setCargando(false)
+    }
+  },
     [showSnackbar]
   )
 
@@ -198,70 +234,161 @@ export default function AbmTurnoClase() {
           throw new Error("Error al obtener las actividades")
         }
 
-        const data = await response.json()
-        setActividades(data)
+        const data = await response.json();
+        setActividades(data);
       } catch (error) {
-        showSnackbar(error.message ?? "Error al obtener las actividades", "error")
-        setActividades([])
+        showSnackbar(error.message ?? 'Error al obtener las actividades', 'error');
+        setActividades([]);
       } finally {
-        setCargandoActividades(false)
+        setCargandoActividades(false);
       }
-    },
-    [showSnackbar]
-  )
+    }, [showSnackbar]);
+
+  const getProfesores = useCallback(async (token) => {
+    setProfesores([]);
+    setCargandoProfesores(true);
+
+    try {
+      const response = await fetch(`${environment.apiUrl}/usuarios/profesores`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al obtener los profesores');
+      }
+
+      const data = await response.json();
+      setProfesores(data);
+    } catch (error) {
+      showSnackbar(error.message ?? 'Error al obtener los profesores', 'error');
+      setProfesores([]);
+    } finally {
+      setCargandoProfesores(false);
+    }
+  }, [showSnackbar]);
 
   useEffect(() => {
-    getTurnoClases(userToken)
-    getActividades(userToken)
-  }, [userToken, getTurnoClases, getActividades])
+    getTurnoClases(userToken);
+    getActividades(userToken);
+    getProfesores(userToken);
+  }, [userToken, getTurnoClases, getActividades, getProfesores]);
 
   return (
-    <>
-      <h2 className="titulo-clases">ABM Clases</h2>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <TableContainer component={Paper} className="equipamiento-table">
-          {cargando ? <Carga /> : <TurnoClasesTabla clases={turnoClases} onEditar={handleOpenModalEditar} />}
-        </TableContainer>
-        <Box
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <h2 className="titulo">ABM Clases</h2>
+
+      <Box sx={{
+        maxWidth: 900,
+        width: '100%',
+        mb: 2,
+        display: 'flex',
+        gap: 2,
+        justifyContent: 'center',
+        flexWrap: 'wrap'
+      }}>
+        <TextField
+          label='Buscar Actividad'
+          variant='outlined'
+          size='small'
+          value={busquedaActividad}
+          onChange={(e) => setBusquedaActividad(e.target.value)}
+          disabled={cargando}
+          placeholder='Ej: Yoga, Pilates, Zumba...'
           sx={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "flex-end",
-            gap: 2,
+            width: '100%',
+            maxWidth: 280,
+            '& .MuiOutlinedInput-root': {
+              backgroundColor: '#ffffff'
+            }
           }}
-        >
-          <Button
-            variant="outlined"
-            className="boton-principal"
-            disabled={cargandoActividades}
-            onClick={handleOpenModalCrear}
-          >
-            Nueva Clase
-          </Button>
-          <Button variant="outlined" className="boton-principal" onClick={() => getTurnoClases(userToken)}>
-            Actualizar
-          </Button>
-        </Box>
-        <TurnoClaseModal
-          abrirModal={modalConfig.abrir}
-          handleCerrar={handleCloseModal}
-          handleConfirmar={handleConfirmarModal}
-          actividades={actividades}
-          turnoExistente={modalConfig.turno}
-          esEdicion={modalConfig.esEdicion}
-          tituloModal={modalConfig.titulo}
         />
-        <SnackbarMensaje
-          abrirSnackbar={abrirSnackbar}
-          duracionSnackbar={5000}
-          handleCloseSnackbar={handleCloseSnackbar}
-          mensajeSnackbar={mensajeSnackbar}
-          snackbarSeverity={snackbarSeverity}
+
+        <TextField
+          label='Buscar Profesor'
+          variant='outlined'
+          size='small'
+          value={busquedaProfesor}
+          onChange={(e) => setBusquedaProfesor(e.target.value)}
+          disabled={cargando}
+          placeholder='Ej: Juan, Maria, Pedro...'
+          sx={{
+            width: '100%',
+            maxWidth: 280,
+            '& .MuiOutlinedInput-root': {
+              backgroundColor: '#ffffff'
+            }
+          }}
         />
-      </LocalizationProvider>
-    </>
-  )
+
+        <DatePicker
+          label='Buscar Fecha'
+          value={busquedaFecha}
+          onChange={(nuevaFecha) => setBusquedaFecha(nuevaFecha)}
+          format='DD/MM/YYYY'
+          disabled={cargando}
+          slotProps={{
+            textField: {
+              size: 'small',
+              sx: {
+                width: '100%',
+                maxWidth: 280,
+                '& .MuiOutlinedInput-root': {
+                  backgroundColor: '#ffffff'
+                }
+              }
+            }
+          }}
+        />
+      </Box>
+
+      <TableContainer component={Paper} className="clases-table">
+        {cargando ?
+          <CargaTabla texto="Cargando clases..." /> :
+          <TurnoClasesTabla
+            clases={turnoClasesFiltradas}
+            onEditar={handleOpenModalEditar}
+          />
+        }
+      </TableContainer>
+      <Box sx={{
+        maxWidth: 900,
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'flex-end',
+        gap: 2,
+      }}>
+        <Button variant="outlined" className="boton-principal" disabled={cargandoActividades && cargandoProfesores} onClick={handleOpenModalCrear}>
+          Nuevo Turno Clase
+        </Button>
+        <Button variant="outlined" className="boton-principal" onClick={() => getTurnoClases(userToken)}>
+          Actualizar
+        </Button>
+      </Box>
+      <TurnoClaseModal
+        abrirModal={modalConfig.abrir}
+        handleCerrar={handleCloseModal}
+        handleConfirmar={handleConfirmarModal}
+        actividades={actividades}
+        profesores={profesores}
+        turnoExistente={modalConfig.turno}
+        esEdicion={modalConfig.esEdicion}
+        tituloModal={modalConfig.titulo}
+      />
+      <SnackbarMensaje
+        abrirSnackbar={abrirSnackbar}
+        duracionSnackbar={5000}
+        handleCloseSnackbar={handleCloseSnackbar}
+        mensajeSnackbar={mensajeSnackbar}
+        snackbarSeverity={snackbarSeverity}
+      />
+    </LocalizationProvider>
+  );
 }
 
 function TurnoClasesTabla({ clases, onEditar }) {
@@ -270,6 +397,7 @@ function TurnoClasesTabla({ clases, onEditar }) {
       <TableHead className="cabecera-tabla-abm">
         <TableRow>
           <TableCell>ACTIVIDAD</TableCell>
+          <TableCell>PROFESOR</TableCell>
           <TableCell>FECHA</TableCell>
           <TableCell>DESDE</TableCell>
           <TableCell>HASTA</TableCell>
@@ -287,7 +415,7 @@ function TurnoClasesTabla({ clases, onEditar }) {
         {encabezadosTabla()}
         <TableBody>
           <TableRow>
-            <TableCell colSpan={6} align="center">
+            <TableCell colSpan={7} align="center">
               No hay turnos de clases para mostrar
             </TableCell>
           </TableRow>
@@ -302,9 +430,8 @@ function TurnoClasesTabla({ clases, onEditar }) {
       <TableBody>
         {clases.map((clase) => (
           <TableRow key={clase.id}>
-            <TableCell>
-              {clase.tipoActividad.charAt(0).toUpperCase() + clase.tipoActividad.slice(1).toLowerCase()}
-            </TableCell>
+            <TableCell>{clase.tipoActividad.charAt(0).toUpperCase() + clase.tipoActividad.slice(1).toLowerCase()}</TableCell>
+            <TableCell>{clase.profesor.charAt(0).toUpperCase() + clase.profesor.slice(1).toLowerCase()}</TableCell>
             <TableCell>{clase.fecha}</TableCell>
             <TableCell>{clase.horarioDesde}</TableCell>
             <TableCell>{clase.horarioHasta}</TableCell>
@@ -324,7 +451,7 @@ function TurnoClasesTabla({ clases, onEditar }) {
                 variant="outlined"
                 className="boton-principal"
                 style={{ minWidth: 200 }}
-                /* onClick={() => onEliminar(clase)} */
+              /* onClick={() => onEliminar(clase)} */
               >
                 Eliminar
               </Button>
@@ -351,15 +478,7 @@ TurnoClasesTabla.propTypes = {
   onEditar: PropTypes.func.isRequired,
 }
 
-function TurnoClaseModal({
-  abrirModal,
-  handleCerrar,
-  handleConfirmar,
-  actividades,
-  turnoExistente,
-  esEdicion,
-  tituloModal,
-}) {
+function TurnoClaseModal({ abrirModal, handleCerrar, handleConfirmar, actividades, profesores, turnoExistente, esEdicion, tituloModal }) {
   const styleModal = {
     position: "absolute",
     top: "50%",
@@ -373,13 +492,14 @@ function TurnoClaseModal({
     display: "flex",
     flexDirection: "column",
     gap: 1,
-  }
-  const [idActividad, setIdActividad] = useState("")
-  const [fecha, setFecha] = useState(null)
-  const [horarioInicio, setHorarioInicio] = useState(null)
-  const [horarioFin, setHorarioFin] = useState(null)
-  const [cupoMaximo, setCupoMaximo] = useState("")
-  const [idTurno, setIdTurno] = useState(null)
+  };
+  const [idActividad, setIdActividad] = useState('');
+  const [idProfesor, setIdProfesor] = useState('');
+  const [fecha, setFecha] = useState(null);
+  const [horarioInicio, setHorarioInicio] = useState(null);
+  const [horarioFin, setHorarioFin] = useState(null);
+  const [cupoMaximo, setCupoMaximo] = useState('');
+  const [idTurno, setIdTurno] = useState(null);
 
   const disabledConfirmButton = !idActividad || !fecha || !horarioInicio || !horarioFin || !cupoMaximo
 
@@ -395,9 +515,10 @@ function TurnoClaseModal({
   const handleSubmit = () => {
     const turnoDatos = {
       id_actividad: idActividad,
-      fecha: fecha ? dayjs(fecha).format("YYYY-MM-DD") : null,
-      horario_desde: horarioInicio ? dayjs(horarioInicio).format("HH:mm") : null,
-      horario_hasta: horarioFin ? dayjs(horarioFin).format("HH:mm") : null,
+      id_profesor: idProfesor,
+      fecha: fecha ? dayjs(fecha).format('YYYY-MM-DD') : null,
+      horario_desde: horarioInicio ? dayjs(horarioInicio).format('HH:mm:ss') : null,
+      horario_hasta: horarioFin ? dayjs(horarioFin).format('HH:mm:ss') : null,
       cupo_maximo: cupoMaximo ? parseInt(cupoMaximo, 10) : 0,
     }
     if (esEdicion && idTurno) {
@@ -408,12 +529,13 @@ function TurnoClaseModal({
 
   useEffect(() => {
     if (abrirModal && esEdicion && turnoExistente) {
-      setIdActividad(turnoExistente.idActividad ?? "")
-      setFecha(turnoExistente.fecha ? dayjs(turnoExistente.fecha, "DD/MM/YYYY") : null)
-      setHorarioInicio(turnoExistente.horarioDesde ? dayjs(`2000-01-01T${turnoExistente.horarioDesde}`) : null)
-      setHorarioFin(turnoExistente.horarioHasta ? dayjs(`2000-01-01T${turnoExistente.horarioHasta}`) : null)
-      setCupoMaximo(turnoExistente.cupoMaximo?.toString() ?? "")
-      setIdTurno(turnoExistente.id ?? null)
+      setIdActividad(turnoExistente.idActividad ?? '');
+      setIdProfesor(turnoExistente.idProfesor ?? '');
+      setFecha(turnoExistente.fecha ? dayjs(turnoExistente.fecha, 'DD/MM/YYYY') : null);
+      setHorarioInicio(turnoExistente.horarioDesde ? dayjs(`2000-01-01T${turnoExistente.horarioDesde}`) : null);
+      setHorarioFin(turnoExistente.horarioHasta ? dayjs(`2000-01-01T${turnoExistente.horarioHasta}`) : null);
+      setCupoMaximo(turnoExistente.cupoMaximo?.toString() ?? '');
+      setIdTurno(turnoExistente.id ?? null);
     } else {
       resetFormValues()
     }
@@ -464,6 +586,31 @@ function TurnoClaseModal({
               return (
                 <MenuItem key={actividad.id} value={actividad.id}>
                   {actividad.tipo.charAt(0).toUpperCase() + actividad.tipo.slice(1).toLowerCase()}
+                </MenuItem>
+              )
+            })}
+          </Select>
+        </FormControl>
+
+        <FormControl fullWidth margin="normal">
+          <InputLabel id="profesor-select-label">Profesor</InputLabel>
+          <Select
+            labelId="profesor-select-label"
+            id="profesor-select"
+            value={idProfesor}
+            label="Profesor"
+            onChange={(e) => setIdProfesor(e.target.value)}
+          >
+            <MenuItem value="">
+              <em>Seleccione un Profesor</em>
+            </MenuItem>
+            {profesores.map((profesor) => {
+              const nombresCapitalizados = profesor.nombres.charAt(0).toUpperCase() + profesor.nombres.slice(1).toLowerCase();
+              const apellidosCapitalizados = profesor.apellidos.charAt(0).toUpperCase() + profesor.apellidos.slice(1).toLowerCase();
+              const nombreCompleto = `${nombresCapitalizados} ${apellidosCapitalizados}`;
+              return (
+                <MenuItem key={profesor.id} value={profesor.id}>
+                  {nombreCompleto}
                 </MenuItem>
               )
             })}
@@ -535,9 +682,17 @@ TurnoClaseModal.propTypes = {
       tipo: PropTypes.string.isRequired,
     })
   ).isRequired,
+  profesores: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.any.isRequired,
+      nombre: PropTypes.string.isRequired,
+      apellido: PropTypes.string.isRequired,
+    })
+  ).isRequired,
   turnoExistente: PropTypes.shape({
     id: PropTypes.number,
     idActividad: PropTypes.number,
+    idProfesor: PropTypes.number,
     tipoActividad: PropTypes.string,
     fecha: PropTypes.string,
     horarioDesde: PropTypes.string,

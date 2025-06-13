@@ -31,6 +31,12 @@ class UsuarioController extends Controller
         return response()->json(['message' => 'Usuario con ID ' . $id . ' no encontrado'], 404);
     }
 
+    public function getProfesores()
+    {
+        $profesores = $this->usuarioSrv->getProfesores();
+        return response()->json($profesores, Response::HTTP_OK);
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([

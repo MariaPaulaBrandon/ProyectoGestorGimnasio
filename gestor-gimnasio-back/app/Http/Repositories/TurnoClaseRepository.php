@@ -11,7 +11,7 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
 {
     public function getAll(): Collection
     {
-        return TurnoClase::with('tipoActividad')
+        return TurnoClase::with(['tipoActividad', 'profesor'])
             ->orderBy('id', 'DESC')
             ->get();
     }
@@ -26,6 +26,9 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
                     LEFT(tipo_actividad.tipo, 1),
                     SUBSTRING(LOWER(tipo_actividad.tipo), 2)
                 ) AS tipoActividad'),
+                'turno_clase.id_profesor AS idProfesor',
+                'usuario.nombres AS nombresProfesor',
+                'usuario.apellidos AS apellidosProfesor',
                 'turno_clase.fecha',
                 'turno_clase.horario_desde AS horarioDesde',
                 'turno_clase.horario_hasta AS horarioHasta',
@@ -42,6 +45,7 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
                 $join->on('turno_clase.id', '=', 'inscripcion.id_turno_clase')
                     ->where('inscripcion.id_usuario', '=', $userId);
             })
+            ->join('usuario', 'turno_clase.id_profesor', '=', 'usuario.id')
             ->orderBy('turno_clase.fecha', 'DESC')
             ->orderBy('turno_clase.id_actividad')
             ->orderBy('turno_clase.horario_desde')
@@ -55,6 +59,25 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
             ->select('cupo_maximo')
             ->where('id', $idTurnoClase)
             ->value('cupo_maximo');
+    }
+
+    public function getCupoActual(int $idTurnoClase)
+    {
+        return TurnoClase::query()
+            ->select(DB::raw('cupo_maximo - COUNT(inscripcion.id) AS cupoActual'))
+            ->join('inscripcion', 'turno_clase.id', '=', 'inscripcion.id_turno_clase')
+            ->where('turno_clase.id', $idTurnoClase)
+            ->groupBy('turno_clase.cupo_maximo')
+            ->value('cupoActual');
+    }
+
+    public function getTurnosByFechaHorario(string $fecha, string $horarioDesde, string $horarioHasta)
+    {
+        return TurnoClase::query()
+            ->whereDate('fecha', $fecha)
+            ->whereTime('horario_desde', '>=', $horarioDesde)
+            ->whereTime('horario_hasta', '<=', $horarioHasta)
+            ->count();
     }
 
     public function create(array $turnoClase)
