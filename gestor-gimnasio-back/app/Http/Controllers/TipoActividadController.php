@@ -60,4 +60,16 @@ class TipoActividadController extends Controller
 
         return response()->json($tipoActividad, Response::HTTP_CREATED);
     }
+
+    /**
+     * Eliminar un tipo actividad existente.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(int $id)
+    {
+        $this->tipo_actividad_service->destroy($id);
+        return response()->json(['message' => 'Actividad eliminada correctamente'], \Illuminate\Http\Response::HTTP_OK);
+    }
 }

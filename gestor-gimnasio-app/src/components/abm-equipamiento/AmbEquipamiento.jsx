@@ -205,6 +205,7 @@ export default function AbmEquipamiento() {
 
   return (
     <>
+      <h2 className="titulo-clases">ABM Equipamiento</h2>
       <TableContainer component={Paper} className="equipamiento-table">
         {cargando ? (
           <ClasesCarga />

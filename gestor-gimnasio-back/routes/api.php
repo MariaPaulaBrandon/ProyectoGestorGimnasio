@@ -69,6 +69,8 @@ Route::middleware(AUTH_SANCTION)->group(function () {
             ->name('tipos-actividad.update');
         Route::post('/', [TipoActividadController::class, 'create'])
             ->name('tipos-actividad.create');
+        Route::delete(ID_ROUTE_PARAMETER, [TipoActividadController::class, 'destroy'])
+            ->name('tipos-actividad.destroy');
     });
 
     Route::prefix('salas')->group(function () {

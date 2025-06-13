@@ -205,6 +205,7 @@ export default function AbmSalas() {
 
   return (
     <>
+      <h2 className="titulo-clases">ABM Salas</h2>
       <TableContainer component={Paper} className="equipamiento-table">
         {cargando ? (
           <ClasesCarga />
@@ -299,7 +300,6 @@ const SalasTabla = ({ salas, onEditar, onEliminar }) => {
   )
 }
 function SalasModal({ abrirModal, handleCerrar, handleConfirmar, salaExistente, esEdicion, tituloModal }) {
-  console.log("SalasModal renderizado", { abrirModal, esEdicion, salaExistente, tituloModal })
   const styleModal = {
     position: "absolute",
     top: "50%",
