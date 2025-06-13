@@ -25,55 +25,51 @@ import dayjs from "dayjs"
 import { DatePicker } from "@mui/x-date-pickers/DatePicker"
 import { TimePicker } from "@mui/x-date-pickers/TimePicker"
 import environment from "../../environments/environment"
-import CargaTabla from "../clases-carga/CargaTabla";
+import CargaTabla from "../clases-carga/CargaTabla"
 import SnackbarMensaje from "../utils/SnackbarMensaje"
 
 export default function AbmTurnoClase() {
-  const [busquedaActividad, setBusquedaActividad] = useState('');
-  const [busquedaProfesor, setBusquedaProfesor] = useState('');
-  const [busquedaFecha, setBusquedaFecha] = useState(null);
-  const [turnoClases, setTurnoClases] = useState([]);
-  const [actividades, setActividades] = useState([]);
-  const [profesores, setProfesores] = useState([]);
-  const [cargando, setCargando] = useState(true);
-  const [cargandoActividades, setCargandoActividades] = useState(true);
-  const [cargandoProfesores, setCargandoProfesores] = useState(true);
-  const [abrirSnackbar, setAbrirSnackbar] = useState(false);
-  const [mensajeSnackbar, setMensajeSnackbar] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState('info');
+  const [busquedaActividad, setBusquedaActividad] = useState("")
+  const [busquedaProfesor, setBusquedaProfesor] = useState("")
+  const [busquedaFecha, setBusquedaFecha] = useState(null)
+  const [turnoClases, setTurnoClases] = useState([])
+  const [actividades, setActividades] = useState([])
+  const [profesores, setProfesores] = useState([])
+  const [cargando, setCargando] = useState(true)
+  const [cargandoActividades, setCargandoActividades] = useState(true)
+  const [cargandoProfesores, setCargandoProfesores] = useState(true)
+  const [abrirSnackbar, setAbrirSnackbar] = useState(false)
+  const [mensajeSnackbar, setMensajeSnackbar] = useState("")
+  const [snackbarSeverity, setSnackbarSeverity] = useState("info")
 
-  const userToken = useMemo(() => localStorage.getItem('usuarioAccesToken'), []);
+  const userToken = useMemo(() => localStorage.getItem("usuarioAccesToken"), [])
 
   const turnoClasesFiltradas = useMemo(() => {
-    let filtradas = turnoClases;
+    let filtradas = turnoClases
 
     if (busquedaActividad.trim()) {
-      filtradas = filtradas.filter(turno =>
+      filtradas = filtradas.filter((turno) =>
         turno.tipoActividad.toLowerCase().includes(busquedaActividad.toLowerCase())
-      );
+      )
     }
 
     if (busquedaProfesor.trim()) {
-      filtradas = filtradas.filter(turno =>
-        turno.profesor.toLowerCase().includes(busquedaProfesor.toLowerCase())
-      );
+      filtradas = filtradas.filter((turno) => turno.profesor.toLowerCase().includes(busquedaProfesor.toLowerCase()))
     }
 
     if (busquedaFecha) {
-      const fechaBusqueda = dayjs(busquedaFecha).format('DD/MM/YYYY');
-      filtradas = filtradas.filter(turno =>
-        turno.fecha === fechaBusqueda
-      );
+      const fechaBusqueda = dayjs(busquedaFecha).format("DD/MM/YYYY")
+      filtradas = filtradas.filter((turno) => turno.fecha === fechaBusqueda)
     }
 
-    return filtradas;
-  }, [turnoClases, busquedaActividad, busquedaProfesor, busquedaFecha]);
+    return filtradas
+  }, [turnoClases, busquedaActividad, busquedaProfesor, busquedaFecha])
 
   const resetBuscadores = useCallback(() => {
-    setBusquedaActividad('');
-    setBusquedaProfesor('');
-    setBusquedaFecha(null);
-  }, []);
+    setBusquedaActividad("")
+    setBusquedaProfesor("")
+    setBusquedaFecha(null)
+  }, [])
 
   const [modalConfig, setModalConfig] = useState({
     abrir: false,
@@ -132,34 +128,35 @@ export default function AbmTurnoClase() {
     setAbrirSnackbar(true)
   }, [])
 
-  const getTurnoClases = useCallback(async (token) => {
-    setTurnoClases([]);
-    resetBuscadores();
-    setCargando(true);
-
-    try {
-      const response = await fetch(`${environment.apiUrl}/turnos-clase`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      })
-
-      if (!response.ok) {
-        throw new Error("Error al obtener los turnos de clases")
-      }
-
-      const data = await response.json()
-      setTurnoClases(data)
-    } catch (error) {
-      showSnackbar(error.message ?? "Error al obtener los turnos de clases", "error")
+  const getTurnoClases = useCallback(
+    async (token) => {
       setTurnoClases([])
-    } finally {
-      setCargando(false)
-    }
-  },
+      resetBuscadores()
+      setCargando(true)
+
+      try {
+        const response = await fetch(`${environment.apiUrl}/turnos-clase`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+
+        if (!response.ok) {
+          throw new Error("Error al obtener los turnos de clases")
+        }
+
+        const data = await response.json()
+        setTurnoClases(data)
+      } catch (error) {
+        showSnackbar(error.message ?? "Error al obtener los turnos de clases", "error")
+        setTurnoClases([])
+      } finally {
+        setCargando(false)
+      }
+    },
     [showSnackbar]
   )
 
@@ -234,137 +231,140 @@ export default function AbmTurnoClase() {
           throw new Error("Error al obtener las actividades")
         }
 
-        const data = await response.json();
-        setActividades(data);
+        const data = await response.json()
+        setActividades(data)
       } catch (error) {
-        showSnackbar(error.message ?? 'Error al obtener las actividades', 'error');
-        setActividades([]);
+        showSnackbar(error.message ?? "Error al obtener las actividades", "error")
+        setActividades([])
       } finally {
-        setCargandoActividades(false);
+        setCargandoActividades(false)
       }
-    }, [showSnackbar]);
+    },
+    [showSnackbar]
+  )
 
-  const getProfesores = useCallback(async (token) => {
-    setProfesores([]);
-    setCargandoProfesores(true);
+  const getProfesores = useCallback(
+    async (token) => {
+      setProfesores([])
+      setCargandoProfesores(true)
 
-    try {
-      const response = await fetch(`${environment.apiUrl}/usuarios/profesores`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
+      try {
+        const response = await fetch(`${environment.apiUrl}/usuarios/profesores`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+
+        if (!response.ok) {
+          throw new Error("Error al obtener los profesores")
         }
-      });
 
-      if (!response.ok) {
-        throw new Error('Error al obtener los profesores');
+        const data = await response.json()
+        setProfesores(data)
+      } catch (error) {
+        showSnackbar(error.message ?? "Error al obtener los profesores", "error")
+        setProfesores([])
+      } finally {
+        setCargandoProfesores(false)
       }
-
-      const data = await response.json();
-      setProfesores(data);
-    } catch (error) {
-      showSnackbar(error.message ?? 'Error al obtener los profesores', 'error');
-      setProfesores([]);
-    } finally {
-      setCargandoProfesores(false);
-    }
-  }, [showSnackbar]);
+    },
+    [showSnackbar]
+  )
 
   useEffect(() => {
-    getTurnoClases(userToken);
-    getActividades(userToken);
-    getProfesores(userToken);
-  }, [userToken, getTurnoClases, getActividades, getProfesores]);
+    getTurnoClases(userToken)
+    getActividades(userToken)
+    getProfesores(userToken)
+  }, [userToken, getTurnoClases, getActividades, getProfesores])
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <h2 className="titulo">ABM Clases</h2>
 
-      <Box sx={{
-        maxWidth: 900,
-        width: '100%',
-        mb: 2,
-        display: 'flex',
-        gap: 2,
-        justifyContent: 'center',
-        flexWrap: 'wrap'
-      }}>
+      <Box
+        sx={{
+          maxWidth: 900,
+          width: "100%",
+          mb: 2,
+          display: "flex",
+          gap: 2,
+          justifyContent: "center",
+          flexWrap: "wrap",
+        }}
+      >
         <TextField
-          label='Buscar Actividad'
-          variant='outlined'
-          size='small'
+          label="Buscar Actividad"
+          variant="outlined"
+          size="small"
           value={busquedaActividad}
           onChange={(e) => setBusquedaActividad(e.target.value)}
           disabled={cargando}
-          placeholder='Ej: Yoga, Pilates, Zumba...'
+          placeholder="Ej: Yoga, Pilates, Zumba..."
           sx={{
-            width: '100%',
+            width: "100%",
             maxWidth: 280,
-            '& .MuiOutlinedInput-root': {
-              backgroundColor: '#ffffff'
-            }
+            "& .MuiOutlinedInput-root": {
+              backgroundColor: "#ffffff",
+            },
           }}
         />
 
         <TextField
-          label='Buscar Profesor'
-          variant='outlined'
-          size='small'
+          label="Buscar Profesor"
+          variant="outlined"
+          size="small"
           value={busquedaProfesor}
           onChange={(e) => setBusquedaProfesor(e.target.value)}
           disabled={cargando}
-          placeholder='Ej: Juan, Maria, Pedro...'
+          placeholder="Ej: Juan, Maria, Pedro..."
           sx={{
-            width: '100%',
+            width: "100%",
             maxWidth: 280,
-            '& .MuiOutlinedInput-root': {
-              backgroundColor: '#ffffff'
-            }
+            "& .MuiOutlinedInput-root": {
+              backgroundColor: "#ffffff",
+            },
           }}
         />
 
         <DatePicker
-          label='Buscar Fecha'
+          label="Buscar Fecha"
           value={busquedaFecha}
           onChange={(nuevaFecha) => setBusquedaFecha(nuevaFecha)}
-          format='DD/MM/YYYY'
+          format="DD/MM/YYYY"
           disabled={cargando}
           slotProps={{
             textField: {
-              size: 'small',
+              size: "small",
               sx: {
-                width: '100%',
+                width: "100%",
                 maxWidth: 280,
-                '& .MuiOutlinedInput-root': {
-                  backgroundColor: '#ffffff'
-                }
-              }
-            }
+                "& .MuiOutlinedInput-root": {
+                  backgroundColor: "#ffffff",
+                },
+              },
+            },
           }}
         />
       </Box>
 
-      <TableContainer component={Paper} className="clases-table">
-        {cargando ?
-          <CargaTabla texto="Cargando clases..." /> :
-          <TurnoClasesTabla
-            clases={turnoClasesFiltradas}
-            onEditar={handleOpenModalEditar}
-          />
-        }
+      <TableContainer component={Paper} className="equipamiento-table">
+        {cargando ? (
+          <CargaTabla texto="Cargando clases..." />
+        ) : (
+          <TurnoClasesTabla clases={turnoClasesFiltradas} onEditar={handleOpenModalEditar} />
+        )}
       </TableContainer>
-      <Box sx={{
-        maxWidth: 900,
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'flex-end',
-        alignItems: 'flex-end',
-        gap: 2,
-      }}>
-        <Button variant="outlined" className="boton-principal" disabled={cargandoActividades && cargandoProfesores} onClick={handleOpenModalCrear}>
-          Nuevo Turno Clase
+      <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mt: 2 }}>
+        <Button
+          variant="outlined"
+          className="boton-principal"
+          disabled={cargandoActividades && cargandoProfesores}
+          onClick={handleOpenModalCrear}
+        >
+          Nueva Clase
         </Button>
         <Button variant="outlined" className="boton-principal" onClick={() => getTurnoClases(userToken)}>
           Actualizar
@@ -388,7 +388,7 @@ export default function AbmTurnoClase() {
         snackbarSeverity={snackbarSeverity}
       />
     </LocalizationProvider>
-  );
+  )
 }
 
 function TurnoClasesTabla({ clases, onEditar }) {
@@ -424,13 +424,21 @@ function TurnoClasesTabla({ clases, onEditar }) {
     )
   }
 
+  const clasesOrdenadas = [...clases].sort((a, b) => {
+    const fechaA = new Date(a.fecha)
+    const fechaB = new Date(b.fecha)
+    return fechaA - fechaB // menor a mayor
+  })
+
   return (
     <Table sx={{ minWidth: 900 }} aria-label="tabla de abm turno clases">
       {encabezadosTabla()}
       <TableBody>
-        {clases.map((clase) => (
+        {clasesOrdenadas.map((clase) => (
           <TableRow key={clase.id}>
-            <TableCell>{clase.tipoActividad.charAt(0).toUpperCase() + clase.tipoActividad.slice(1).toLowerCase()}</TableCell>
+            <TableCell>
+              {clase.tipoActividad.charAt(0).toUpperCase() + clase.tipoActividad.slice(1).toLowerCase()}
+            </TableCell>
             <TableCell>{clase.profesor.charAt(0).toUpperCase() + clase.profesor.slice(1).toLowerCase()}</TableCell>
             <TableCell>{clase.fecha}</TableCell>
             <TableCell>{clase.horarioDesde}</TableCell>
@@ -451,7 +459,7 @@ function TurnoClasesTabla({ clases, onEditar }) {
                 variant="outlined"
                 className="boton-principal"
                 style={{ minWidth: 200 }}
-              /* onClick={() => onEliminar(clase)} */
+                /* onClick={() => onEliminar(clase)} */
               >
                 Eliminar
               </Button>
@@ -478,7 +486,16 @@ TurnoClasesTabla.propTypes = {
   onEditar: PropTypes.func.isRequired,
 }
 
-function TurnoClaseModal({ abrirModal, handleCerrar, handleConfirmar, actividades, profesores, turnoExistente, esEdicion, tituloModal }) {
+function TurnoClaseModal({
+  abrirModal,
+  handleCerrar,
+  handleConfirmar,
+  actividades,
+  profesores,
+  turnoExistente,
+  esEdicion,
+  tituloModal,
+}) {
   const styleModal = {
     position: "absolute",
     top: "50%",
@@ -492,14 +509,14 @@ function TurnoClaseModal({ abrirModal, handleCerrar, handleConfirmar, actividade
     display: "flex",
     flexDirection: "column",
     gap: 1,
-  };
-  const [idActividad, setIdActividad] = useState('');
-  const [idProfesor, setIdProfesor] = useState('');
-  const [fecha, setFecha] = useState(null);
-  const [horarioInicio, setHorarioInicio] = useState(null);
-  const [horarioFin, setHorarioFin] = useState(null);
-  const [cupoMaximo, setCupoMaximo] = useState('');
-  const [idTurno, setIdTurno] = useState(null);
+  }
+  const [idActividad, setIdActividad] = useState("")
+  const [idProfesor, setIdProfesor] = useState("")
+  const [fecha, setFecha] = useState(null)
+  const [horarioInicio, setHorarioInicio] = useState(null)
+  const [horarioFin, setHorarioFin] = useState(null)
+  const [cupoMaximo, setCupoMaximo] = useState("")
+  const [idTurno, setIdTurno] = useState(null)
 
   const disabledConfirmButton = !idActividad || !fecha || !horarioInicio || !horarioFin || !cupoMaximo
 
@@ -516,9 +533,9 @@ function TurnoClaseModal({ abrirModal, handleCerrar, handleConfirmar, actividade
     const turnoDatos = {
       id_actividad: idActividad,
       id_profesor: idProfesor,
-      fecha: fecha ? dayjs(fecha).format('YYYY-MM-DD') : null,
-      horario_desde: horarioInicio ? dayjs(horarioInicio).format('HH:mm:ss') : null,
-      horario_hasta: horarioFin ? dayjs(horarioFin).format('HH:mm:ss') : null,
+      fecha: fecha ? dayjs(fecha).format("YYYY-MM-DD") : null,
+      horario_desde: horarioInicio ? dayjs(horarioInicio).format("HH:mm:ss") : null,
+      horario_hasta: horarioFin ? dayjs(horarioFin).format("HH:mm:ss") : null,
       cupo_maximo: cupoMaximo ? parseInt(cupoMaximo, 10) : 0,
     }
     if (esEdicion && idTurno) {
@@ -529,13 +546,13 @@ function TurnoClaseModal({ abrirModal, handleCerrar, handleConfirmar, actividade
 
   useEffect(() => {
     if (abrirModal && esEdicion && turnoExistente) {
-      setIdActividad(turnoExistente.idActividad ?? '');
-      setIdProfesor(turnoExistente.idProfesor ?? '');
-      setFecha(turnoExistente.fecha ? dayjs(turnoExistente.fecha, 'DD/MM/YYYY') : null);
-      setHorarioInicio(turnoExistente.horarioDesde ? dayjs(`2000-01-01T${turnoExistente.horarioDesde}`) : null);
-      setHorarioFin(turnoExistente.horarioHasta ? dayjs(`2000-01-01T${turnoExistente.horarioHasta}`) : null);
-      setCupoMaximo(turnoExistente.cupoMaximo?.toString() ?? '');
-      setIdTurno(turnoExistente.id ?? null);
+      setIdActividad(turnoExistente.idActividad ?? "")
+      setIdProfesor(turnoExistente.idProfesor ?? "")
+      setFecha(turnoExistente.fecha ? dayjs(turnoExistente.fecha, "DD/MM/YYYY") : null)
+      setHorarioInicio(turnoExistente.horarioDesde ? dayjs(`2000-01-01T${turnoExistente.horarioDesde}`) : null)
+      setHorarioFin(turnoExistente.horarioHasta ? dayjs(`2000-01-01T${turnoExistente.horarioHasta}`) : null)
+      setCupoMaximo(turnoExistente.cupoMaximo?.toString() ?? "")
+      setIdTurno(turnoExistente.id ?? null)
     } else {
       resetFormValues()
     }
@@ -605,9 +622,11 @@ function TurnoClaseModal({ abrirModal, handleCerrar, handleConfirmar, actividade
               <em>Seleccione un Profesor</em>
             </MenuItem>
             {profesores.map((profesor) => {
-              const nombresCapitalizados = profesor.nombres.charAt(0).toUpperCase() + profesor.nombres.slice(1).toLowerCase();
-              const apellidosCapitalizados = profesor.apellidos.charAt(0).toUpperCase() + profesor.apellidos.slice(1).toLowerCase();
-              const nombreCompleto = `${nombresCapitalizados} ${apellidosCapitalizados}`;
+              const nombresCapitalizados =
+                profesor.nombres.charAt(0).toUpperCase() + profesor.nombres.slice(1).toLowerCase()
+              const apellidosCapitalizados =
+                profesor.apellidos.charAt(0).toUpperCase() + profesor.apellidos.slice(1).toLowerCase()
+              const nombreCompleto = `${nombresCapitalizados} ${apellidosCapitalizados}`
               return (
                 <MenuItem key={profesor.id} value={profesor.id}>
                   {nombreCompleto}
