@@ -85,6 +85,7 @@ function Landing() {
   return (
     <>
       <Box
+        className="landing-section"
         sx={{
           display: "flex",
           flexDirection: "column",
