@@ -324,7 +324,7 @@ function TurnoClasesTabla({ clases, onEditar }) {
                 variant="outlined"
                 className="boton-principal"
                 style={{ minWidth: 200 }}
-                onClick={() => onEditar(clase)}
+                /* onClick={() => onEliminar(clase)} */
               >
                 Eliminar
               </Button>
