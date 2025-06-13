@@ -20,4 +20,38 @@ class MaterialService implements MaterialServiceInterface
     {
         return $this->material_repository->getAll();
     }
+
+    /**
+     * Actualizar un material existente.
+     *
+     * @param int $id
+     * @param array $material
+     * @return mixed
+     */
+    public function update(int $id, array $material): mixed
+    {
+        return $this->material_repository->update($id, $material);
+    }
+
+    /**
+     * Crear un nuevo material.
+     *
+     * @param array $material
+     * @return mixed
+     */
+    public function create(array $material)
+    {
+        return $this->material_repository->create($material);
+    }
+
+    /**
+     * Eliminar un material existente.
+     *
+     * @param int $id
+     * @return mixed
+     */
+    public function destroy(int $id)
+    {
+        return $this->material_repository->destroy($id);
+    }
 }

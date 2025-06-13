@@ -8,7 +8,7 @@ use App\Http\Controllers\SalaController;
 use App\Http\Controllers\TipoActividadController;
 use App\Http\Controllers\TurnoClase;
 use App\Http\Controllers\UsuarioController;
-use App\Http\Controllers\EquipamientoController;
+use App\Http\Controllers\MaterialController;
 use Illuminate\Support\Facades\Route;
 
 if (!defined('AUTH_SANCTION')) {
@@ -81,7 +81,13 @@ Route::middleware(AUTH_SANCTION)->group(function () {
     });
 
     Route::prefix('equipamiento')->group(function () {
-        Route::get('/', [EquipamientoController::class, 'index'])
+        Route::get('/', [MaterialController::class, 'index'])
             ->name('equipamiento.index');
+        Route::post('/', [MaterialController::class, 'create'])
+            ->name('equipamiento.create');
+        Route::put(ID_ROUTE_PARAMETER, [MaterialController::class, 'update'])
+            ->name('equipamiento.update');
+        Route::delete(ID_ROUTE_PARAMETER, [MaterialController::class, 'destroy'])
+            ->name('equipamiento.destroy');
     });
 });

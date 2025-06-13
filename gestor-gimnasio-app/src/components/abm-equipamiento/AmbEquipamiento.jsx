@@ -17,6 +17,7 @@ import {
   Typography,
   TextField,
 } from "@mui/material"
+import "./AmbEquipamiento.css"
 
 export default function AbmEquipamiento() {
   const userToken = useMemo(() => localStorage.getItem("usuarioAccesToken"), [])
@@ -27,12 +28,12 @@ export default function AbmEquipamiento() {
   const [mensajeSnackbar, setMensajeSnackbar] = useState("")
   const [snackbarSeverity, setSnackbarSeverity] = useState("info")
 
-  /*  const [modalConfig, setModalConfig] = useState({
+  const [modalConfig, setModalConfig] = useState({
     abrir: false,
     esEdicion: false,
     material: null,
     titulo: "",
-  }) */
+  })
 
   const showSnackbar = useCallback((mensaje, severidad) => {
     setMensajeSnackbar(mensaje)
@@ -82,7 +83,7 @@ export default function AbmEquipamiento() {
     getEquipamiento(userToken)
   }, [userToken, getEquipamiento])
 
-  /*  const handleOpenModalCrear = () => {
+  const handleOpenModalCrear = () => {
     setModalConfig({
       abrir: true,
       esEdicion: false,
@@ -116,9 +117,9 @@ export default function AbmEquipamiento() {
     } else {
       await createMaterial(datosMaterial, userToken)
     }
-  } */
+  }
 
-  /* const createMaterial = async (nuevoMaterial, token) => {
+  const createMaterial = async (nuevoMaterial, token) => {
     setCargando(true)
     try {
       const response = await fetch(`${environment.apiUrl}/equipamiento`, {
@@ -128,7 +129,10 @@ export default function AbmEquipamiento() {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ descripcion: nuevoMaterial.descripcion.toLocaleUpperCase("es-AR") }),
+        body: JSON.stringify({
+          descripcion: nuevoMaterial.descripcion.toLocaleUpperCase("es-AR"),
+          stock: nuevoMaterial.stock ? Number(nuevoMaterial.stock) : 0,
+        }),
       })
 
       if (!response.ok) {
@@ -172,7 +176,32 @@ export default function AbmEquipamiento() {
       showSnackbar(error.message ?? "Error al modificar el material", "error")
       setCargando(false)
     }
-  } */
+  }
+
+  const deleteMaterial = async (materialEliminado, token) => {
+    setCargando(true)
+    try {
+      const response = await fetch(`${environment.apiUrl}/equipamiento/${materialEliminado.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.message ?? "Error al eliminar el material")
+      }
+
+      showSnackbar("Material eliminado exitosamente", "success")
+      await getEquipamiento(token)
+    } catch (error) {
+      showSnackbar(error.message ?? "Error al eliminar el material", "error")
+      setCargando(false)
+    }
+  }
 
   return (
     <>
@@ -180,13 +209,19 @@ export default function AbmEquipamiento() {
         {cargando ? (
           <ClasesCarga />
         ) : (
-          <EquipamientoTabla equipamiento={equipamiento} /* onEditar={handleOpenModalEditar } */ />
+          <EquipamientoTabla
+            equipamiento={equipamiento}
+            onEditar={handleOpenModalEditar}
+            onEliminar={(material) => deleteMaterial(material, userToken)}
+          />
         )}
       </TableContainer>
       <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mt: 2 }}>
-        {/* <Button variant="outlined" className="boton-principal" disabled={cargando} onClick={handleOpenModalCrear}>
-          Nuevo material
-        </Button> */}
+        {
+          <Button variant="outlined" className="boton-principal" disabled={cargando} onClick={handleOpenModalCrear}>
+            Nuevo material
+          </Button>
+        }
         <Button
           variant="outlined"
           disabled={cargando}
@@ -197,14 +232,16 @@ export default function AbmEquipamiento() {
           Actualizar
         </Button>
       </Box>
-      {/* <EquipamientoModal
-        abrirModal={modalConfig.abrir}
-        handleCerrar={handleCloseModal}
-        handleConfirmar={handleConfirmarModal}
-        materialExistente={modalConfig.material}
-        esEdicion={modalConfig.esEdicion}
-        tituloModal={modalConfig.titulo}
-      /> */}
+      {
+        <EquipamientoModal
+          abrirModal={modalConfig.abrir}
+          handleCerrar={handleCloseModal}
+          handleConfirmar={handleConfirmarModal}
+          materialExistente={modalConfig.material}
+          esEdicion={modalConfig.esEdicion}
+          tituloModal={modalConfig.titulo}
+        />
+      }
       <SnackbarMensaje
         abrirSnackbar={abrirSnackbar}
         duracionSnackbar={5000}
@@ -216,14 +253,15 @@ export default function AbmEquipamiento() {
   )
 }
 
-function EquipamientoTabla({ equipamiento, onEditar }) {
+function EquipamientoTabla({ equipamiento, onEditar, onEliminar }) {
   const encabezadosTabla = () => {
     return (
       <TableHead className="cabecera-tabla-abm">
         <TableRow>
           <TableCell>MATERIAL</TableCell>
           <TableCell>CANTIDAD</TableCell>
-          <TableCell>ACCIÓN</TableCell>
+          <TableCell>MODIFICAR</TableCell>
+          <TableCell>ELIMINAR</TableCell>
         </TableRow>
       </TableHead>
     )
@@ -256,7 +294,12 @@ function EquipamientoTabla({ equipamiento, onEditar }) {
             <TableCell>{material.stock}</TableCell>
             <TableCell>
               <Button variant="outlined" className="boton-principal" onClick={() => onEditar(material)}>
-                Modificar registro
+                Modificar
+              </Button>
+            </TableCell>
+            <TableCell>
+              <Button variant="outlined" className="boton-principal" onClick={() => onEliminar(material)}>
+                Eliminar
               </Button>
             </TableCell>
           </TableRow>
@@ -267,7 +310,6 @@ function EquipamientoTabla({ equipamiento, onEditar }) {
 }
 
 function EquipamientoModal({ abrirModal, handleCerrar, handleConfirmar, materialExistente, esEdicion, tituloModal }) {
-  console.log("EquipamientoModal renderizado", { abrirModal, esEdicion, materialExistente, tituloModal })
   const styleModal = {
     position: "absolute",
     top: "50%",
@@ -284,18 +326,21 @@ function EquipamientoModal({ abrirModal, handleCerrar, handleConfirmar, material
   }
 
   const [material, setMaterial] = useState("")
+  const [cantidad, setCantidad] = useState("")
   const [idMaterial, setIdMaterial] = useState(null)
 
-  const disabledConfirmButton = !material.trim()
+  const disabledConfirmButton = !material.trim() || !cantidad.trim() || isNaN(Number(cantidad))
 
   const resetFormValues = () => {
     setMaterial("")
+    setCantidad("")
     setIdMaterial(null)
   }
 
   const handleSubmit = () => {
     const materialDatos = {
       descripcion: material.trim(),
+      stock: Number(cantidad),
     }
     if (esEdicion && idMaterial) {
       materialDatos.id = idMaterial
@@ -306,6 +351,7 @@ function EquipamientoModal({ abrirModal, handleCerrar, handleConfirmar, material
   useEffect(() => {
     if (abrirModal && esEdicion && materialExistente) {
       setMaterial(materialExistente.descripcion ?? "")
+      setCantidad(materialExistente.stock?.toString() ?? "")
       setIdMaterial(materialExistente.id ?? null)
     } else {
       resetFormValues()
@@ -316,6 +362,13 @@ function EquipamientoModal({ abrirModal, handleCerrar, handleConfirmar, material
     const value = event.target.value
     if (value.length <= 50) {
       setMaterial(value)
+    }
+  }
+
+  const handleCantidadChange = (event) => {
+    const value = event.target.value
+    if (/^\d{0,6}$/.test(value)) {
+      setCantidad(value)
     }
   }
 
@@ -340,10 +393,21 @@ function EquipamientoModal({ abrirModal, handleCerrar, handleConfirmar, material
           onChange={handleMaterialChange}
           placeholder="Ingrese el nombre del material"
           slotProps={{
-            htmlInput: {
+            htmlInDELETE: {
               maxLength: 50,
             },
           }}
+        />
+
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Cantidad"
+          type="number"
+          value={cantidad}
+          onChange={handleCantidadChange}
+          placeholder="Ingrese la cantidad que tiene del material"
+          inputProps={{ min: 0, max: 999999 }}
         />
 
         <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3, gap: 1 }}>
