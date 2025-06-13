@@ -180,7 +180,7 @@ export default function AbmSalas() {
 
   return (
     <>
-      <TableContainer component={Paper} className="salas-table">
+      <TableContainer component={Paper} className="equipamiento-table">
         {cargando ? <ClasesCarga /> : <SalasTabla salas={salas} onEditar={handleOpenModalEditar} />}
       </TableContainer>
       <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mt: 2 }}>
@@ -216,26 +216,24 @@ export default function AbmSalas() {
   )
 }
 
-function SalasTabla({ salas, onEditar }) {
-  const encabezadosTabla = () => {
-    return (
-      <TableHead className="cabecera-tabla-abm">
-        <TableRow>
-          <TableCell>ID</TableCell>
-          <TableCell>SALA</TableCell>
-          <TableCell>ACCIÓN</TableCell>
-        </TableRow>
-      </TableHead>
-    )
-  }
+const SalasTabla = ({ salas, onEditar }) => {
+  const encabezadosTabla = () => (
+    <TableHead className="cabecera-tabla-abm">
+      <TableRow>
+        <TableCell>SALA</TableCell>
+        <TableCell>MODIFICAR</TableCell>
+        <TableCell>ELIMINAR</TableCell>
+      </TableRow>
+    </TableHead>
+  )
 
   if (!salas || salas.length === 0) {
     return (
-      <Table sx={{ minWidth: 600 }} aria-label="tabla de abm salas">
+      <Table aria-label="tabla de abm salas">
         {encabezadosTabla()}
         <TableBody>
           <TableRow>
-            <TableCell colSpan={4} align="center">
+            <TableCell colSpan={3} align="center">
               No hay salas para mostrar
             </TableCell>
           </TableRow>
@@ -245,16 +243,20 @@ function SalasTabla({ salas, onEditar }) {
   }
 
   return (
-    <Table sx={{ minWidth: 600 }} aria-label="tabla de abm salas">
+    <Table aria-label="tabla de abm salas">
       {encabezadosTabla()}
       <TableBody>
         {salas.map((sala) => (
           <TableRow key={sala.id}>
-            <TableCell>{sala.id}</TableCell>
             <TableCell>{sala.descripcion.charAt(0).toUpperCase() + sala.descripcion.slice(1).toLowerCase()}</TableCell>
             <TableCell>
               <Button variant="outlined" className="boton-principal" onClick={() => onEditar(sala)}>
-                Modificar registro
+                Modificar
+              </Button>
+            </TableCell>
+            <TableCell>
+              <Button variant="outlined" className="boton-principal" onClick={() => onEditar(sala)}>
+                Eliminar
               </Button>
             </TableCell>
           </TableRow>
@@ -263,7 +265,6 @@ function SalasTabla({ salas, onEditar }) {
     </Table>
   )
 }
-
 function SalasModal({ abrirModal, handleCerrar, handleConfirmar, salaExistente, esEdicion, tituloModal }) {
   console.log("SalasModal renderizado", { abrirModal, esEdicion, salaExistente, tituloModal })
   const styleModal = {

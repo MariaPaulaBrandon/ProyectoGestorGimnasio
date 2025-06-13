@@ -1,9 +1,7 @@
-/* Estilos profesionales para tablas ABM, replicados de AgendarClases.css */
 .salas-table {
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(60, 60, 60, 0.22);
-  margin: 32px auto;
   max-width: 1200px;
   min-width: 900px;
   width: 90vw;
