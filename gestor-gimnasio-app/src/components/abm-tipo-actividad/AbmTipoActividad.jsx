@@ -1,207 +1,264 @@
-import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Modal, Typography, TextField, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
-import SnackbarMensaje from "../utils/SnackbarMensaje";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import ClasesCarga from "../clases-carga/ClasesCarga";
-import PropTypes from "prop-types";
-import environment from "../../environments/environment";
-import './AbmTipoActividad.css';
+import {
+  Box,
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Modal,
+  Typography,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material"
+import SnackbarMensaje from "../utils/SnackbarMensaje"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import ClasesCarga from "../clases-carga/ClasesCarga"
+import PropTypes from "prop-types"
+import environment from "../../environments/environment"
+import "./AbmTipoActividad.css"
 
 export default function AbmTipoActividad() {
-  const userToken = useMemo(() => localStorage.getItem('usuarioAccesToken'), []);
+  const userToken = useMemo(() => localStorage.getItem("usuarioAccesToken"), [])
 
-  const [tiposActividad, setTiposActividad] = useState([]);
-  const [salas, setSalas] = useState([]);
-  const [cargando, setCargando] = useState(true);
-  const [cargandoSalas, setCargandoSalas] = useState(true);
-  const [abrirSnackbar, setAbrirSnackbar] = useState(false);
-  const [mensajeSnackbar, setMensajeSnackbar] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState('info');
+  const [tiposActividad, setTiposActividad] = useState([])
+  const [salas, setSalas] = useState([])
+  const [cargando, setCargando] = useState(true)
+  const [cargandoSalas, setCargandoSalas] = useState(true)
+  const [abrirSnackbar, setAbrirSnackbar] = useState(false)
+  const [mensajeSnackbar, setMensajeSnackbar] = useState("")
+  const [snackbarSeverity, setSnackbarSeverity] = useState("info")
 
   const [modalConfig, setModalConfig] = useState({
     abrir: false,
     esEdicion: false,
     actividad: null,
-    titulo: '',
-  });
+    titulo: "",
+  })
 
   const handleOpenModalCrear = () => {
     setModalConfig({
       abrir: true,
       esEdicion: false,
       actividad: null,
-      titulo: 'Crear nuevo tipo de actividad',
-    });
-  };
+      titulo: "Crear nuevo tipo de actividad",
+    })
+  }
 
   const handleOpenModalEditar = (actividadParaEditar) => {
     setModalConfig({
       abrir: true,
       esEdicion: true,
       actividad: actividadParaEditar,
-      titulo: 'Modificar tipo de actividad',
-    });
-  };
+      titulo: "Modificar tipo de actividad",
+    })
+  }
 
   const handleCloseModal = () => {
     setModalConfig({
       abrir: false,
       esEdicion: false,
       actividad: null,
-      titulo: '',
-    });
-  };
+      titulo: "",
+    })
+  }
 
   const handleConfirmarModal = async (datosActividad) => {
-    handleCloseModal();
+    handleCloseModal()
     if (modalConfig.esEdicion) {
-      await updateTipoActividad(datosActividad, userToken);
+      await updateTipoActividad(datosActividad, userToken)
     } else {
-      await createTipoActividad(datosActividad, userToken);
+      await createTipoActividad(datosActividad, userToken)
     }
-  };
+  }
 
   const handleCloseSnackbar = (_, reason) => {
-    if (reason === 'clickaway') {
-      return;
+    if (reason === "clickaway") {
+      return
     }
 
-    setAbrirSnackbar(false);
-  };
+    setAbrirSnackbar(false)
+  }
 
   const showSnackbar = useCallback((mensaje, severidad) => {
-    setMensajeSnackbar(mensaje);
-    setSnackbarSeverity(severidad);
-    setAbrirSnackbar(true);
-  }, []);
+    setMensajeSnackbar(mensaje)
+    setSnackbarSeverity(severidad)
+    setAbrirSnackbar(true)
+  }, [])
 
-  const getTiposActividad = useCallback(async (token) => {
-    setTiposActividad([]);
-    setCargando(true);
+  const getTiposActividad = useCallback(
+    async (token) => {
+      setTiposActividad([])
+      setCargando(true)
 
-    try {
-      const response = await fetch(`${environment.apiUrl}/tipos-actividad`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
+      try {
+        const response = await fetch(`${environment.apiUrl}/tipos-actividad`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+
+        if (!response.ok) {
+          throw new Error("Error al obtener los tipos de actividad")
         }
-      });
 
-      if (!response.ok) {
-        throw new Error('Error al obtener los tipos de actividad');
+        const data = await response.json()
+        setTiposActividad(data)
+      } catch (error) {
+        showSnackbar(error.message ?? "Error al obtener los tipos de actividad", "error")
+        setTiposActividad([])
+      } finally {
+        setCargando(false)
       }
-
-      const data = await response.json();
-      setTiposActividad(data);
-    } catch (error) {
-      showSnackbar(error.message ?? 'Error al obtener los tipos de actividad', 'error');
-      setTiposActividad([]);
-    } finally {
-      setCargando(false);
-    }
-  }, [showSnackbar]);
+    },
+    [showSnackbar]
+  )
 
   const createTipoActividad = async (nuevaActividad, token) => {
-    setCargando(true);
+    setCargando(true)
     try {
       const response = await fetch(`${environment.apiUrl}/tipos-actividad`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(nuevaActividad),
-      });
+      })
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message ?? 'Error al crear el tipo de actividad');
+        const errorData = await response.json()
+        throw new Error(errorData.message ?? "Error al crear el tipo de actividad")
       }
 
-      showSnackbar('Tipo de actividad creado exitosamente', 'success');
-      await getTiposActividad(token);
+      showSnackbar("Tipo de actividad creado exitosamente", "success")
+      await getTiposActividad(token)
     } catch (error) {
-      showSnackbar(error.message ?? 'Error al crear el tipo de actividad', 'error');
-      setCargando(false);
+      showSnackbar(error.message ?? "Error al crear el tipo de actividad", "error")
+      setCargando(false)
     }
   }
   const updateTipoActividad = async (actividadActualizada, token) => {
-    setCargando(true);
+    setCargando(true)
     try {
       const response = await fetch(`${environment.apiUrl}/tipos-actividad/${actividadActualizada.id}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(actividadActualizada),
-      });
+      })
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message ?? 'Error al modificar el tipo de actividad');
+        const errorData = await response.json()
+        throw new Error(errorData.message ?? "Error al modificar el tipo de actividad")
       }
 
-      showSnackbar('Tipo de actividad modificado exitosamente', 'success');
-      await getTiposActividad(token);
+      showSnackbar("Tipo de actividad modificado exitosamente", "success")
+      await getTiposActividad(token)
     } catch (error) {
-      showSnackbar(error.message ?? 'Error al modificar el tipo de actividad', 'error');
-      setCargando(false);
+      showSnackbar(error.message ?? "Error al modificar el tipo de actividad", "error")
+      setCargando(false)
     }
-  };
+  }
 
-  const getSalas = useCallback(async (token) => {
-    setSalas([]);
-    setCargandoSalas(true);
+  const getSalas = useCallback(
+    async (token) => {
+      setSalas([])
+      setCargandoSalas(true)
 
-    try {
-      const response = await fetch(`${environment.apiUrl}/salas`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
+      try {
+        const response = await fetch(`${environment.apiUrl}/salas`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+
+        if (!response.ok) {
+          throw new Error("Error al obtener las salas")
         }
-      });
 
-      if (!response.ok) {
-        throw new Error('Error al obtener las salas');
+        const data = await response.json()
+        setSalas(data)
+      } catch (error) {
+        showSnackbar(error.message ?? "Error al obtener las salas", "error")
+        setSalas([])
+      } finally {
+        setCargandoSalas(false)
       }
-
-      const data = await response.json();
-      setSalas(data);
-    } catch (error) {
-      showSnackbar(error.message ?? 'Error al obtener las salas', 'error');
-      setSalas([]);
-    } finally {
-      setCargandoSalas(false);
-    }
-  }, [showSnackbar]);
+    },
+    [showSnackbar]
+  )
 
   useEffect(() => {
-    getTiposActividad(userToken);
-    getSalas(userToken);
-  }, [userToken, getTiposActividad, getSalas]);
+    getTiposActividad(userToken)
+    getSalas(userToken)
+  }, [userToken, getTiposActividad, getSalas])
+
+  const deleteActividad = async (actividadEliminada, token) => {
+    setCargando(true)
+    try {
+      const response = await fetch(`${environment.apiUrl}/tipos-actividad/${actividadEliminada.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.message ?? "Error al eliminar la actividad")
+      }
+
+      showSnackbar("Actividad eliminado exitosamente", "success")
+      await getTiposActividad(token)
+    } catch (error) {
+      showSnackbar(error.message ?? "Error al eliminar la actividad", "error")
+      setCargando(false)
+    }
+  }
 
   return (
     <>
-      <TableContainer component={Paper} className="tipos-actividad-table">
-        {cargando ?
-          <ClasesCarga /> : <TiposActividadTabla
+      <h2 className="titulo-clases">ABM Actividades</h2>
+      <TableContainer component={Paper} className="equipamiento-table">
+        {cargando ? (
+          <ClasesCarga />
+        ) : (
+          <TiposActividadTabla
             actividades={tiposActividad}
             onEditar={handleOpenModalEditar}
             salas={salas}
+            onEliminar={(actividad) => deleteActividad(actividad, userToken)}
           />
-        }
+        )}
       </TableContainer>
-      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+      <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mt: 2 }}>
         <Button variant="outlined" className="boton-principal" disabled={cargandoSalas} onClick={handleOpenModalCrear}>
-          Nuevo Tipo de Actividad
+          Nueva Actividad
         </Button>
-        <Button variant="outlined" className="boton-principal" sx={{ ml: 2 }} onClick={() => getTiposActividad(userToken)}>
+        <Button
+          variant="outlined"
+          className="boton-principal"
+          sx={{ ml: 2 }}
+          onClick={() => getTiposActividad(userToken)}
+        >
           Actualizar
         </Button>
       </Box>
@@ -223,57 +280,66 @@ export default function AbmTipoActividad() {
         snackbarSeverity={snackbarSeverity}
       />
     </>
-  );
+  )
 }
 
-function TiposActividadTabla({ actividades, onEditar }) {
+function TiposActividadTabla({ actividades, onEditar, onEliminar }) {
   const encabezadosTabla = () => {
     return (
       <TableHead className="cabecera-tabla-abm">
         <TableRow>
-          <TableCell>ID</TableCell>
-          <TableCell>TIPO DE ACTIVIDAD</TableCell>
+          <TableCell>ACTIVIDAD</TableCell>
           <TableCell>SALA</TableCell>
-          <TableCell>ACCIÓN</TableCell>
+          <TableCell>MODIFICAR</TableCell>
+          <TableCell>ELIMINAR</TableCell>
         </TableRow>
       </TableHead>
-    );
+    )
   }
 
   if (!actividades || actividades.length === 0) {
     return (
-      <Table sx={{ minWidth: 600 }} aria-label="tabla de abm tipos actividad">
+      <Table aria-label="tabla de abm tipos actividad">
         {encabezadosTabla()}
         <TableBody>
           <TableRow>
-            <TableCell colSpan={4} align="center">
+            <TableCell colSpan={3} align="center">
               No hay tipos de actividad para mostrar
             </TableCell>
           </TableRow>
         </TableBody>
       </Table>
-    );
+    )
   }
 
   return (
-    <Table sx={{ minWidth: 600 }} aria-label="tabla de abm tipos actividad">
+    <Table aria-label="tabla de abm tipos actividad">
       {encabezadosTabla()}
       <TableBody>
-        {actividades.map((actividad) => (
-          <TableRow key={actividad.id}>
-            <TableCell>{actividad.id}</TableCell>
-            <TableCell>{actividad.tipo.charAt(0).toUpperCase() + actividad.tipo.slice(1).toLowerCase()}</TableCell>
-            <TableCell>{actividad.descripcionSala.charAt(0).toUpperCase() + actividad.descripcionSala.slice(1).toLowerCase()}</TableCell>
+        {actividades.map((tipoActividad) => (
+          <TableRow key={tipoActividad.id}>
             <TableCell>
-              <Button variant="outlined" className="boton-principal" onClick={() => onEditar(actividad)}>
-                Modificar registro
+              {tipoActividad.tipo.charAt(0).toUpperCase() + tipoActividad.tipo.slice(1).toLowerCase()}
+            </TableCell>
+            <TableCell>
+              {tipoActividad.descripcionSala.charAt(0).toUpperCase() +
+                tipoActividad.descripcionSala.slice(1).toLowerCase()}
+            </TableCell>
+            <TableCell>
+              <Button variant="outlined" className="boton-principal" onClick={() => onEditar(tipoActividad)}>
+                Modificar
+              </Button>
+            </TableCell>
+            <TableCell>
+              <Button variant="outlined" className="boton-principal" onClick={() => onEliminar(tipoActividad)}>
+                Eliminar
               </Button>
             </TableCell>
           </TableRow>
         ))}
       </TableBody>
     </Table>
-  );
+  )
 }
 
 TiposActividadTabla.propTypes = {
@@ -288,64 +354,73 @@ TiposActividadTabla.propTypes = {
   onEditar: PropTypes.func.isRequired,
 }
 
-function TipoActividadModal({ abrirModal, handleCerrar, handleConfirmar, actividadExistente, esEdicion, tituloModal, salas, cargandoSalas }) {
+function TipoActividadModal({
+  abrirModal,
+  handleCerrar,
+  handleConfirmar,
+  actividadExistente,
+  esEdicion,
+  tituloModal,
+  salas,
+  cargandoSalas,
+}) {
   const styleModal = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
     width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
+    bgcolor: "background.paper",
+    border: "2px solid #000",
     boxShadow: 24,
     p: 4,
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     gap: 1,
-  };
+  }
 
-  const [tipo, setTipo] = useState('');
-  const [idSala, setIdSala] = useState('');
-  const [idActividad, setIdActividad] = useState(null);
+  const [tipo, setTipo] = useState("")
+  const [idSala, setIdSala] = useState("")
+  const [idActividad, setIdActividad] = useState(null)
 
-  const disabledConfirmButton = !tipo.trim() || !idSala;
+  const disabledConfirmButton = !tipo.trim() || !idSala
 
   const resetFormValues = () => {
-    setTipo('');
-    setIdSala('');
-    setIdActividad(null);
+    setTipo("")
+    setIdSala("")
+    setIdActividad(null)
   }
 
   const handleSubmit = () => {
     const actividadDatos = {
       tipo: tipo.trim(),
       id_sala: parseInt(idSala),
-    };
-    if (esEdicion && idActividad) {
-      actividadDatos.id = idActividad;
     }
-    handleConfirmar(actividadDatos);
-  };
+    if (esEdicion && idActividad) {
+      actividadDatos.id = idActividad
+    }
+    handleConfirmar(actividadDatos)
+  }
 
   useEffect(() => {
     if (abrirModal && esEdicion && actividadExistente) {
-      setTipo(actividadExistente.tipo ?? '');
-      setIdSala(actividadExistente.idSala ? actividadExistente.idSala.toString() : '');
-      setIdActividad(actividadExistente.id ?? null);
+      setTipo(actividadExistente.tipo ?? "")
+      setIdSala(actividadExistente.idSala ? actividadExistente.idSala.toString() : "")
+      setIdActividad(actividadExistente.id ?? null)
     } else {
-      resetFormValues();
+      resetFormValues()
     }
-  }, [abrirModal, esEdicion, actividadExistente]);
+  }, [abrirModal, esEdicion, actividadExistente])
 
   const handleTipoChange = (event) => {
-    const value = event.target.value;
+    const value = event.target.value
     if (value.length <= 50) {
-      setTipo(value);
+      setTipo(value)
     }
   }
 
   const handleSalaChange = (event) => {
-    setIdSala(event.target.value);
+    setIdSala(event.target.value)
   }
 
   return (
@@ -356,7 +431,7 @@ function TipoActividadModal({ abrirModal, handleCerrar, handleConfirmar, activid
       aria-describedby="modal-crear-tipo-actividad-description"
     >
       <Box sx={styleModal}>
-        <Typography variant="h6" component="h2" sx={{ mb: 2, color: 'black', textAlign: 'center' }}>
+        <Typography variant="h6" component="h2" sx={{ mb: 2, color: "black", textAlign: "center" }}>
           {tituloModal}
         </Typography>
 
@@ -371,7 +446,7 @@ function TipoActividadModal({ abrirModal, handleCerrar, handleConfirmar, activid
           slotProps={{
             htmlInput: {
               maxLength: 50,
-            }
+            },
           }}
         />
 
@@ -386,9 +461,7 @@ function TipoActividadModal({ abrirModal, handleCerrar, handleConfirmar, activid
             disabled={cargandoSalas}
           >
             {cargandoSalas ? (
-              <MenuItem disabled>
-                Cargando salas...
-              </MenuItem>
+              <MenuItem disabled>Cargando salas...</MenuItem>
             ) : (
               salas.map((sala) => (
                 <MenuItem key={sala.id} value={sala.id.toString()}>
@@ -399,13 +472,22 @@ function TipoActividadModal({ abrirModal, handleCerrar, handleConfirmar, activid
           </Select>
         </FormControl>
 
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3, gap: 1 }}>
-          <Button variant="outlined" className="boton-secundario" onClick={handleCerrar}>Cancelar</Button>
-          <Button variant="contained" className="boton-principal" onClick={handleSubmit} disabled={disabledConfirmButton}>Confirmar</Button>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3, gap: 1 }}>
+          <Button variant="outlined" className="boton-secundario" onClick={handleCerrar}>
+            Cancelar
+          </Button>
+          <Button
+            variant="contained"
+            className="boton-principal"
+            onClick={handleSubmit}
+            disabled={disabledConfirmButton}
+          >
+            Confirmar
+          </Button>
         </Box>
       </Box>
     </Modal>
-  );
+  )
 }
 
 TipoActividadModal.propTypes = {
@@ -427,4 +509,4 @@ TipoActividadModal.propTypes = {
     })
   ).isRequired,
   cargandoSalas: PropTypes.bool.isRequired,
-};
+}

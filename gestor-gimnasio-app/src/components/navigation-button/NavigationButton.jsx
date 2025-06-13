@@ -123,7 +123,7 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
             }}
           >
             <MenuItem onClick={handleAbmClasesClick}>ABM Clases</MenuItem>
-            <MenuItem onClick={handleAbmTiposActividadClick}>ABM Tipos de Actividad</MenuItem>
+            <MenuItem onClick={handleAbmTiposActividadClick}>ABM Actividades</MenuItem>
             <MenuItem onClick={handleAbmSalasClick}>ABM Salas</MenuItem>
             <MenuItem onClick={handleAbmEquipamientoClick}>ABM Equipamiento</MenuItem>
           </Menu>

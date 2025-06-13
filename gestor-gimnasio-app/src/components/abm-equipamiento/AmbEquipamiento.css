@@ -1,13 +1,24 @@
+.titulo-clases {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 24px 0 12px 0;
+  font-family: "Roboto", Arial, sans-serif;
+  letter-spacing: -1px;
+}
+
+.equipamiento-table .MuiTableCell-root {
+  text-align: center;
+}
+
 .equipamiento-table {
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(60, 60, 60, 0.22);
-  /*   margin: 32px auto;
- */
   max-width: 1200px;
   min-width: 900px;
   width: 90vw;
   border: rgba(60, 60, 60, 0.22) 0.5px solid;
+  margin: 32px auto;
 }
 
 .cabecera-tabla-abm {
