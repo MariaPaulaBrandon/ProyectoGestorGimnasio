@@ -18,7 +18,7 @@ import {
 } from "@mui/material"
 import SnackbarMensaje from "../utils/SnackbarMensaje"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import ClasesCarga from "../clases-carga/ClasesCarga"
+import Carga from "../carga/Carga"
 import PropTypes from "prop-types"
 import environment from "../../environments/environment"
 import "./AbmTipoActividad.css"
@@ -239,7 +239,7 @@ export default function AbmTipoActividad() {
       <h2 className="titulo-clases">ABM Actividades</h2>
       <TableContainer component={Paper} className="equipamiento-table">
         {cargando ? (
-          <ClasesCarga />
+          <Carga />
         ) : (
           <TiposActividadTabla
             actividades={tiposActividad}

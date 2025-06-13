@@ -25,7 +25,7 @@ import dayjs from "dayjs"
 import { DatePicker } from "@mui/x-date-pickers/DatePicker"
 import { TimePicker } from "@mui/x-date-pickers/TimePicker"
 import environment from "../../environments/environment"
-import ClasesCarga from "../clases-carga/ClasesCarga"
+import Carga from "../carga/Carga"
 import SnackbarMensaje from "../utils/SnackbarMensaje"
 
 export default function AbmTurnoClase() {
@@ -220,7 +220,7 @@ export default function AbmTurnoClase() {
       <h2 className="titulo-clases">ABM Clases</h2>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <TableContainer component={Paper} className="equipamiento-table">
-          {cargando ? <ClasesCarga /> : <TurnoClasesTabla clases={turnoClases} onEditar={handleOpenModalEditar} />}
+          {cargando ? <Carga /> : <TurnoClasesTabla clases={turnoClases} onEditar={handleOpenModalEditar} />}
         </TableContainer>
         <Box
           sx={{

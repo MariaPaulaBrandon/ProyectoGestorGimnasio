@@ -1,6 +1,6 @@
 import { useMemo, useCallback, useEffect, useState } from "react"
 import environment from "../../environments/environment"
-import ClasesCarga from "../clases-carga/ClasesCarga"
+import Carga from "../carga/Carga"
 
 import SnackbarMensaje from "../utils/SnackbarMensaje"
 import {
@@ -208,7 +208,7 @@ export default function AbmEquipamiento() {
       <h2 className="titulo-clases">ABM Equipamiento</h2>
       <TableContainer component={Paper} className="equipamiento-table">
         {cargando ? (
-          <ClasesCarga />
+          <Carga />
         ) : (
           <EquipamientoTabla
             equipamiento={equipamiento}
