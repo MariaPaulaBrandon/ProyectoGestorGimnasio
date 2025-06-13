@@ -25,4 +25,11 @@ interface SalaServiceInterface
      * @return mixed
      */
     public function create(array $sala);
+
+    /**
+     * Eliminar un material existente.
+     * @param int $id
+     * @return mixed
+     */
+    public function destroy(int $id);
 }

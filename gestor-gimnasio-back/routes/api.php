@@ -8,6 +8,7 @@ use App\Http\Controllers\SalaController;
 use App\Http\Controllers\TipoActividadController;
 use App\Http\Controllers\TurnoClase;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\MaterialController;
 use Illuminate\Support\Facades\Route;
 
 if (!defined('AUTH_SANCTION')) {
@@ -79,6 +80,8 @@ Route::middleware(AUTH_SANCTION)->group(function () {
             ->name('tipos-actividad.update');
         Route::post('/', [TipoActividadController::class, 'create'])
             ->name('tipos-actividad.create');
+        Route::delete(ID_ROUTE_PARAMETER, [TipoActividadController::class, 'destroy'])
+            ->name('tipos-actividad.destroy');
     });
 
     Route::prefix('salas')->group(function () {
@@ -88,5 +91,18 @@ Route::middleware(AUTH_SANCTION)->group(function () {
             ->name('salas.update');
         Route::post('/', [SalaController::class, 'create'])
             ->name('salas.create');
+        Route::delete(ID_ROUTE_PARAMETER, [SalaController::class, 'destroy'])
+            ->name('salas.destroy');
+    });
+
+    Route::prefix('equipamiento')->group(function () {
+        Route::get('/', [MaterialController::class, 'index'])
+            ->name('equipamiento.index');
+        Route::post('/', [MaterialController::class, 'create'])
+            ->name('equipamiento.create');
+        Route::put(ID_ROUTE_PARAMETER, [MaterialController::class, 'update'])
+            ->name('equipamiento.update');
+        Route::delete(ID_ROUTE_PARAMETER, [MaterialController::class, 'destroy'])
+            ->name('equipamiento.destroy');
     });
 });

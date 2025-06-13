@@ -1,6 +1,5 @@
 import { useMemo, useCallback, useEffect, useState } from "react"
 import environment from "../../environments/environment"
-
 import SnackbarMensaje from "../utils/SnackbarMensaje"
 import {
   Box,
@@ -15,10 +14,6 @@ import {
   Modal,
   Typography,
   TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
 } from "@mui/material"
 import CargaTabla from "../clases-carga/CargaTabla"
 
@@ -178,10 +173,44 @@ export default function AbmSalas() {
     }
   }
 
+  const deleteSala = async (salaEliminada, token) => {
+    setCargando(true)
+    try {
+      const response = await fetch(`${environment.apiUrl}/salas/${salaEliminada.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.message ?? "Error al eliminar la sala")
+      }
+
+      showSnackbar("Sala eliminado exitosamente", "success")
+      await getSalas(token)
+    } catch (error) {
+      showSnackbar(error.message ?? "Error al eliminar la sala", "error")
+      setCargando(false)
+    }
+  }
+
   return (
     <>
-      <TableContainer component={Paper} className="salas-table">
-        {cargando ? <CargaTabla texto="Cargando salas..." /> : <SalasTabla salas={salas} onEditar={handleOpenModalEditar} />}
+      <h2 className="titulo-clases">ABM Salas</h2>
+      <TableContainer component={Paper} className="equipamiento-table">
+        {cargando ? (
+          <CargaTabla texto="Cargando salas..." />
+        ) : (
+          <SalasTabla
+            salas={salas}
+            onEditar={handleOpenModalEditar}
+            onEliminar={(sala) => deleteSala(sala, userToken)}
+          />
+        )}
       </TableContainer>
       <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mt: 2 }}>
         <Button variant="outlined" className="boton-principal" disabled={cargando} onClick={handleOpenModalCrear}>
@@ -216,26 +245,24 @@ export default function AbmSalas() {
   )
 }
 
-function SalasTabla({ salas, onEditar }) {
-  const encabezadosTabla = () => {
-    return (
-      <TableHead className="cabecera-tabla-abm">
-        <TableRow>
-          <TableCell>ID</TableCell>
-          <TableCell>SALA</TableCell>
-          <TableCell>ACCIÓN</TableCell>
-        </TableRow>
-      </TableHead>
-    )
-  }
+const SalasTabla = ({ salas, onEditar, onEliminar }) => {
+  const encabezadosTabla = () => (
+    <TableHead className="cabecera-tabla-abm">
+      <TableRow>
+        <TableCell>SALA</TableCell>
+        <TableCell>MODIFICAR</TableCell>
+        <TableCell>ELIMINAR</TableCell>
+      </TableRow>
+    </TableHead>
+  )
 
   if (!salas || salas.length === 0) {
     return (
-      <Table sx={{ minWidth: 600 }} aria-label="tabla de abm salas">
+      <Table aria-label="tabla de abm salas">
         {encabezadosTabla()}
         <TableBody>
           <TableRow>
-            <TableCell colSpan={4} align="center">
+            <TableCell colSpan={3} align="center">
               No hay salas para mostrar
             </TableCell>
           </TableRow>
@@ -245,16 +272,20 @@ function SalasTabla({ salas, onEditar }) {
   }
 
   return (
-    <Table sx={{ minWidth: 600 }} aria-label="tabla de abm salas">
+    <Table aria-label="tabla de abm salas">
       {encabezadosTabla()}
       <TableBody>
         {salas.map((sala) => (
           <TableRow key={sala.id}>
-            <TableCell>{sala.id}</TableCell>
             <TableCell>{sala.descripcion.charAt(0).toUpperCase() + sala.descripcion.slice(1).toLowerCase()}</TableCell>
             <TableCell>
               <Button variant="outlined" className="boton-principal" onClick={() => onEditar(sala)}>
-                Modificar registro
+                Modificar
+              </Button>
+            </TableCell>
+            <TableCell>
+              <Button variant="outlined" className="boton-principal" onClick={() => onEliminar(sala)}>
+                Eliminar
               </Button>
             </TableCell>
           </TableRow>
@@ -263,9 +294,7 @@ function SalasTabla({ salas, onEditar }) {
     </Table>
   )
 }
-
 function SalasModal({ abrirModal, handleCerrar, handleConfirmar, salaExistente, esEdicion, tituloModal }) {
-  console.log("SalasModal renderizado", { abrirModal, esEdicion, salaExistente, tituloModal })
   const styleModal = {
     position: "absolute",
     top: "50%",

@@ -43,4 +43,16 @@ class TipoActividadRepository implements TipoActividadRepositoryInterface
     {
         return TipoActividad::create($tipoActividad);
     }
+
+    /**
+     * Eliminar un tipo actividad existente.
+     *
+     * @param int $id
+     * @return mixed
+     */
+    public function destroy(int $id)
+    {
+        $tipoActividad = TipoActividad::findOrFail($id);
+        return $tipoActividad->delete();
+    }
 }
