@@ -10,6 +10,7 @@ use App\Http\Controllers\TurnoClaseController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\MaterialController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MensajeController;
 
 if (!defined('AUTH_SANCTION')) {
     define('AUTH_SANCTION', 'auth:sanctum');
@@ -107,4 +108,10 @@ Route::middleware(AUTH_SANCTION)->group(function () {
         Route::delete(ID_ROUTE_PARAMETER, [MaterialController::class, 'destroy'])
             ->name('equipamiento.destroy');
     });
+
+    Route::post('/mensajes/enviar', [MensajeController::class, 'enviar']);
+    Route::get('/mensajes/recibidos/{usuarioId}', [MensajeController::class, 'recibidos']);
+    Route::get('/mensajes/enviados/{usuarioId}', [MensajeController::class, 'enviados']);
+    Route::patch('/mensajes/{id}/leido', [MensajeController::class, 'marcarLeido']);
+    Route::delete('/mensajes/{id}', [MensajeController::class, 'eliminar'])->name('mensajes.destroy');
 });

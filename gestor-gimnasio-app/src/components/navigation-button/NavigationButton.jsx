@@ -8,6 +8,7 @@ import MailOutlineIcon from "@mui/icons-material/MailOutline"
 import BuildIcon from "@mui/icons-material/Build"
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"
 import TiposUsuarioEnum from "../../models/enums/TiposUsuarioEnum.models.enum.js"
+import NotificationsIcon from "@mui/icons-material/Notifications"
 import PropTypes from "prop-types"
 import { useNavigate } from "react-router-dom"
 import { useState } from "react"
@@ -93,6 +94,16 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
           onClick={() => navigate("/dashboard/actividades")}
         >
           Actividades
+        </Button>
+      )}
+      {puedeVerActividades && (
+        <Button
+          color="inherit"
+          startIcon={<NotificationsIcon />}
+          sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
+          onClick={() => navigate("/dashboard/notificaciones")}
+        >
+          Mensajes
         </Button>
       )}
       {puedeVerAbm && (
