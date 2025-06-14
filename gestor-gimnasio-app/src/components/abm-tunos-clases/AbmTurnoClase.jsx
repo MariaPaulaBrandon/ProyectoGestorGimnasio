@@ -395,7 +395,7 @@ export default function AbmTurnoClase() {
         >
           Nueva Clase
         </Button>
-        <Button variant="outlined" className="boton-principal" onClick={() => getTurnoClases(userToken)}>
+        <Button variant="outlined" className="boton-principal" sx={{ ml: 2 }} onClick={() => getTurnoClases(userToken)}>
           Actualizar
         </Button>
       </Box>
