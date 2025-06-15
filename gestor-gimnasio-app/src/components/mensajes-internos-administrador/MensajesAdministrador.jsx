@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import ListaMensajesAdministrador from "./ListaMensajesAdministrador"
 import RedactarMensajeAdministrador from "./RedactarMensajeAdministrador"
 import { Box, Tabs, Tab, Button } from "@mui/material"
@@ -14,9 +14,21 @@ export default function MensajesAdministrador() {
   const handleDetalleOpen = () => setViendoDetalle(true)
   const handleDetalleClose = () => setViendoDetalle(false)
 
+  const usuarioId = useMemo(() => {
+    const usuarioGuardado = localStorage.getItem("usuario")
+    if (usuarioGuardado) {
+      try {
+        const usuario = JSON.parse(usuarioGuardado)
+        return usuario.id
+      } catch {
+        return null
+      }
+    }
+    return null
+  }, [])
+
   useEffect(() => {
     const userToken = localStorage.getItem("usuarioAccesToken")
-    const usuarioId = 5 // Cambia por el ID real del usuario logueado
     fetch(`http://localhost:8080/api/mensajes/recibidos/${usuarioId}`, {
       headers: {
         "Content-Type": "application/json",
@@ -29,7 +41,7 @@ export default function MensajesAdministrador() {
         setNoLeidos(count)
       })
       .catch(() => setNoLeidos(0))
-  }, [vista])
+  }, [vista, usuarioId])
 
   return (
     <>
