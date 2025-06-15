@@ -35,21 +35,30 @@ export default function ListaMensajes({ tipo, onDetalleOpen, onDetalleClose }) {
 
   useEffect(() => {
     setLoading(true)
+    const controller = new AbortController()
     const endpoint =
-      tipo === "recibidos"
+      tipo === 'recibidos'
         ? `http://localhost:8080/api/mensajes/recibidos/${usuarioId}`
         : `http://localhost:8080/api/mensajes/enviados/${usuarioId}`
 
     fetch(endpoint, {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${userToken}`,
       },
+      signal: controller.signal,
     })
-      .then((res) => res.json())
-      .then((data) => setMensajes(data))
-      .catch(() => setMensajes([]))
-      .finally(() => setLoading(false))
+      .then(res => res.json())
+      .then(data => setMensajes(data))
+      .catch(err => {
+        if (err.name !== 'AbortError') setMensajes([])
+      })
+      .finally(() => {
+        // Solo poner loading en false si NO se abortó
+        if (!controller.signal.aborted) setLoading(false)
+      })
+
+    return () => controller.abort()
   }, [tipo, usuarioId, userToken])
 
   // Función para capitalizar nombres y apellidos
@@ -78,7 +87,7 @@ export default function ListaMensajes({ tipo, onDetalleOpen, onDetalleClose }) {
           },
         })
         setMensajes((prev) => prev.map((m) => (m.id === msg.id ? { ...m, leido: true } : m)))
-      } catch {}
+      } catch { }
     }
   }
 
@@ -191,9 +200,9 @@ export default function ListaMensajes({ tipo, onDetalleOpen, onDetalleClose }) {
               <div style={{ flex: 1, textAlign: "right", color: "#888" }}>
                 {msg.fecha_envio
                   ? new Date(msg.fecha_envio).toLocaleDateString("es-AR", {
-                      day: "2-digit",
-                      month: "short",
-                    })
+                    day: "2-digit",
+                    month: "short",
+                  })
                   : ""}
               </div>
             </Box>

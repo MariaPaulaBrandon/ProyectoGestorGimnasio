@@ -101,7 +101,7 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
           color="inherit"
           startIcon={<NotificationsIcon />}
           sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
-          onClick={() => navigate("/dashboard/notificaciones")}
+          onClick={() => navigate("/dashboard/mensajes")}
         >
           Mensajes
         </Button>
