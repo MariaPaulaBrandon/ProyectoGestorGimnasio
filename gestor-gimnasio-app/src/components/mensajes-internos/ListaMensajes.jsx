@@ -3,7 +3,7 @@ import MensajeDetalle from "./MensajeDetalle"
 import { Box } from "@mui/material"
 import SnackbarMensaje from "../utils/SnackbarMensaje"
 import RedactarMensaje from "./RedactarMensaje"
-import CircularProgress from "@mui/material/CircularProgress"
+import Carga from "../carga/Carga"
 
 export default function ListaMensajes({ tipo, onDetalleOpen, onDetalleClose }) {
   const userToken = useMemo(() => localStorage.getItem("usuarioAccesToken"), [])
@@ -94,6 +94,7 @@ export default function ListaMensajes({ tipo, onDetalleOpen, onDetalleClose }) {
   // Lógica de borrado de mensaje
   const handleEliminarMensaje = async (mensaje) => {
     try {
+      setLoading(true)
       await fetch(`http://localhost:8080/api/mensajes/${mensaje.id}`, {
         method: "DELETE",
         headers: {
@@ -111,6 +112,8 @@ export default function ListaMensajes({ tipo, onDetalleOpen, onDetalleClose }) {
       setMensajeSnackbar("No se pudo eliminar el mensaje. Intenta nuevamente.")
       setSnackbarSeverity("error")
       setAbrirSnackbar(true)
+    } finally {
+      setLoading(false)
     }
   }
   const handleCloseSnackbar = (_, reason) => {
@@ -120,10 +123,7 @@ export default function ListaMensajes({ tipo, onDetalleOpen, onDetalleClose }) {
 
   if (loading) {
     return (
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: 120 }}>
-        <CircularProgress size={22} style={{ marginRight: 12 }} />
-        <span>Cargando mensajes...</span>
-      </div>
+      <Carga />
     )
   }
 
@@ -142,14 +142,13 @@ export default function ListaMensajes({ tipo, onDetalleOpen, onDetalleClose }) {
             setMensajeParaRedactar(msg)
             setModoRedactar("responder")
             setMensajeSeleccionado(null)
-            if (onDetalleClose) onDetalleClose()
           }}
           onReenviar={(msg) => {
             setMensajeParaRedactar(msg)
             setModoRedactar("reenviar")
             setMensajeSeleccionado(null)
-            if (onDetalleClose) onDetalleClose()
           }}
+          loading={loading}
         />
       </>
     )
@@ -161,6 +160,7 @@ export default function ListaMensajes({ tipo, onDetalleOpen, onDetalleClose }) {
         onClose={() => {
           setMensajeParaRedactar(null)
           setModoRedactar(null)
+          if (onDetalleClose) onDetalleClose()
         }}
         mensajeOriginal={mensajeParaRedactar}
         modo={modoRedactar}

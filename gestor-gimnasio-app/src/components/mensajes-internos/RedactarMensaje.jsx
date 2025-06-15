@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo } from "react"
 import {
   Autocomplete,
   TextField,
@@ -11,9 +11,11 @@ import {
   CircularProgress,
 } from "@mui/material"
 import SnackbarMensaje from "../utils/SnackbarMensaje"
+import Carga from "../carga/Carga"
 
 const TIPOS_USUARIO = [
   { value: "todos_usuarios", label: "Todos los usuarios" },
+  { value: "todos_administradores", label: "Todos los administradores" },
   { value: "todos_profesores", label: "Todos los profesores" },
   { value: "todos_alumnos", label: "Todos los alumnos" },
   { value: 1, label: "Administradores" },
@@ -35,22 +37,37 @@ export default function RedactarMensaje({ onClose, mensajeOriginal, modo }) {
   const [destinatariosError, setDestinatariosError] = useState(false)
   const [asuntoError, setAsuntoError] = useState(false)
   const [mensajeError, setMensajeError] = useState(false)
+  const [loading, setLoading] = useState(false)
+
 
   useEffect(() => {
+    const controller = new AbortController()
+    setLoading(true)
+
     fetch("http://localhost:8080/api/usuarios", {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${userToken}`,
       },
+      signal: controller.signal,
     })
       .then((res) => res.json())
       .then((data) => setUsuarios(data))
-      .catch(() => setUsuarios([]))
+      .catch(err => {
+        if (err.name !== 'AbortError') setUsuarios([])
+      })
+      .finally(() => {
+        // Solo poner loading en false si NO se abortó
+        if (!controller.signal.aborted) setLoading(false)
+      })
+
+    return () => controller.abort()
   }, [userToken])
 
   // Filtrar usuarios según tipo seleccionado
   const usuariosFiltrados = useMemo(() => {
     if (tipoUsuario === "todos_usuarios") return usuarios
+    if (tipoUsuario === "todos_administradores") return usuarios.filter((u) => u.idTipoUsuario === 1)
     if (tipoUsuario === "todos_profesores") return usuarios.filter((u) => u.idTipoUsuario === 2)
     if (tipoUsuario === "todos_alumnos") return usuarios.filter((u) => u.idTipoUsuario === 3)
     if (tipoUsuario) return usuarios.filter((u) => u.idTipoUsuario === tipoUsuario)
@@ -60,6 +77,7 @@ export default function RedactarMensaje({ onClose, mensajeOriginal, modo }) {
   // Etiqueta para el destinatario según selección
   const destinatarioLabel = useMemo(() => {
     if (tipoUsuario === "todos_usuarios") return "Todos los usuarios"
+    if (tipoUsuario === "todos_administradores") return "Todos los administradores"
     if (tipoUsuario === "todos_profesores") return "Todos los profesores"
     if (tipoUsuario === "todos_alumnos") return "Todos los alumnos"
     const tipo = TIPOS_USUARIO.find((t) => t.value === tipoUsuario)
@@ -73,6 +91,7 @@ export default function RedactarMensaje({ onClose, mensajeOriginal, modo }) {
 
     if (
       tipoUsuario !== "todos_usuarios" &&
+      tipoUsuario !== "todos_administradores" &&
       tipoUsuario !== "todos_profesores" &&
       tipoUsuario !== "todos_alumnos" &&
       destinatarios.length === 0
@@ -115,7 +134,7 @@ export default function RedactarMensaje({ onClose, mensajeOriginal, modo }) {
     setEnviando(true)
     try {
       let destinatariosIds = []
-      if (tipoUsuario === "todos_usuarios" || tipoUsuario === "todos_profesores" || tipoUsuario === "todos_alumnos") {
+      if (tipoUsuario === "todos_usuarios" || tipoUsuario === "todos_administradores" || tipoUsuario === "todos_profesores" || tipoUsuario === "todos_alumnos") {
         destinatariosIds = usuariosFiltrados.map((u) => u.id)
       } else {
         destinatariosIds = destinatarios.map((d) => d.id)
@@ -182,92 +201,97 @@ export default function RedactarMensaje({ onClose, mensajeOriginal, modo }) {
         snackbarSeverity={snackbarSeverity}
       />
       <form onSubmit={handleSubmit} style={{ pointerEvents: enviando ? "none" : "auto", opacity: enviando ? 0.6 : 1 }}>
-        <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
-          <FormControl fullWidth>
-            <InputLabel id="tipo-usuario-label">Tipo de usuario</InputLabel>
-            <Select
-              labelId="tipo-usuario-label"
-              value={tipoUsuario}
-              label="Tipo de usuario"
-              onChange={(e) => {
-                setTipoUsuario(e.target.value)
-                setDestinatarios([])
-              }}
-              disabled={enviando}
-            >
-              <MenuItem value="">Todos</MenuItem>
-              {TIPOS_USUARIO.map((t) => (
-                <MenuItem key={t.value} value={t.value}>
-                  {t.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <TextField
-            label="Asunto*"
-            type="text"
-            value={asunto}
-            onChange={(e) => setAsunto(e.target.value)}
-            required={false}
-            fullWidth
-            disabled={enviando}
-            error={asuntoError}
-          />
-        </Box>
-        <Box sx={{ mb: 2 }}>
-          {tipoUsuario === "todos_usuarios" || tipoUsuario === "todos_profesores" || tipoUsuario === "todos_alumnos" ? (
-            <TextField label="Destinatario/s" value={destinatarioLabel} fullWidth disabled />
-          ) : (
-            <Autocomplete
-              multiple
-              options={usuariosFiltrados}
-              getOptionLabel={(option) => `${option.nombres} ${option.apellidos} (${option.email})`}
-              value={destinatarios}
-              onChange={(_, newValue) => {
-                setDestinatarios(newValue)
-                setDestinatariosError(false)
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Destinatario/s"
-                  fullWidth
+        {loading ? (
+          <Carga />
+        ) : (
+          <>
+            <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
+              <FormControl fullWidth>
+                <InputLabel id="tipo-usuario-label">Tipo de usuario</InputLabel>
+                <Select
+                  labelId="tipo-usuario-label"
+                  value={tipoUsuario}
+                  label="Tipo de usuario"
+                  onChange={(e) => {
+                    setTipoUsuario(e.target.value)
+                    setDestinatarios([])
+                  }}
                   disabled={enviando}
-                  error={destinatariosError}
+                >
+                  <MenuItem value="">Todos</MenuItem>
+                  {TIPOS_USUARIO.map((t) => (
+                    <MenuItem key={t.value} value={t.value}>
+                      {t.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <TextField
+                label="Asunto*"
+                type="text"
+                value={asunto}
+                onChange={(e) => setAsunto(e.target.value)}
+                required={false}
+                fullWidth
+                disabled={enviando}
+                error={asuntoError}
+              />
+            </Box>
+            <Box sx={{ mb: 2 }}>
+              {tipoUsuario === "todos_usuarios" || tipoUsuario === "todos_administradores" || tipoUsuario === "todos_profesores" || tipoUsuario === "todos_alumnos" ? (
+                <TextField label="Destinatario/s" value={destinatarioLabel} fullWidth disabled />
+              ) : (
+                <Autocomplete
+                  multiple
+                  options={usuariosFiltrados}
+                  getOptionLabel={(option) => `${option.nombres} ${option.apellidos} (${option.email})`}
+                  value={destinatarios}
+                  onChange={(_, newValue) => {
+                    setDestinatarios(newValue)
+                    setDestinatariosError(false)
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Destinatario/s"
+                      fullWidth
+                      disabled={enviando}
+                      error={destinatariosError}
+                    />
+                  )}
+                  isOptionEqualToValue={(option, value) => option.id === value.id}
+                  disabled={enviando}
                 />
               )}
-              isOptionEqualToValue={(option, value) => option.id === value.id}
+            </Box>
+            <Box sx={{ mb: 2 }}>
+              <TextField
+                label="Mensaje*"
+                value={mensaje}
+                onChange={(e) => setMensaje(e.target.value)}
+                fullWidth
+                multiline
+                minRows={4}
+                disabled={enviando}
+                error={mensajeError}
+              />
+            </Box>
+            <Button
+              className="boton-principal"
+              type="submit"
               disabled={enviando}
-            />
-          )}
-        </Box>
-        <Box sx={{ mb: 2 }}>
-          <TextField
-            label="Mensaje*"
-            value={mensaje}
-            onChange={(e) => setMensaje(e.target.value)}
-            fullWidth
-            multiline
-            minRows={4}
-            disabled={enviando}
-            error={mensajeError}
-          />
-        </Box>
-        <Button
-          className="boton-principal"
-          type="submit"
-          disabled={enviando}
-          fullWidth
-          sx={{ fontWeight: 500, fontSize: 16, borderRadius: 2, minHeight: 44 }}
-          startIcon={enviando ? <CircularProgress size={20} color="inherit" /> : null}
-        >
-          {enviando ? "Enviando..." : "Enviar"}
-        </Button>
-        {onClose && (
-          <Button className="boton-secundario" onClick={onClose} sx={{ mt: 2, width: "100%" }} disabled={enviando}>
-            Volver
-          </Button>
-        )}
+              fullWidth
+              sx={{ fontWeight: 500, fontSize: 16, borderRadius: 2, minHeight: 44 }}
+              startIcon={enviando ? <CircularProgress size={20} color="inherit" /> : null}
+            >
+              {enviando ? "Enviando..." : "Enviar"}
+            </Button>
+            {onClose && (
+              <Button className="boton-secundario" onClick={onClose} sx={{ mt: 2, width: "100%" }} disabled={enviando}>
+                Volver
+              </Button>
+            )}
+          </>)}
       </form>
     </>
   )

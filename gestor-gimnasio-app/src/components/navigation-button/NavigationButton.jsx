@@ -99,7 +99,7 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
       {puedeVerActividades && (
         <Button
           color="inherit"
-          startIcon={<NotificationsIcon />}
+          startIcon={<MailOutlineIcon />}
           sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
           onClick={() => navigate("/dashboard/mensajes")}
         >
