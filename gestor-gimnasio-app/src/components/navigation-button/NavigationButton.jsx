@@ -8,7 +8,6 @@ import MailOutlineIcon from "@mui/icons-material/MailOutline"
 import BuildIcon from "@mui/icons-material/Build"
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"
 import TiposUsuarioEnum from "../../models/enums/TiposUsuarioEnum.models.enum.js"
-import NotificationsIcon from "@mui/icons-material/Notifications"
 import PropTypes from "prop-types"
 import { useNavigate } from "react-router-dom"
 import { useState } from "react"
@@ -26,13 +25,8 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
   const puedeVerAgendarClases =
     idTipoUsuario === TiposUsuarioEnum.ALUMNO || idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR
 
-  const puedeVerContactoAlumno =
-    idTipoUsuario === TiposUsuarioEnum.ALUMNO ||
-    idTipoUsuario === TiposUsuarioEnum.PROFESOR ||
-    idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR
-
   const puedeVerActividades =
-    idTipoUsuario === TiposUsuarioEnum.PROFESOR || idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR
+    idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR
 
   const puedeVerAbm = idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR
 
@@ -78,16 +72,6 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
           onClick={() => navigate("/dashboard/agendar-clases")}
         >
           Agendar
-        </Button>
-      )}
-      {puedeVerContactoAlumno && (
-        <Button
-          color="inherit"
-          startIcon={<MailOutlineIcon />}
-          sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
-          onClick={() => navigate("/dashboard/contacto")}
-        >
-          Contacto
         </Button>
       )}
       {puedeVerActividades && (
