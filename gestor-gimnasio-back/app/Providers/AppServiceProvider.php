@@ -101,6 +101,16 @@ class AppServiceProvider extends ServiceProvider
             ContactoRepositoryInterface::class,
             ContactoRepository::class
         );
+
+        $this->app->bind(
+            \App\Http\Interfaces\PagoRepositoryInterface::class,
+            \App\Http\Repositories\PagoRepository::class
+        );
+
+        $this->app->bind(
+            \App\Http\Interfaces\PagoServiceInterface::class,
+            \App\Http\Services\PagoService::class
+        );
     }
 
     /**

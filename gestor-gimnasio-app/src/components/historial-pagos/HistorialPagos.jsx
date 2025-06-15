@@ -7,25 +7,20 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import './HistorialPagos.css';
+import environment from '../../environments/environment';
 
 const HistorialPagos = () => {
   const [pagos, setPagos] = useState([]);
   const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("usuarioAccesToken");
-    fetch(
-      `${
-        import.meta.env.VITE_API_URL || "http://localhost:8000/api"
-      }/pagos/historial`,
-      {
+    fetch(`${environment.apiUrl}/pagos/historial`, {
+        method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      }
-    )
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        }
+      })
       .then((res) => res.json())
       .then((data) => {
         setPagos(data);
