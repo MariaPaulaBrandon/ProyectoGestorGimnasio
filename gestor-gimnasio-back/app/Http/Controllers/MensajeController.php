@@ -28,10 +28,11 @@ class MensajeController extends Controller
             // Si es administrador (id_tipo_usuario = 1), mostrar "Administración"
             $nombreRemitente = ($remitente->id_tipo_usuario == 1) ? 'Administración' : ($remitente->nombres . ' ' . $remitente->apellidos);
         }
-        $esAlumno = $destinatario && $destinatario->id_tipo_usuario == 3;
+        // Considerar alumno (3) o profesor (2)
+        $esAlumnoOProfe = $destinatario && ($destinatario->id_tipo_usuario == 3 || $destinatario->id_tipo_usuario == 2);
         if ($destinatario && $destinatario->email) {
             Mail::to($destinatario->email)->send(
-                new \App\Mail\MensajeInternoMail($request->asunto, $request->mensaje, $nombreRemitente, $esAlumno)
+                new \App\Mail\MensajeInternoMail($request->asunto, $request->mensaje, $nombreRemitente, $esAlumnoOProfe)
             );
         }
 
