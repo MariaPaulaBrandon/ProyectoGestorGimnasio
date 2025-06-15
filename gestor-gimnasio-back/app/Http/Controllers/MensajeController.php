@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mensaje;
+use App\Models\Usuario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MensajeInternoMail;
 
 class MensajeController extends Controller
 {
@@ -16,6 +19,22 @@ class MensajeController extends Controller
             'asunto' => $request->asunto,
             'mensaje' => $request->mensaje,
         ]);
+
+        // Obtener datos del destinatario y remitente
+        $destinatario = Usuario::find($request->destinatario_id);
+        $remitente = Usuario::find($request->remitente_id);
+        $nombreRemitente = 'Usuario';
+        if ($remitente) {
+            // Si es administrador (id_tipo_usuario = 1), mostrar "Administración"
+            $nombreRemitente = ($remitente->id_tipo_usuario == 1) ? 'Administración' : ($remitente->nombres . ' ' . $remitente->apellidos);
+        }
+        $esAlumno = $destinatario && $destinatario->id_tipo_usuario == 3;
+        if ($destinatario && $destinatario->email) {
+            Mail::to($destinatario->email)->send(
+                new \App\Mail\MensajeInternoMail($request->asunto, $request->mensaje, $nombreRemitente, $esAlumno)
+            );
+        }
+
         return response()->json(['ok' => true, 'mensaje' => $mensaje]);
     }
 
