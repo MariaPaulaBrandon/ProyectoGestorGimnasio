@@ -23,7 +23,7 @@ const TIPOS_USUARIO = [
   { value: 3, label: "Alumnos" },
 ]
 
-export default function RedactarMensaje({ onClose, mensajeOriginal, modo }) {
+export default function RedactarMensajeAdministrador({ onClose, mensajeOriginal, modo }) {
   const userToken = useMemo(() => localStorage.getItem("usuarioAccesToken"), [])
   const [tipoUsuario, setTipoUsuario] = useState("")
   const [destinatarios, setDestinatarios] = useState([])
@@ -206,6 +206,26 @@ export default function RedactarMensaje({ onClose, mensajeOriginal, modo }) {
         ) : (
           <>
             <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
+              <FormControl fullWidth>
+                <InputLabel id="tipo-usuario-label">Tipo de usuario</InputLabel>
+                <Select
+                  labelId="tipo-usuario-label"
+                  value={tipoUsuario}
+                  label="Tipo de usuario"
+                  onChange={(e) => {
+                    setTipoUsuario(e.target.value)
+                    setDestinatarios([])
+                  }}
+                  disabled={enviando}
+                >
+                  <MenuItem value="">Todos</MenuItem>
+                  {TIPOS_USUARIO.map((t) => (
+                    <MenuItem key={t.value} value={t.value}>
+                      {t.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
               <TextField
                 label="Asunto*"
                 type="text"
@@ -216,6 +236,33 @@ export default function RedactarMensaje({ onClose, mensajeOriginal, modo }) {
                 disabled={enviando}
                 error={asuntoError}
               />
+            </Box>
+            <Box sx={{ mb: 2 }}>
+              {tipoUsuario === "todos_usuarios" || tipoUsuario === "todos_administradores" || tipoUsuario === "todos_profesores" || tipoUsuario === "todos_alumnos" ? (
+                <TextField label="Destinatario/s" value={destinatarioLabel} fullWidth disabled />
+              ) : (
+                <Autocomplete
+                  multiple
+                  options={usuariosFiltrados}
+                  getOptionLabel={(option) => `${option.nombres} ${option.apellidos} (${option.email})`}
+                  value={destinatarios}
+                  onChange={(_, newValue) => {
+                    setDestinatarios(newValue)
+                    setDestinatariosError(false)
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Destinatario/s"
+                      fullWidth
+                      disabled={enviando}
+                      error={destinatariosError}
+                    />
+                  )}
+                  isOptionEqualToValue={(option, value) => option.id === value.id}
+                  disabled={enviando}
+                />
+              )}
             </Box>
             <Box sx={{ mb: 2 }}>
               <TextField

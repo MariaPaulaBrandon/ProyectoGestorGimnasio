@@ -36,6 +36,10 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
 
   const puedeVerAbm = idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR
 
+  const puedeVerMensajes = 
+    idTipoUsuario === TiposUsuarioEnum.ALUMNO ||
+    idTipoUsuario === TiposUsuarioEnum.PROFESOR
+
   const handleAbmClick = (event) => {
     setAnchorEl(event.currentTarget)
   }
@@ -96,12 +100,22 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
           Actividades
         </Button>
       )}
-      {puedeVerActividades && (
+      {puedeVerMensajes && (
         <Button
           color="inherit"
           startIcon={<MailOutlineIcon />}
           sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
           onClick={() => navigate("/dashboard/mensajes")}
+        >
+          Mensajes
+        </Button>
+      )}
+      {puedeVerAbm && (
+        <Button
+          color="inherit"
+          startIcon={<MailOutlineIcon />}
+          sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
+          onClick={() => navigate("/dashboard/admin-mensajes")}
         >
           Mensajes
         </Button>
