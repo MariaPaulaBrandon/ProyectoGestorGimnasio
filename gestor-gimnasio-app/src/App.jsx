@@ -6,13 +6,13 @@ import RutaProtegida from "./components/auth/RutaProtegida/RutaProtegida"
 import Dashboard from "./components/layouts/dashboard/Dashboard"
 import ForgottenPassword from "./components/forgotten-password/ForgottenPassword"
 import AgendarClases from "./components/agendar-clases/AgendarClases"
-import ContactoAlumno from "./components/contacto-alumno/ContactoAlumno"
 import AbmTurnoClase from "./components/abm-tunos-clases/AbmTurnoClase"
 import AbmTipoActividad from "./components/abm-tipo-actividad/AbmTipoActividad"
 import AbmSalas from "./components/abm-salas/AbmSalas"
 import AbmEquipamiento from "./components/abm-equipamiento/AmbEquipamiento"
 import Contacto from "./components/contacto/Contacto"
 import Actividades from "./components/actividades/Actividades"
+import MensajesAdministrador from "./components/mensajes-internos-administrador/MensajesAdministrador"
 import Mensajes from "./components/mensajes-internos/Mensajes"
 
 import dayjs from "dayjs"
@@ -38,9 +38,9 @@ function App() {
         <Route element={<RutaProtegida />}>
           <Route path="/dashboard" element={<Dashboard />}>
             <Route path="/dashboard/agendar-clases" element={<AgendarClases />} />
-            <Route path="/dashboard/contacto" element={<ContactoAlumno />} />
             <Route path="/dashboard/actividades" element={<Actividades />} />
             <Route path="/dashboard/mensajes" element={<Mensajes />} />
+            <Route path="/dashboard/admin-mensajes" element={<MensajesAdministrador />} />
             <Route path="/dashboard/abm/clases" element={<AbmTurnoClase />} />
             <Route path="/dashboard/abm/tipos-actividad" element={<AbmTipoActividad />} />
             <Route path="/dashboard/abm/salas" element={<AbmSalas />} />

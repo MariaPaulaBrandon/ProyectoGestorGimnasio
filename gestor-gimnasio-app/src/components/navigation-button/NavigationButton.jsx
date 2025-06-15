@@ -8,7 +8,6 @@ import MailOutlineIcon from "@mui/icons-material/MailOutline"
 import BuildIcon from "@mui/icons-material/Build"
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"
 import TiposUsuarioEnum from "../../models/enums/TiposUsuarioEnum.models.enum.js"
-import NotificationsIcon from "@mui/icons-material/Notifications"
 import PropTypes from "prop-types"
 import { useNavigate } from "react-router-dom"
 import { useState } from "react"
@@ -26,15 +25,14 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
   const puedeVerAgendarClases =
     idTipoUsuario === TiposUsuarioEnum.ALUMNO || idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR
 
-  const puedeVerContactoAlumno =
-    idTipoUsuario === TiposUsuarioEnum.ALUMNO ||
-    idTipoUsuario === TiposUsuarioEnum.PROFESOR ||
+  const puedeVerActividades =
     idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR
 
-  const puedeVerActividades =
-    idTipoUsuario === TiposUsuarioEnum.PROFESOR || idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR
-
   const puedeVerAbm = idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR
+
+  const puedeVerMensajes = 
+    idTipoUsuario === TiposUsuarioEnum.ALUMNO ||
+    idTipoUsuario === TiposUsuarioEnum.PROFESOR
 
   const handleAbmClick = (event) => {
     setAnchorEl(event.currentTarget)
@@ -76,16 +74,6 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
           Agendar
         </Button>
       )}
-      {puedeVerContactoAlumno && (
-        <Button
-          color="inherit"
-          startIcon={<MailOutlineIcon />}
-          sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
-          onClick={() => navigate("/dashboard/contacto")}
-        >
-          Contacto
-        </Button>
-      )}
       {puedeVerActividades && (
         <Button
           color="inherit"
@@ -96,12 +84,22 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
           Actividades
         </Button>
       )}
-      {puedeVerActividades && (
+      {puedeVerMensajes && (
         <Button
           color="inherit"
           startIcon={<MailOutlineIcon />}
           sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
           onClick={() => navigate("/dashboard/mensajes")}
+        >
+          Mensajes
+        </Button>
+      )}
+      {puedeVerAbm && (
+        <Button
+          color="inherit"
+          startIcon={<MailOutlineIcon />}
+          sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
+          onClick={() => navigate("/dashboard/admin-mensajes")}
         >
           Mensajes
         </Button>

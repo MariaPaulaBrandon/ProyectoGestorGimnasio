@@ -5,7 +5,7 @@ import ReplyIcon from "@mui/icons-material/Reply"
 import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox"
 import Carga from "../carga/Carga"
 
-export default function MensajeDetalle({ mensaje, onCerrar, usuarios, loading, onEliminar, onResponder, onReenviar }) {
+export default function MensajeDetalleAdministrador({ mensaje, onCerrar, usuarios, loading, onEliminar, onResponder, onReenviar }) {
 
   if (!mensaje) return null
 
@@ -47,6 +47,14 @@ export default function MensajeDetalle({ mensaje, onCerrar, usuarios, loading, o
               sx={{ color: "black", textTransform: "none", fontWeight: 500, ml: 1 }}
             >
               Responder
+            </Button>
+            <Button
+              variant="text"
+              startIcon={<ForwardToInboxIcon />}
+              onClick={() => onReenviar && onReenviar(mensaje)}
+              sx={{ color: "black", textTransform: "none", fontWeight: 500, ml: 1 }}
+            >
+              Reenviar
             </Button>
             <Box sx={{ flex: 1 }} />
           </Box>

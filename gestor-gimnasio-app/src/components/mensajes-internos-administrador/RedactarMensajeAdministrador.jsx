@@ -1,6 +1,11 @@
 import { useState, useEffect, useMemo } from "react"
 import {
+  Autocomplete,
   TextField,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
   Box,
   Button,
   CircularProgress,
@@ -18,9 +23,9 @@ const TIPOS_USUARIO = [
   { value: 3, label: "Alumnos" },
 ]
 
-export default function RedactarMensaje({ onClose, mensajeOriginal, modo }) {
+export default function RedactarMensajeAdministrador({ onClose, mensajeOriginal, modo }) {
   const userToken = useMemo(() => localStorage.getItem("usuarioAccesToken"), [])
-  const [tipoUsuario, setTipoUsuario] = useState('todos_administradores');
+  const [tipoUsuario, setTipoUsuario] = useState("")
   const [destinatarios, setDestinatarios] = useState([])
   const [asunto, setAsunto] = useState("")
   const [mensaje, setMensaje] = useState("")
@@ -195,15 +200,35 @@ export default function RedactarMensaje({ onClose, mensajeOriginal, modo }) {
         mensajeSnackbar={mensajeSnackbar}
         snackbarSeverity={snackbarSeverity}
       />
-      <form onSubmit={handleSubmit} style={{ pointerEvents: enviando ? 'none' : 'auto', opacity: enviando ? 0.6 : 1 }}>
+      <form onSubmit={handleSubmit} style={{ pointerEvents: enviando ? "none" : "auto", opacity: enviando ? 0.6 : 1 }}>
         {loading ? (
           <Carga />
         ) : (
           <>
-            <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+            <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
+              <FormControl fullWidth>
+                <InputLabel id="tipo-usuario-label">Tipo de usuario</InputLabel>
+                <Select
+                  labelId="tipo-usuario-label"
+                  value={tipoUsuario}
+                  label="Tipo de usuario"
+                  onChange={(e) => {
+                    setTipoUsuario(e.target.value)
+                    setDestinatarios([])
+                  }}
+                  disabled={enviando}
+                >
+                  <MenuItem value="">Todos</MenuItem>
+                  {TIPOS_USUARIO.map((t) => (
+                    <MenuItem key={t.value} value={t.value}>
+                      {t.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
               <TextField
-                label='Asunto*'
-                type='text'
+                label="Asunto*"
+                type="text"
                 value={asunto}
                 onChange={(e) => setAsunto(e.target.value)}
                 required={false}
@@ -213,8 +238,35 @@ export default function RedactarMensaje({ onClose, mensajeOriginal, modo }) {
               />
             </Box>
             <Box sx={{ mb: 2 }}>
+              {tipoUsuario === "todos_usuarios" || tipoUsuario === "todos_administradores" || tipoUsuario === "todos_profesores" || tipoUsuario === "todos_alumnos" ? (
+                <TextField label="Destinatario/s" value={destinatarioLabel} fullWidth disabled />
+              ) : (
+                <Autocomplete
+                  multiple
+                  options={usuariosFiltrados}
+                  getOptionLabel={(option) => `${option.nombres} ${option.apellidos} (${option.email})`}
+                  value={destinatarios}
+                  onChange={(_, newValue) => {
+                    setDestinatarios(newValue)
+                    setDestinatariosError(false)
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Destinatario/s"
+                      fullWidth
+                      disabled={enviando}
+                      error={destinatariosError}
+                    />
+                  )}
+                  isOptionEqualToValue={(option, value) => option.id === value.id}
+                  disabled={enviando}
+                />
+              )}
+            </Box>
+            <Box sx={{ mb: 2 }}>
               <TextField
-                label='Mensaje*'
+                label="Mensaje*"
                 value={mensaje}
                 onChange={(e) => setMensaje(e.target.value)}
                 fullWidth
@@ -225,22 +277,21 @@ export default function RedactarMensaje({ onClose, mensajeOriginal, modo }) {
               />
             </Box>
             <Button
-              className='boton-principal'
-              type='submit'
+              className="boton-principal"
+              type="submit"
               disabled={enviando}
               fullWidth
               sx={{ fontWeight: 500, fontSize: 16, borderRadius: 2, minHeight: 44 }}
-              startIcon={enviando ? <CircularProgress size={20} color='inherit' /> : null}
+              startIcon={enviando ? <CircularProgress size={20} color="inherit" /> : null}
             >
-              {enviando ? 'Enviando...' : 'Enviar'}
+              {enviando ? "Enviando..." : "Enviar"}
             </Button>
             {onClose && (
-              <Button className='boton-secundario' onClick={onClose} sx={{ mt: 2, width: '100%' }} disabled={enviando}>
+              <Button className="boton-secundario" onClick={onClose} sx={{ mt: 2, width: "100%" }} disabled={enviando}>
                 Volver
               </Button>
             )}
-          </>
-        )}
+          </>)}
       </form>
     </>
   )
