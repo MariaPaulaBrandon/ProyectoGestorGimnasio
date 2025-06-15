@@ -17,8 +17,18 @@ export default function ListaMensajesAdministrador({ tipo, onDetalleOpen, onDeta
   const [mensajeParaRedactar, setMensajeParaRedactar] = useState(null)
   const [modoRedactar, setModoRedactar] = useState(null) // 'responder' o 'reenviar'
 
-  // Cambia por el ID real del usuario logueado
-  const usuarioId = 5
+const usuarioId = useMemo(() => {
+  const usuarioGuardado = localStorage.getItem('usuario');
+  if (usuarioGuardado) {
+    try {
+      const usuario = JSON.parse(usuarioGuardado);
+      return usuario.id;
+    } catch {
+      return null;
+    }
+  }
+  return null;
+}, [])
 
   // Traer usuarios para mostrar nombre/email
   useEffect(() => {

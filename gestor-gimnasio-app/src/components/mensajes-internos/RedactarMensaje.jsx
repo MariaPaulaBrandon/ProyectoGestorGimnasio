@@ -20,6 +20,18 @@ const TIPOS_USUARIO = [
 
 export default function RedactarMensaje({ onClose, mensajeOriginal, modo }) {
   const userToken = useMemo(() => localStorage.getItem("usuarioAccesToken"), [])
+  const usuarioId = useMemo(() => {
+    const usuarioGuardado = localStorage.getItem('usuario');
+    if (usuarioGuardado) {
+      try {
+        const usuario = JSON.parse(usuarioGuardado);
+        return usuario.id;
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  }, []);
   const [tipoUsuario, setTipoUsuario] = useState('todos_administradores');
   const [destinatarios, setDestinatarios] = useState([])
   const [asunto, setAsunto] = useState("")
@@ -143,7 +155,7 @@ export default function RedactarMensaje({ onClose, mensajeOriginal, modo }) {
             Authorization: `Bearer ${userToken}`,
           },
           body: JSON.stringify({
-            remitente_id: 5, // Cambia por el ID del usuario logueado
+            remitente_id: usuarioId, // Usar el ID real del usuario logueado
             destinatario_id: destId,
             asunto,
             mensaje,

@@ -16,7 +16,18 @@ export default function Mensajes() {
 
   useEffect(() => {
     const userToken = localStorage.getItem("usuarioAccesToken")
-    const usuarioId = 5 // Cambia por el ID real del usuario logueado
+    const usuarioId = (() => {
+      const usuarioGuardado = localStorage.getItem('usuario');
+      if (usuarioGuardado) {
+        try {
+          const usuario = JSON.parse(usuarioGuardado);
+          return usuario.id;
+        } catch {
+          return null;
+        }
+      }
+      return null;
+    })();
     fetch(`http://localhost:8080/api/mensajes/recibidos/${usuarioId}`, {
       headers: {
         "Content-Type": "application/json",

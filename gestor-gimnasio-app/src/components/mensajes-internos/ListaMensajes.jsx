@@ -7,6 +7,19 @@ import Carga from "../carga/Carga"
 
 export default function ListaMensajes({ tipo, onDetalleOpen, onDetalleClose }) {
   const userToken = useMemo(() => localStorage.getItem("usuarioAccesToken"), [])
+  // Obtener el ID real del usuario logueado desde localStorage
+  const usuarioId = useMemo(() => {
+    const usuarioGuardado = localStorage.getItem('usuario');
+    if (usuarioGuardado) {
+      try {
+        const usuario = JSON.parse(usuarioGuardado);
+        return usuario.id;
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  }, []);
   const [mensajes, setMensajes] = useState([])
   const [loading, setLoading] = useState(true)
   const [usuarios, setUsuarios] = useState([])
@@ -16,9 +29,6 @@ export default function ListaMensajes({ tipo, onDetalleOpen, onDetalleClose }) {
   const [snackbarSeverity, setSnackbarSeverity] = useState("info")
   const [mensajeParaRedactar, setMensajeParaRedactar] = useState(null)
   const [modoRedactar, setModoRedactar] = useState(null) // 'responder' o 'reenviar'
-
-  // Cambia por el ID real del usuario logueado
-  const usuarioId = 5
 
   // Traer usuarios para mostrar nombre/email
   useEffect(() => {
