@@ -10,11 +10,12 @@ import './HistorialPagos.css';
 import environment from '../../environments/environment';
 
 const HistorialPagos = () => {
+  const usuario = JSON.parse(localStorage.getItem('usuario'));
   const [pagos, setPagos] = useState([]);
   const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
-    fetch(`${environment.apiUrl}/pagos/historial`, {
+    fetch(`${environment.apiUrl}/pagos/${usuario.id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
