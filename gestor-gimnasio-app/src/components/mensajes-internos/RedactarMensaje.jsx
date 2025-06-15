@@ -1,11 +1,6 @@
 import { useState, useEffect, useMemo } from "react"
 import {
-  Autocomplete,
   TextField,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
   Box,
   Button,
   CircularProgress,
@@ -25,7 +20,7 @@ const TIPOS_USUARIO = [
 
 export default function RedactarMensaje({ onClose, mensajeOriginal, modo }) {
   const userToken = useMemo(() => localStorage.getItem("usuarioAccesToken"), [])
-  const [tipoUsuario, setTipoUsuario] = useState("")
+  const [tipoUsuario, setTipoUsuario] = useState('todos_administradores');
   const [destinatarios, setDestinatarios] = useState([])
   const [asunto, setAsunto] = useState("")
   const [mensaje, setMensaje] = useState("")
@@ -200,15 +195,15 @@ export default function RedactarMensaje({ onClose, mensajeOriginal, modo }) {
         mensajeSnackbar={mensajeSnackbar}
         snackbarSeverity={snackbarSeverity}
       />
-      <form onSubmit={handleSubmit} style={{ pointerEvents: enviando ? "none" : "auto", opacity: enviando ? 0.6 : 1 }}>
+      <form onSubmit={handleSubmit} style={{ pointerEvents: enviando ? 'none' : 'auto', opacity: enviando ? 0.6 : 1 }}>
         {loading ? (
           <Carga />
         ) : (
           <>
-            <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
+            <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
               <TextField
-                label="Asunto*"
-                type="text"
+                label='Asunto*'
+                type='text'
                 value={asunto}
                 onChange={(e) => setAsunto(e.target.value)}
                 required={false}
@@ -219,7 +214,7 @@ export default function RedactarMensaje({ onClose, mensajeOriginal, modo }) {
             </Box>
             <Box sx={{ mb: 2 }}>
               <TextField
-                label="Mensaje*"
+                label='Mensaje*'
                 value={mensaje}
                 onChange={(e) => setMensaje(e.target.value)}
                 fullWidth
@@ -230,21 +225,22 @@ export default function RedactarMensaje({ onClose, mensajeOriginal, modo }) {
               />
             </Box>
             <Button
-              className="boton-principal"
-              type="submit"
+              className='boton-principal'
+              type='submit'
               disabled={enviando}
               fullWidth
               sx={{ fontWeight: 500, fontSize: 16, borderRadius: 2, minHeight: 44 }}
-              startIcon={enviando ? <CircularProgress size={20} color="inherit" /> : null}
+              startIcon={enviando ? <CircularProgress size={20} color='inherit' /> : null}
             >
-              {enviando ? "Enviando..." : "Enviar"}
+              {enviando ? 'Enviando...' : 'Enviar'}
             </Button>
             {onClose && (
-              <Button className="boton-secundario" onClick={onClose} sx={{ mt: 2, width: "100%" }} disabled={enviando}>
+              <Button className='boton-secundario' onClick={onClose} sx={{ mt: 2, width: '100%' }} disabled={enviando}>
                 Volver
               </Button>
             )}
-          </>)}
+          </>
+        )}
       </form>
     </>
   )
