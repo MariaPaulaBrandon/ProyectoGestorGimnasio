@@ -70,8 +70,8 @@ class TurnoClaseController extends Controller
         $validatedData = $request->validate([
             'id_actividad' => REQUIRED_NUMERIC,
             'fecha' => 'required|date',
-            'horario_desde' => 'required|date_format:H:i',
-            'horario_hasta' => 'required|date_format:H:i|after:horarioDesde',
+            'horario_desde' => 'required|date_format:H:i:s',
+            'horario_hasta' => 'required|date_format:H:i:s|after:horarioDesde',
             'cupo_maximo' => 'required|numeric|min:1',
         ]);
 
